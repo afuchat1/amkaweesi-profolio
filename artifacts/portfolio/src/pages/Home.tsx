@@ -15,12 +15,15 @@ import {
   ChevronDown,
   Cloud,
   BookOpen,
-  Cpu,
   Megaphone,
   Calculator,
   Menu,
   X,
   ArrowLeft,
+  CreditCard,
+  Layers,
+  Headphones,
+  GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,14 +32,15 @@ import { Textarea } from "@/components/ui/textarea";
 /* ─────────────────────────────────────────────── data ──── */
 
 const projects = [
-  { domain: "afuchat.com", name: "AfuChat", desc: "Unified communication platform for the modern web", icon: MessageSquare, color: "bg-blue-50 text-blue-600", border: "border-blue-100", logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
-  { domain: "email.afuchat.com", name: "AfuMail", desc: "Smart, privacy-first email for the ecosystem", icon: Mail, color: "bg-violet-50 text-violet-600", border: "border-violet-100" },
-  { domain: "pay.afuchat.com", name: "AfuPay", desc: "Seamless digital payments and transfers", icon: Globe, color: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
-  { domain: "cloud.afuchat.com", name: "AfuCloud", desc: "Personal cloud storage and file management", icon: Cloud, color: "bg-sky-50 text-sky-600", border: "border-sky-100" },
-  { domain: "blog.afuchat.com", name: "AfuBlog", desc: "Publish ideas, stories, and long-form content", icon: BookOpen, color: "bg-amber-50 text-amber-600", border: "border-amber-100" },
-  { domain: "build.afuchat.com", name: "AfuBuild", desc: "Website and application builder for everyone", icon: Cpu, color: "bg-rose-50 text-rose-600", border: "border-rose-100" },
-  { domain: "ads.afuchat.com", name: "AfuAds", desc: "Digital advertising and audience reach tools", icon: Megaphone, color: "bg-orange-50 text-orange-600", border: "border-orange-100" },
-  { domain: "math.afuchat.com", name: "AfuMath", desc: "Interactive math education and problem solving", icon: Calculator, color: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
+  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, color: "bg-blue-50 text-blue-600",    border: "border-blue-100",    logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
+  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          color: "bg-red-50 text-red-500",      border: "border-red-100"    },
+  { domain: "pay.afuchat.com",    name: "AfuPay",   desc: "Seamless digital payments and transfers",              icon: CreditCard,    color: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
+  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         color: "bg-sky-50 text-sky-600",      border: "border-sky-100"    },
+  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      color: "bg-amber-50 text-amber-600",  border: "border-amber-100"  },
+  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        color: "bg-violet-50 text-violet-600", border: "border-violet-100" },
+  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     color: "bg-orange-50 text-orange-600", border: "border-orange-100" },
+  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, color: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
+  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    color: "bg-teal-50 text-teal-600",    border: "border-teal-100"   },
 ];
 
 const clients = [
@@ -165,7 +169,7 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
         ))}
       </div>
       <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/60 flex items-center justify-between">
-        <span className="text-xs text-slate-500">8 services in the AfuChat ecosystem</span>
+        <span className="text-xs text-slate-500">9 services in the AfuChat ecosystem</span>
         <a href="#ecosystem" className="text-xs font-medium text-primary flex items-center gap-1 hover:underline">
           View all <ArrowRight className="w-3 h-3" />
         </a>
@@ -394,7 +398,7 @@ export default function Home() {
             {/* stat cards — stacked */}
             <div className="flex flex-col gap-3">
               {[
-                { label: "Services Built", value: "8+", note: "Across communication, cloud, payments & more" },
+                { label: "Services Built", value: "9+", note: "Across communication, cloud, payments & more" },
                 { label: "Core Platform", value: "AfuChat", note: "Unified ecosystem hub" },
                 { label: "Vision", value: "Long-term", note: "Infrastructure-first, community-driven" },
               ].map((stat) => (
@@ -417,7 +421,7 @@ export default function Home() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Ecosystem</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">The AfuChat Suite</h2>
-              <p className="text-lg text-slate-500 max-w-xl">A unified collection of interconnected digital services — each purpose-built, all connected.</p>
+              <p className="text-lg text-slate-500 max-w-xl">A unified collection of 9 interconnected digital services — each purpose-built, all connected.</p>
             </div>
             {/* carousel controls */}
             <div className="flex items-center gap-2 shrink-0">
