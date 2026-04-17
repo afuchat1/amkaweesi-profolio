@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -53,65 +53,67 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* LIGHT MODE ONLY */
 :root {
-  --background: 226 83% 98%;
-  --foreground: 226 83% 5%;
-  --border: 226 20% 90%;
-  --input: 226 20% 90%;
-  --ring: 189 94% 43%;
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+  --opaque-button-border-intensity: -8;
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
+
+  --background: 216 33% 97%;
+  --foreground: 222 47% 11%;
+  --border: 220 20% 88%;
+  --input: 220 20% 88%;
+  --ring: 221 83% 53%;
+
   --card: 0 0% 100%;
-  --card-foreground: 226 83% 5%;
-  --card-border: 226 20% 90%;
+  --card-foreground: 222 47% 11%;
+  --card-border: 220 20% 90%;
+
   --popover: 0 0% 100%;
-  --popover-foreground: 226 83% 5%;
-  --popover-border: 226 20% 90%;
-  --primary: 189 94% 43%;
+  --popover-foreground: 222 47% 11%;
+  --popover-border: 220 20% 90%;
+
+  --primary: 221 83% 53%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 262 83% 66%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 226 20% 96%;
-  --muted-foreground: 226 10% 40%;
-  --accent: 226 20% 96%;
-  --accent-foreground: 226 83% 5%;
+  --primary-border: hsl(221 83% 47%);
+
+  --secondary: 216 33% 95%;
+  --secondary-foreground: 222 47% 11%;
+  --secondary-border: hsl(220 20% 88%);
+
+  --muted: 216 33% 95%;
+  --muted-foreground: 220 14% 46%;
+  --muted-border: hsl(220 20% 91%);
+
+  --accent: 216 100% 96%;
+  --accent-foreground: 221 83% 40%;
+  --accent-border: hsl(221 60% 88%);
+
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
-  --chart-1: 189 94% 43%;
-  --chart-2: 262 83% 66%;
-  --chart-3: 210 100% 50%;
-  --chart-4: 280 80% 60%;
-  --chart-5: 320 80% 60%;
-  
+  --destructive-border: hsl(0 84% 54%);
+
+  --chart-1: 221 83% 53%;
+  --chart-2: 260 60% 58%;
+  --chart-3: 189 94% 43%;
+  --chart-4: 340 75% 55%;
+  --chart-5: 28 90% 55%;
+
   --app-font-sans: 'Inter', sans-serif;
   --radius: 0.75rem;
-}
 
-.dark {
-  --background: 226 83% 5%;
-  --foreground: 226 20% 95%;
-  --border: 226 40% 15%;
-  --input: 226 40% 15%;
-  --ring: 189 94% 43%;
-  --card: 226 60% 8%;
-  --card-foreground: 226 20% 95%;
-  --card-border: 226 40% 15%;
-  --popover: 226 60% 8%;
-  --popover-foreground: 226 20% 95%;
-  --popover-border: 226 40% 15%;
-  --primary: 189 94% 43%;
-  --primary-foreground: 226 83% 5%;
-  --secondary: 262 83% 66%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 226 40% 15%;
-  --muted-foreground: 226 20% 65%;
-  --accent: 226 40% 15%;
-  --accent-foreground: 226 20% 95%;
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 226 20% 95%;
-  --chart-1: 189 94% 43%;
-  --chart-2: 262 83% 66%;
-  --chart-3: 210 100% 50%;
-  --chart-4: 280 80% 60%;
-  --chart-5: 320 80% 60%;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 222 47% 11%;
+  --sidebar-border: 220 20% 90%;
+  --sidebar-primary: 221 83% 53%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-primary-border: hsl(221 83% 47%);
+  --sidebar-accent: 216 100% 96%;
+  --sidebar-accent-foreground: 221 83% 40%;
+  --sidebar-accent-border: hsl(221 60% 88%);
+  --sidebar-ring: 221 83% 53%;
 }
 
 @layer base {
@@ -119,18 +121,21 @@
     @apply border-border;
   }
   body {
-    @apply font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground;
+    @apply font-sans antialiased bg-background text-foreground;
   }
-  
   html {
     scroll-behavior: smooth;
   }
 }
 
-.glass-panel {
-  @apply bg-card/40 backdrop-blur-xl border border-white/10 dark:border-white/5 shadow-2xl;
+.card-lift {
+  @apply bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl;
 }
 
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+.section-alt {
+  background-color: hsl(216 33% 97%);
+}
+
+.section-white {
+  background-color: #ffffff;
 }
