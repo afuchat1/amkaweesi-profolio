@@ -50,6 +50,10 @@ const clients = [
   { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "https://sabulashoespot.com/favicon.ico" },
 ];
 
+const partners = [
+  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ajsdigitalservices.com/favicon.ico" },
+];
+
 const socialLinks = [
   { href: "https://afuchat.com/@amkaweesi", label: "AfuChat", icon: MessageSquare },
   { href: "https://x.com/amkaweesii", label: "X (Twitter)", icon: Twitter },
@@ -116,6 +120,7 @@ const navItems: NavItem[] = [
   },
   { label: "About", href: "#about" },
   { label: "Clients", href: "#clients" },
+  { label: "Partners", href: "#partners" },
   { label: "Vision", href: "#vision" },
 ];
 
@@ -506,6 +511,51 @@ export default function Home() {
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: client.brand.iconBg, color: client.brand.primary }}>Active</span>
                     </div>
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-all" style={{ color: client.brand.primary }} />
+                  </div>
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ PARTNERS ══════════ */}
+      <section id="partners" className="py-24 px-6 bg-slate-50 border-t border-slate-100">
+        <div className="max-w-6xl mx-auto">
+          <Breadcrumb items={["AMK", "Partners"]} />
+          <motion.div {...fadeUp} className="mb-12">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Partners</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">Trusted Collaborators</h2>
+            <p className="text-lg text-slate-500">Organizations we work alongside to deliver greater impact.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {partners.map((partner, index) => (
+              <motion.div key={partner.name} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: index * 0.12 }}>
+                <a
+                  href={`https://${partner.domain}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col gap-4 p-6 rounded-2xl hover:shadow-md transition-all h-full"
+                  style={{ background: partner.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: partner.brand.cardBorder }}
+                >
+                  <div className="p-2.5 rounded-xl inline-flex w-fit" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>
+                    <ServiceLogo
+                      name={partner.name}
+                      domain={partner.domain}
+                      logoUrl={partner.logoUrl}
+                      FallbackIcon={partner.icon}
+                      imgClassName="w-7 h-7 object-contain rounded"
+                      iconClassName="w-7 h-7"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-semibold mb-1" style={{ color: partner.brand.dark ? "#f1f5f9" : "#0f172a" }}>{partner.name}</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: partner.brand.dark ? "#94a3b8" : "#64748b" }}>{partner.desc}</p>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>Partner</span>
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-all" style={{ color: partner.brand.primary }} />
                   </div>
                 </a>
               </motion.div>
