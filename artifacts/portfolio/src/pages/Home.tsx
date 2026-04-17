@@ -24,6 +24,7 @@ import {
   Layers,
   Headphones,
   GraduationCap,
+  Code2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ const projects = [
   { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ads.afuchat.com/favicon.ico" },
   { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "https://math.afuchat.com/favicon.ico" },
   { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "https://desk.afuchat.com/favicon.ico" },
+  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "https://dev.afuchat.com/favicon.ico" },
 ];
 
 const clients = [
@@ -155,7 +157,7 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
         ))}
       </div>
       <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/60 flex items-center justify-between">
-        <span className="text-xs text-slate-500">8 services in the AfuChat ecosystem</span>
+        <span className="text-xs text-slate-500">9 services in the AfuChat ecosystem</span>
         <a href="#ecosystem" className="text-xs font-medium text-primary flex items-center gap-1 hover:underline">
           View all <ArrowRight className="w-3 h-3" />
         </a>
@@ -383,7 +385,7 @@ export default function Home() {
             {/* stat cards — stacked */}
             <div className="flex flex-col gap-3">
               {[
-                { label: "Services Built", value: "8+", note: "Across communication, cloud, storage & more" },
+                { label: "Services Built", value: "9+", note: "Across communication, cloud, storage & more" },
                 { label: "Core Platform", value: "AfuChat", note: "Unified ecosystem hub" },
                 { label: "Vision", value: "Long-term", note: "Infrastructure-first, community-driven" },
               ].map((stat) => (
@@ -406,7 +408,7 @@ export default function Home() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Ecosystem</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">The AfuChat Suite</h2>
-              <p className="text-lg text-slate-500 max-w-xl">A unified collection of 8 interconnected digital services — each purpose-built, all connected.</p>
+              <p className="text-lg text-slate-500 max-w-xl">A unified collection of 9 interconnected digital services — each purpose-built, all connected.</p>
             </div>
             {/* carousel controls */}
             <div className="flex items-center gap-2 shrink-0">
