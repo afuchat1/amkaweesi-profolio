@@ -41,7 +41,7 @@ const projects = [
   { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ads.afuchat.com/favicon.ico" },
   { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "https://math.afuchat.com/favicon.ico" },
   { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "https://desk.afuchat.com/favicon.ico" },
-  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "https://dev.afuchat.com/favicon.ico", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/get-quote" },
+  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "https://dev.afuchat.com/favicon.ico", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
 ];
 
 const clients = [
