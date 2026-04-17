@@ -32,20 +32,20 @@ import { Textarea } from "@/components/ui/textarea";
 /* ─────────────────────────────────────────────── data ──── */
 
 const projects = [
-  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, color: "bg-blue-50 text-blue-600",    border: "border-blue-100",    logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
-  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          color: "bg-red-50 text-red-500",      border: "border-red-100"    },
-  { domain: "pay.afuchat.com",    name: "AfuPay",   desc: "Seamless digital payments and transfers",              icon: CreditCard,    color: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
-  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         color: "bg-sky-50 text-sky-600",      border: "border-sky-100"    },
-  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      color: "bg-amber-50 text-amber-600",  border: "border-amber-100"  },
-  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        color: "bg-violet-50 text-violet-600", border: "border-violet-100" },
-  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     color: "bg-orange-50 text-orange-600", border: "border-orange-100" },
-  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, color: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
-  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    color: "bg-teal-50 text-teal-600",    border: "border-teal-100"   },
+  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, brand: { primary: "#0099B8", iconBg: "#e0f7fa", card: "#f0fdff", cardBorder: "#a5f3fc" }, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
+  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#eff6ff", cardBorder: "#bfdbfe" } },
+  { domain: "pay.afuchat.com",    name: "AfuPay",   desc: "Seamless digital payments and transfers",              icon: CreditCard,    brand: { primary: "#0ea5e9", iconBg: "#e0f2fe", card: "#f0f9ff", cardBorder: "#bae6fd" } },
+  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#fff7ed", cardBorder: "#fed7aa" } },
+  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#f0fdfa", cardBorder: "#99f6e4" } },
+  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ecfeff", cardBorder: "#a5f3fc" } },
+  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#fff7ed", cardBorder: "#fed7aa" } },
+  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#eff6ff", cardBorder: "#bfdbfe" } },
+  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#fff7ed", cardBorder: "#fed7aa" } },
 ];
 
 const clients = [
-  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda" },
-  { domain: "sabulashoespot.com", name: "Sabula Shoe Spot", desc: "Quality footwear retail brand for everyday style" },
+  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda", brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a" } },
+  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",           brand: { primary: "#ca8a04", iconBg: "#fef9c3", card: "#fefce8", cardBorder: "#fef08a" } },
 ];
 
 const socialLinks = [
@@ -427,20 +427,21 @@ export default function Home() {
                   href={`https://${project.domain}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-250 cursor-pointer"
+                  className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-250 cursor-pointer"
+                  style={{ background: project.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: project.brand.cardBorder }}
                 >
-                  <div className={`mb-5 ${project.color}`}>
+                  <div className="mb-5 p-2.5 rounded-xl inline-flex w-fit" style={{ background: project.brand.iconBg, color: project.brand.primary }}>
                     <ServiceLogo
                       name={project.name}
                       logoUrl={(project as any).logoUrl}
                       FallbackIcon={project.icon}
-                      imgClassName="w-9 h-9 object-contain"
-                      iconClassName="w-8 h-8"
+                      imgClassName="w-7 h-7 object-contain"
+                      iconClassName="w-7 h-7"
                     />
                   </div>
-                  <h3 className="text-base font-semibold text-slate-900 mb-1.5 group-hover:text-primary transition-colors">{project.name}</h3>
+                  <h3 className="text-base font-semibold text-slate-900 mb-1.5 transition-colors" style={{ ["--tw-text-opacity" as string]: 1 }}>{project.name}</h3>
                   <p className="text-sm text-slate-500 flex-1 leading-relaxed">{project.desc}</p>
-                  <div className="mt-4 flex items-center gap-1 text-xs font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-4 flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: project.brand.primary }}>
                     Visit <ExternalLink className="w-3 h-3" />
                   </div>
                 </a>
@@ -466,26 +467,27 @@ export default function Home() {
                   href={`https://${client.domain}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col gap-4 p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:border-slate-200 hover:bg-white hover:shadow-md transition-all h-full"
+                  className="group flex flex-col gap-4 p-6 rounded-2xl hover:shadow-md transition-all h-full"
+                  style={{ background: client.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: client.brand.cardBorder }}
                 >
-                  <div className="text-slate-400 group-hover:text-primary transition-colors">
+                  <div className="p-2.5 rounded-xl inline-flex w-fit transition-colors" style={{ background: client.brand.iconBg, color: client.brand.primary }}>
                     <ServiceLogo
                       name={client.name}
                       FallbackIcon={Globe}
-                      imgClassName="w-8 h-8 object-contain"
+                      imgClassName="w-7 h-7 object-contain"
                       iconClassName="w-7 h-7"
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base font-semibold text-slate-900 group-hover:text-primary transition-colors mb-1">{client.name}</h3>
+                    <h3 className="text-base font-semibold text-slate-900 mb-1">{client.name}</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">{client.desc}</p>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-500">Client</span>
-                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">Active</span>
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: client.brand.iconBg, color: client.brand.primary }}>Active</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:translate-x-0.5 transition-all" style={{ color: client.brand.primary }} />
                   </div>
                 </a>
               </motion.div>
