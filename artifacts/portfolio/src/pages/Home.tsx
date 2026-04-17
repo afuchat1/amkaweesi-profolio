@@ -238,7 +238,6 @@ export default function Home() {
 
           {/* Right CTA */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
-            <a href="#contact" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Contact</a>
             <Button size="sm" className="rounded-full px-5 text-sm" asChild>
               <a href="#contact">Get in Touch</a>
             </Button>
