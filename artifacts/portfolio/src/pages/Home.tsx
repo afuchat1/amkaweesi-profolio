@@ -29,7 +29,7 @@ import { Textarea } from "@/components/ui/textarea";
 /* ─────────────────────────────────────────────── data ──── */
 
 const projects = [
-  { domain: "afuchat.com", name: "AfuChat", desc: "Unified communication platform for the modern web", icon: MessageSquare, color: "bg-blue-50 text-blue-600", border: "border-blue-100" },
+  { domain: "afuchat.com", name: "AfuChat", desc: "Unified communication platform for the modern web", icon: MessageSquare, color: "bg-blue-50 text-blue-600", border: "border-blue-100", logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
   { domain: "email.afuchat.com", name: "AfuMail", desc: "Smart, privacy-first email for the ecosystem", icon: Mail, color: "bg-violet-50 text-violet-600", border: "border-violet-100" },
   { domain: "pay.afuchat.com", name: "AfuPay", desc: "Seamless digital payments and transfers", icon: Globe, color: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
   { domain: "cloud.afuchat.com", name: "AfuCloud", desc: "Personal cloud storage and file management", icon: Cloud, color: "bg-sky-50 text-sky-600", border: "border-sky-100" },
@@ -58,6 +58,48 @@ const fadeUp = {
   transition: { duration: 0.55, ease: "easeOut" },
 };
 
+/* ──────────────────────────────────────── ServiceLogo ──── */
+interface ServiceLogoProps {
+  name: string;
+  domain: string;
+  logoUrl?: string;
+  FallbackIcon: React.ElementType;
+  size?: "sm" | "md";
+}
+
+function ServiceLogo({ name, domain, logoUrl, FallbackIcon, size = "md" }: ServiceLogoProps) {
+  const [src, setSrc] = useState<string>(
+    logoUrl || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+  );
+  const [stage, setStage] = useState<"logo" | "favicon" | "icon">(
+    logoUrl ? "logo" : "favicon"
+  );
+  const imgSize = size === "sm" ? "w-5 h-5" : "w-6 h-6";
+  const iconSize = size === "sm" ? "w-4 h-4" : "w-5 h-5";
+
+  const handleError = () => {
+    if (stage === "logo") {
+      setSrc(`https://www.google.com/s2/favicons?domain=${domain}&sz=64`);
+      setStage("favicon");
+    } else {
+      setStage("icon");
+    }
+  };
+
+  if (stage === "icon") {
+    return <FallbackIcon className={`${iconSize}`} />;
+  }
+
+  return (
+    <img
+      src={src}
+      alt={name}
+      className={`${imgSize} object-contain rounded-sm`}
+      onError={handleError}
+    />
+  );
+}
+
 /* ─────────────────────────────────────── breadcrumb ──── */
 function Breadcrumb({ items }: { items: string[] }) {
   return (
@@ -73,13 +115,13 @@ function Breadcrumb({ items }: { items: string[] }) {
 }
 
 /* ─────────────────────────────────────── nav dropdown ──── */
-type DropdownItem = { name: string; desc: string; href: string; icon: React.ElementType };
+type DropdownItem = { name: string; desc: string; href: string; domain: string; logoUrl?: string; icon: React.ElementType };
 type NavItem = { label: string; href?: string; dropdown?: DropdownItem[] };
 
 const navItems: NavItem[] = [
   {
     label: "Products",
-    dropdown: projects.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, icon: p.icon })),
+    dropdown: projects.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: (p as any).logoUrl, icon: p.icon })),
   },
   { label: "About", href: "#about" },
   { label: "Clients", href: "#clients" },
@@ -98,26 +140,29 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
       {/* arrow */}
       <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-slate-200 rotate-45" />
       <div className="grid grid-cols-2 gap-0 p-3">
-        {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <a
-              key={item.name}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 group-hover:bg-blue-50 transition-colors mt-0.5">
-                <Icon className="w-4 h-4 text-slate-500 group-hover:text-primary transition-colors" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-slate-900 group-hover:text-primary transition-colors">{item.name}</p>
-                <p className="text-xs text-slate-500 mt-0.5 leading-snug line-clamp-2">{item.desc}</p>
-              </div>
-            </a>
-          );
-        })}
+        {items.map((item) => (
+          <a
+            key={item.name}
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors mt-0.5 overflow-hidden">
+              <ServiceLogo
+                name={item.name}
+                domain={item.domain}
+                logoUrl={item.logoUrl}
+                FallbackIcon={item.icon}
+                size="sm"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-slate-900 group-hover:text-primary transition-colors">{item.name}</p>
+              <p className="text-xs text-slate-500 mt-0.5 leading-snug line-clamp-2">{item.desc}</p>
+            </div>
+          </a>
+        ))}
       </div>
       <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/60 flex items-center justify-between">
         <span className="text-xs text-slate-500">8 services in the AfuChat ecosystem</span>
@@ -394,9 +439,7 @@ export default function Home() {
         {/* embla carousel — full width, overflow visible */}
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex gap-4 px-6 md:px-[calc((100vw-72rem)/2+1.5rem)]">
-            {projects.map((project) => {
-              const Icon = project.icon;
-              return (
+            {projects.map((project) => (
                 <a
                   key={project.name}
                   href={`https://${project.domain}`}
@@ -404,17 +447,13 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-250 cursor-pointer"
                 >
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${project.color} ${project.border} border`}>
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${project.domain}&sz=64`}
-                      alt={project.name}
-                      className="w-6 h-6 object-contain"
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                        (e.currentTarget.nextElementSibling as HTMLElement)!.style.display = "flex";
-                      }}
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${project.color} ${project.border} border overflow-hidden`}>
+                    <ServiceLogo
+                      name={project.name}
+                      domain={project.domain}
+                      logoUrl={(project as any).logoUrl}
+                      FallbackIcon={project.icon}
                     />
-                    <Icon className="w-5 h-5 hidden" />
                   </div>
                   <h3 className="text-base font-semibold text-slate-900 mb-1.5 group-hover:text-primary transition-colors">{project.name}</h3>
                   <p className="text-sm text-slate-500 flex-1 leading-relaxed">{project.desc}</p>
@@ -422,8 +461,7 @@ export default function Home() {
                     Visit <ExternalLink className="w-3 h-3" />
                   </div>
                 </a>
-              );
-            })}
+            ))}
           </div>
         </div>
       </section>
@@ -449,15 +487,11 @@ export default function Home() {
                   className="group flex items-center gap-5 py-6 hover:bg-slate-50 -mx-4 px-4 rounded-xl transition-colors"
                 >
                   <div className="w-14 h-14 rounded-xl border border-slate-100 bg-slate-50 flex items-center justify-center shrink-0 overflow-hidden">
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${client.domain}&sz=64`}
-                      alt={client.name}
-                      className="w-8 h-8 object-contain"
-                      onError={(e) => {
-                        const parent = e.currentTarget.parentElement!;
-                        e.currentTarget.style.display = "none";
-                        parent.innerHTML = `<span class="text-xl font-bold text-slate-400">${client.name[0]}</span>`;
-                      }}
+                    <ServiceLogo
+                      name={client.name}
+                      domain={client.domain}
+                      FallbackIcon={Globe}
+                      size="md"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
