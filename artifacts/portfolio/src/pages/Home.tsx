@@ -41,7 +41,7 @@ const projects = [
   { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ads.afuchat.com/favicon.ico" },
   { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "https://math.afuchat.com/favicon.ico" },
   { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "https://desk.afuchat.com/favicon.ico" },
-  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "https://dev.afuchat.com/favicon.ico" },
+  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "https://dev.afuchat.com/favicon.ico", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/get-quote" },
 ];
 
 const clients = [
@@ -157,7 +157,7 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
         ))}
       </div>
       <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/60 flex items-center justify-between">
-        <span className="text-xs text-slate-500">9 services in the AfuChat ecosystem</span>
+        <span className="text-xs text-slate-500">{projects.length} services in the AfuChat ecosystem</span>
         <a href="#ecosystem" className="text-xs font-medium text-primary flex items-center gap-1 hover:underline">
           View all <ArrowRight className="w-3 h-3" />
         </a>
@@ -385,7 +385,7 @@ export default function Home() {
             {/* stat cards — stacked */}
             <div className="flex flex-col gap-3">
               {[
-                { label: "Services Built", value: "9+", note: "Across communication, cloud, storage & more" },
+                { label: "Services Built", value: `${projects.length}+`, note: "Across communication, cloud, storage & more" },
                 { label: "Core Platform", value: "AfuChat", note: "Unified ecosystem hub" },
                 { label: "Vision", value: "Long-term", note: "Infrastructure-first, community-driven" },
               ].map((stat) => (
@@ -408,7 +408,7 @@ export default function Home() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Ecosystem</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">The AfuChat Suite</h2>
-              <p className="text-lg text-slate-500 max-w-xl">A unified collection of 9 interconnected digital services — each purpose-built, all connected.</p>
+              <p className="text-lg text-slate-500 max-w-xl">A unified collection of {projects.length} interconnected digital services — each purpose-built, all connected.</p>
             </div>
             {/* carousel controls */}
             <div className="flex items-center gap-2 shrink-0">
@@ -426,11 +426,9 @@ export default function Home() {
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex gap-4 px-6 md:px-[calc((100vw-72rem)/2+1.5rem)]">
             {projects.map((project) => (
-                <a
+                <div
                   key={project.name}
-                  href={`https://${project.domain}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => window.open(`https://${project.domain}`, "_blank")}
                   className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-250 cursor-pointer"
                   style={{ background: project.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: project.brand.cardBorder }}
                 >
@@ -446,10 +444,23 @@ export default function Home() {
                   </div>
                   <h3 className="text-base font-semibold mb-1.5" style={{ color: project.brand.dark ? "#f1f5f9" : "#0f172a" }}>{project.name}</h3>
                   <p className="text-sm flex-1 leading-relaxed" style={{ color: project.brand.dark ? "#94a3b8" : "#64748b" }}>{project.desc}</p>
-                  <div className="mt-4 flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: project.brand.primary }}>
-                    Visit <ExternalLink className="w-3 h-3" />
-                  </div>
-                </a>
+                  {(project as any).ctaHref ? (
+                    <a
+                      href={(project as any).ctaHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-4 inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-opacity"
+                      style={{ background: project.brand.iconBg, color: project.brand.primary, border: `1px solid ${project.brand.cardBorder}` }}
+                    >
+                      {(project as any).ctaLabel} <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ) : (
+                    <div className="mt-4 flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: project.brand.primary }}>
+                      Visit <ExternalLink className="w-3 h-3" />
+                    </div>
+                  )}
+                </div>
             ))}
           </div>
         </div>
