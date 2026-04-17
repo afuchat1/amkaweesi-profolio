@@ -32,20 +32,20 @@ import { Textarea } from "@/components/ui/textarea";
 /* ─────────────────────────────────────────────── data ──── */
 
 const projects = [
-  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, brand: { primary: "#0099B8", iconBg: "#e0f7fa", card: "#f0fdff", cardBorder: "#a5f3fc" }, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
-  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#eff6ff", cardBorder: "#bfdbfe" } },
-  { domain: "pay.afuchat.com",    name: "AfuPay",   desc: "Seamless digital payments and transfers",              icon: CreditCard,    brand: { primary: "#0ea5e9", iconBg: "#e0f2fe", card: "#f0f9ff", cardBorder: "#bae6fd" } },
-  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#fff7ed", cardBorder: "#fed7aa" } },
-  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#f0fdfa", cardBorder: "#99f6e4" } },
-  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ecfeff", cardBorder: "#a5f3fc" } },
-  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#fff7ed", cardBorder: "#fed7aa" } },
-  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#eff6ff", cardBorder: "#bfdbfe" } },
-  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#fff7ed", cardBorder: "#fed7aa" } },
+  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2", dark: false }, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
+  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#1e3a5f", card: "#0a0a0a", cardBorder: "#1e2a3a", dark: true  } },
+  { domain: "pay.afuchat.com",    name: "AfuPay",   desc: "Seamless digital payments and transfers",              icon: CreditCard,    brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  } },
+  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false } },
+  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4", dark: false } },
+  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ffffff", cardBorder: "#a5f3fc", dark: false } },
+  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false } },
+  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  } },
+  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  } },
 ];
 
 const clients = [
-  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda", brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a" } },
-  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",           brand: { primary: "#ca8a04", iconBg: "#fef9c3", card: "#fefce8", cardBorder: "#fef08a" } },
+  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda", brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false } },
+  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",           brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  } },
 ];
 
 const socialLinks = [
@@ -439,8 +439,8 @@ export default function Home() {
                       iconClassName="w-7 h-7"
                     />
                   </div>
-                  <h3 className="text-base font-semibold text-slate-900 mb-1.5 transition-colors" style={{ ["--tw-text-opacity" as string]: 1 }}>{project.name}</h3>
-                  <p className="text-sm text-slate-500 flex-1 leading-relaxed">{project.desc}</p>
+                  <h3 className="text-base font-semibold mb-1.5" style={{ color: project.brand.dark ? "#f1f5f9" : "#0f172a" }}>{project.name}</h3>
+                  <p className="text-sm flex-1 leading-relaxed" style={{ color: project.brand.dark ? "#94a3b8" : "#64748b" }}>{project.desc}</p>
                   <div className="mt-4 flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: project.brand.primary }}>
                     Visit <ExternalLink className="w-3 h-3" />
                   </div>
@@ -479,15 +479,15 @@ export default function Home() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base font-semibold text-slate-900 mb-1">{client.name}</h3>
-                    <p className="text-sm text-slate-500 leading-relaxed">{client.desc}</p>
+                    <h3 className="text-base font-semibold mb-1" style={{ color: client.brand.dark ? "#f1f5f9" : "#0f172a" }}>{client.name}</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: client.brand.dark ? "#94a3b8" : "#64748b" }}>{client.desc}</p>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-500">Client</span>
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full border" style={{ background: client.brand.dark ? "#1e1e1e" : "#ffffff", borderColor: client.brand.dark ? "#333" : "#e2e8f0", color: client.brand.dark ? "#94a3b8" : "#64748b" }}>Client</span>
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: client.brand.iconBg, color: client.brand.primary }}>Active</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:translate-x-0.5 transition-all" style={{ color: client.brand.primary }} />
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-all" style={{ color: client.brand.primary }} />
                   </div>
                 </a>
               </motion.div>
