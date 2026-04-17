@@ -1,0 +1,86 @@
+Build a modern, responsive personal portfolio website for AM Kaweesi (Abdul), founder of the AfuChat ecosystem.
+
+The design must feel like a premium modern SaaS founder portfolio:
+
+Ultra modern flat UI
+Clean, minimal, high-end startup aesthetic
+Fully responsive (mobile + desktop)
+Dark mode default with optional light mode toggle
+Smooth animations, hover effects, and soft transitions
+Card-based layout with strong visual hierarchy
+CORE IDEA
+
+This portfolio represents a connected digital ecosystem, not separate unrelated projects.
+
+All project information must be inferred from:
+
+Domain names
+Website identity (via logo + public branding where possible)
+
+No manual explanations or technical breakdowns.
+
+1. HERO SECTION
+Name: AM Kaweesi (Abdul)
+Title: Builder of the AfuChat Ecosystem
+Tagline: “Building connected digital systems across communication, payments, cloud, publishing, and tools.”
+CTA buttons:
+Explore Ecosystem
+Contact Me
+2. ABOUT SECTION
+Short introduction of a builder focused on digital ecosystems
+Emphasize AfuChat as the core expanding platform
+Highlight building interconnected online services
+3. ECOSYSTEM SECTION (IMPORTANT)
+
+Display all projects as interactive navigation tiles (NOT text domains).
+
+RULES:
+Do NOT show domain names as text
+Each project must appear as a clickable nav card/button
+Each card must display:
+Automatically fetched logo (favicon or brand logo from domain)
+Auto-generated description based on domain identity
+Hover should reveal subtle extra info preview
+Clicking should navigate to the actual service
+PROJECTS:
+afuchat.com
+email.afuchat.com
+pay.afuchat.com
+cloud.afuchat.com
+blog.afuchat.com
+build.afuchat.com
+ads.afuchat.com
+math.afuchat.com
+4. CLIENTS SECTION
+
+Display client work as clean cards:
+
+honeybeeministriesug.org
+sabulashoespot.com
+RULES:
+No domain text emphasis as titles
+Each card must use:
+Fetched logo (or fallback initials logo if not available)
+Short auto-generated description based on site identity
+Keep it minimal and professional
+5. VISION SECTION
+Describe a unified digital ecosystem built across communication, payments, cloud, publishing, education, and tools
+Focus on long-term infrastructure and scalability
+Emphasize real-world impact and system connectivity
+6. CONTACT SECTION
+Simple form (Name, Email, Message)
+Social links placeholders (GitHub, Email, etc.)
+DESIGN STYLE REQUIREMENTS
+Premium SaaS aesthetic (Stripe / Vercel inspired)
+Glassmorphism or soft elevated cards
+Smooth hover animations and micro-interactions
+Subtle gradient background or animated mesh
+Grid-based layout with strong spacing
+Mobile bottom navigation + desktop top navigation
+Everything should feel like a unified ecosystem dashboard
+IMPORTANT RULES
+Never show raw domain names as visible labels
+Only use logos + UI cards for identification
+Descriptions must be automatically inferred from domain identity
+No tech stack mentions anywhere
+Keep everything minimal, premium, and ecosystem-focused
