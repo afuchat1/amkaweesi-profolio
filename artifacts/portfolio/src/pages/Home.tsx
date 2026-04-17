@@ -65,25 +65,33 @@ const fadeUp = {
 /* ──────────────────────────────────────── ServiceLogo ──── */
 interface ServiceLogoProps {
   name: string;
+  domain: string;
   logoUrl?: string;
   FallbackIcon: React.ElementType;
   imgClassName?: string;
   iconClassName?: string;
 }
 
-function ServiceLogo({ name, logoUrl, FallbackIcon, imgClassName = "w-7 h-7 object-contain", iconClassName = "w-6 h-6" }: ServiceLogoProps) {
-  const [failed, setFailed] = useState(false);
+function ServiceLogo({ name, domain, logoUrl, FallbackIcon, imgClassName = "w-7 h-7 object-contain", iconClassName = "w-6 h-6" }: ServiceLogoProps) {
+  const [stage, setStage] = useState<"logo" | "favicon" | "icon">(logoUrl ? "logo" : "favicon");
 
-  if (!logoUrl || failed) {
+  const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+
+  const handleError = () => {
+    if (stage === "logo") setStage("favicon");
+    else setStage("icon");
+  };
+
+  if (stage === "icon") {
     return <FallbackIcon className={iconClassName} />;
   }
 
   return (
     <img
-      src={logoUrl}
+      src={stage === "logo" ? logoUrl! : faviconUrl}
       alt={name}
       className={imgClassName}
-      onError={() => setFailed(true)}
+      onError={handleError}
     />
   );
 }
@@ -139,6 +147,7 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
             <span className="shrink-0 mt-0.5 text-slate-400 group-hover:text-primary transition-colors">
               <ServiceLogo
                 name={item.name}
+                domain={item.domain}
                 logoUrl={item.logoUrl}
                 FallbackIcon={item.icon}
                 imgClassName="w-5 h-5 object-contain"
@@ -433,9 +442,10 @@ export default function Home() {
                   <div className="mb-5 p-2.5 rounded-xl inline-flex w-fit" style={{ background: project.brand.iconBg, color: project.brand.primary }}>
                     <ServiceLogo
                       name={project.name}
+                      domain={project.domain}
                       logoUrl={(project as any).logoUrl}
                       FallbackIcon={project.icon}
-                      imgClassName="w-7 h-7 object-contain"
+                      imgClassName="w-7 h-7 object-contain rounded"
                       iconClassName="w-7 h-7"
                     />
                   </div>
@@ -473,8 +483,9 @@ export default function Home() {
                   <div className="p-2.5 rounded-xl inline-flex w-fit transition-colors" style={{ background: client.brand.iconBg, color: client.brand.primary }}>
                     <ServiceLogo
                       name={client.name}
+                      domain={client.domain}
                       FallbackIcon={Globe}
-                      imgClassName="w-7 h-7 object-contain"
+                      imgClassName="w-7 h-7 object-contain rounded"
                       iconClassName="w-7 h-7"
                     />
                   </div>
