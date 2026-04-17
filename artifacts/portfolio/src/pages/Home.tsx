@@ -64,18 +64,17 @@ interface ServiceLogoProps {
   domain: string;
   logoUrl?: string;
   FallbackIcon: React.ElementType;
-  size?: "sm" | "md";
+  imgClassName?: string;
+  iconClassName?: string;
 }
 
-function ServiceLogo({ name, domain, logoUrl, FallbackIcon, size = "md" }: ServiceLogoProps) {
+function ServiceLogo({ name, domain, logoUrl, FallbackIcon, imgClassName = "w-7 h-7 object-contain", iconClassName = "w-6 h-6" }: ServiceLogoProps) {
   const [src, setSrc] = useState<string>(
     logoUrl || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
   );
   const [stage, setStage] = useState<"logo" | "favicon" | "icon">(
     logoUrl ? "logo" : "favicon"
   );
-  const imgSize = size === "sm" ? "w-5 h-5" : "w-6 h-6";
-  const iconSize = size === "sm" ? "w-4 h-4" : "w-5 h-5";
 
   const handleError = () => {
     if (stage === "logo") {
@@ -87,14 +86,14 @@ function ServiceLogo({ name, domain, logoUrl, FallbackIcon, size = "md" }: Servi
   };
 
   if (stage === "icon") {
-    return <FallbackIcon className={`${iconSize}`} />;
+    return <FallbackIcon className={iconClassName} />;
   }
 
   return (
     <img
       src={src}
       alt={name}
-      className={`${imgSize} object-contain rounded-sm`}
+      className={imgClassName}
       onError={handleError}
     />
   );
@@ -148,15 +147,16 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
             rel="noopener noreferrer"
             className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
           >
-            <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors mt-0.5 overflow-hidden">
+            <span className="shrink-0 mt-0.5 text-slate-400 group-hover:text-primary transition-colors">
               <ServiceLogo
                 name={item.name}
                 domain={item.domain}
                 logoUrl={item.logoUrl}
                 FallbackIcon={item.icon}
-                size="sm"
+                imgClassName="w-5 h-5 object-contain"
+                iconClassName="w-4 h-4"
               />
-            </div>
+            </span>
             <div className="min-w-0">
               <p className="text-sm font-medium text-slate-900 group-hover:text-primary transition-colors">{item.name}</p>
               <p className="text-xs text-slate-500 mt-0.5 leading-snug line-clamp-2">{item.desc}</p>
@@ -391,22 +391,17 @@ export default function Home() {
               </div>
             </div>
 
-            {/* horizontal stat strip */}
-            <div className="space-y-4">
+            {/* stat cards — stacked */}
+            <div className="flex flex-col gap-3">
               {[
                 { label: "Services Built", value: "8+", note: "Across communication, cloud, payments & more" },
                 { label: "Core Platform", value: "AfuChat", note: "Unified ecosystem hub" },
                 { label: "Vision", value: "Long-term", note: "Infrastructure-first, community-driven" },
-              ].map((stat, i) => (
-                <div key={stat.label}>
-                  <div className="flex items-center justify-between py-4">
-                    <div>
-                      <div className="text-xl font-bold text-slate-900">{stat.value}</div>
-                      <div className="text-sm text-slate-500 mt-0.5">{stat.note}</div>
-                    </div>
-                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{stat.label}</span>
-                  </div>
-                  {i < 2 && <div className="h-px bg-slate-100" />}
+              ].map((stat) => (
+                <div key={stat.label} className="rounded-2xl border border-slate-100 bg-slate-50 p-5">
+                  <div className="text-2xl font-bold text-slate-900 mb-0.5">{stat.value}</div>
+                  <div className="text-xs font-semibold uppercase tracking-widest text-primary mb-1">{stat.label}</div>
+                  <div className="text-sm text-slate-500 leading-snug">{stat.note}</div>
                 </div>
               ))}
             </div>
@@ -447,12 +442,14 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-250 cursor-pointer"
                 >
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${project.color} ${project.border} border overflow-hidden`}>
+                  <div className={`mb-5 ${project.color}`}>
                     <ServiceLogo
                       name={project.name}
                       domain={project.domain}
                       logoUrl={(project as any).logoUrl}
                       FallbackIcon={project.icon}
+                      imgClassName="w-9 h-9 object-contain"
+                      iconClassName="w-8 h-8"
                     />
                   </div>
                   <h3 className="text-base font-semibold text-slate-900 mb-1.5 group-hover:text-primary transition-colors">{project.name}</h3>
@@ -476,34 +473,35 @@ export default function Home() {
             <p className="text-lg text-slate-500">Organizations powered by this ecosystem.</p>
           </motion.div>
 
-          <div className="flex flex-col gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {clients.map((client, index) => (
-              <motion.div key={client.name} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: index * 0.12 }}>
-                {index > 0 && <div className="h-px bg-slate-100" />}
+              <motion.div key={client.name} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: index * 0.12 }}>
                 <a
                   href={`https://${client.domain}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-5 py-6 hover:bg-slate-50 -mx-4 px-4 rounded-xl transition-colors"
+                  className="group flex flex-col gap-4 p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:border-slate-200 hover:bg-white hover:shadow-md transition-all h-full"
                 >
-                  <div className="w-14 h-14 rounded-xl border border-slate-100 bg-slate-50 flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="text-slate-400 group-hover:text-primary transition-colors">
                     <ServiceLogo
                       name={client.name}
                       domain={client.domain}
                       FallbackIcon={Globe}
-                      size="md"
+                      imgClassName="w-8 h-8 object-contain"
+                      iconClassName="w-7 h-7"
                     />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-slate-900 group-hover:text-primary transition-colors">{client.name}</h3>
-                    <p className="text-sm text-slate-500 mt-0.5">{client.desc}</p>
+                  <div className="flex-1">
+                    <h3 className="text-base font-semibold text-slate-900 group-hover:text-primary transition-colors mb-1">{client.name}</h3>
+                    <p className="text-sm text-slate-500 leading-relaxed">{client.desc}</p>
                   </div>
-                  {/* horizontal tag strip */}
-                  <div className="hidden md:flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-500">Client</span>
-                    <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">Active</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-500">Client</span>
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">Active</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
                 </a>
               </motion.div>
             ))}
