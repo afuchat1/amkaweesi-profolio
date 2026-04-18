@@ -177,7 +177,30 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+  const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    fetch("/api/visits")
+      .then((r) => r.json())
+      .then((data) => { if (data?.counts) setVisitCounts(data.counts); })
+      .catch(() => {});
+  }, []);
+
+  const trackVisit = (domain: string) => {
+    fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ domain }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.count !== undefined) {
+          setVisitCounts((prev) => ({ ...prev, [domain]: data.count }));
+        }
+      })
+      .catch(() => {});
+  };
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start", dragFree: true });
 
@@ -433,7 +456,7 @@ export default function Home() {
             {projects.map((project) => (
                 <div
                   key={project.name}
-                  onClick={() => window.open(`https://${project.domain}`, "_blank")}
+                  onClick={() => { trackVisit(project.domain); window.open(`https://${project.domain}`, "_blank"); }}
                   className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-250 cursor-pointer"
                   style={{ background: project.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: project.brand.cardBorder }}
                 >
@@ -449,6 +472,11 @@ export default function Home() {
                   </div>
                   <h3 className="text-base font-semibold mb-1.5" style={{ color: project.brand.dark ? "#f1f5f9" : "#0f172a" }}>{project.name}</h3>
                   <p className="text-sm flex-1 leading-relaxed" style={{ color: project.brand.dark ? "#94a3b8" : "#64748b" }}>{project.desc}</p>
+                  {visitCounts[project.domain] ? (
+                    <p className="mt-2 text-xs" style={{ color: project.brand.dark ? "#64748b" : "#94a3b8" }}>
+                      {visitCounts[project.domain].toLocaleString()} visit{visitCounts[project.domain] !== 1 ? "s" : ""}
+                    </p>
+                  ) : null}
                   {(project as any).ctaHref ? (
                     <a
                       href={(project as any).ctaHref}
@@ -488,6 +516,7 @@ export default function Home() {
                   href={`https://${client.domain}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackVisit(client.domain)}
                   className="group flex flex-col gap-4 p-6 rounded-2xl hover:shadow-md transition-all h-full"
                   style={{ background: client.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: client.brand.cardBorder }}
                 >
@@ -509,6 +538,11 @@ export default function Home() {
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full border" style={{ background: client.brand.dark ? "#1e1e1e" : "#ffffff", borderColor: client.brand.dark ? "#333" : "#e2e8f0", color: client.brand.dark ? "#94a3b8" : "#64748b" }}>Client</span>
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: client.brand.iconBg, color: client.brand.primary }}>Active</span>
+                      {visitCounts[client.domain] ? (
+                        <span className="text-xs" style={{ color: client.brand.dark ? "#64748b" : "#94a3b8" }}>
+                          {visitCounts[client.domain].toLocaleString()} visit{visitCounts[client.domain] !== 1 ? "s" : ""}
+                        </span>
+                      ) : null}
                     </div>
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-all" style={{ color: client.brand.primary }} />
                   </div>
@@ -536,6 +570,7 @@ export default function Home() {
                   href={`https://${partner.domain}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackVisit(partner.domain)}
                   className="group flex flex-col gap-4 p-6 rounded-2xl hover:shadow-md transition-all h-full"
                   style={{ background: partner.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: partner.brand.cardBorder }}
                 >
@@ -554,7 +589,14 @@ export default function Home() {
                     <p className="text-sm leading-relaxed" style={{ color: partner.brand.dark ? "#94a3b8" : "#64748b" }}>{partner.desc}</p>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>Partner</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>Partner</span>
+                      {visitCounts[partner.domain] ? (
+                        <span className="text-xs" style={{ color: "#94a3b8" }}>
+                          {visitCounts[partner.domain].toLocaleString()} visit{visitCounts[partner.domain] !== 1 ? "s" : ""}
+                        </span>
+                      ) : null}
+                    </div>
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-all" style={{ color: partner.brand.primary }} />
                   </div>
                 </a>
