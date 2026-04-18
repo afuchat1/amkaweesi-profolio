@@ -365,33 +365,61 @@ export default function Home() {
         <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 w-full pt-28 pb-16">
-          <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl">
-            {/* breadcrumb */}
-            <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* left — text */}
+            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+              <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
 
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-sm font-medium text-blue-700 mb-7">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              Builder of the AfuChat Ecosystem
-            </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-sm font-medium text-blue-700 mb-7">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                Builder of the AfuChat Ecosystem
+              </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.08] text-slate-900 mb-5">
-              AM Kaweesi
-              <br />
-              <span className="text-primary">Digital Builder.</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-slate-600 leading-relaxed mb-9 max-w-2xl">
-              Building connected digital systems across communication, payments, cloud, publishing, and tools.
-            </p>
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] text-slate-900 mb-5">
+                AM Kaweesi
+                <br />
+                <span className="text-primary">Digital Builder.</span>
+              </h1>
+              <p className="text-xl text-slate-600 leading-relaxed mb-9 max-w-xl">
+                Building connected digital systems across communication, payments, cloud, publishing, and tools.
+              </p>
 
-            <div className="flex flex-wrap items-center gap-4">
-              <Button size="lg" className="px-8 text-base rounded-full shadow-md shadow-blue-100" asChild>
-                <a href="#ecosystem">Explore Ecosystem <ArrowRight className="ml-2 w-4 h-4" /></a>
-              </Button>
-              <Button size="lg" variant="outline" className="px-8 text-base rounded-full border-slate-300 bg-white hover:bg-slate-50" asChild>
-                <a href="#contact">Contact Me</a>
-              </Button>
-            </div>
-          </motion.div>
+              <div className="flex flex-wrap items-center gap-4">
+                <Button size="lg" className="px-8 text-base rounded-full shadow-md shadow-blue-100" asChild>
+                  <a href="#ecosystem">Explore Ecosystem <ArrowRight className="ml-2 w-4 h-4" /></a>
+                </Button>
+                <Button size="lg" variant="outline" className="px-8 text-base rounded-full border-slate-300 bg-white hover:bg-slate-50" asChild>
+                  <a href="#contact">Contact Me</a>
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* right — photo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.75, delay: 0.15 }}
+              className="flex justify-center md:justify-end"
+            >
+              <div className="relative">
+                {/* outer glow ring */}
+                <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-primary/20 via-blue-200/30 to-indigo-200/20 blur-xl" />
+                {/* colored border frame */}
+                <div className="relative p-1 rounded-[1.75rem] bg-gradient-to-br from-primary via-blue-400 to-indigo-400 shadow-2xl shadow-blue-200/60">
+                  <img
+                    src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg"
+                    alt="AM Kaweesi"
+                    className="w-64 h-64 md:w-80 md:h-80 object-cover rounded-[1.6rem] block"
+                  />
+                </div>
+                {/* floating badge */}
+                <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-lg shadow-slate-200/80 border border-slate-100 px-4 py-2.5 flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <span className="text-sm font-semibold text-slate-800">Available for projects</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -401,7 +429,19 @@ export default function Home() {
           <Breadcrumb items={["AMK", "About"]} />
           <motion.div {...fadeUp} className="grid md:grid-cols-2 gap-14 lg:gap-24 items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">About</p>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-0.5 rounded-full bg-gradient-to-br from-primary via-blue-400 to-indigo-400 shadow-md shadow-blue-200/50">
+                  <img
+                    src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg"
+                    alt="AM Kaweesi"
+                    className="w-14 h-14 object-cover rounded-full block"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-widest text-primary">About</p>
+                  <p className="text-sm text-slate-500 font-medium">AM Kaweesi</p>
+                </div>
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-snug">The Architect of Connectivity</h2>
               <div className="space-y-5 text-lg text-slate-600 leading-relaxed">
                 <p>I am a builder focused on creating cohesive digital ecosystems. Digital tools shouldn't exist in isolation — they should connect, communicate, and compound.</p>
