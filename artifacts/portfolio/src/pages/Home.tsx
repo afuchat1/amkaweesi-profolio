@@ -56,6 +56,7 @@ const partners = [
 
 const socialLinks = [
   { href: "https://afuchat.com/@amkaweesi", label: "AfuChat", icon: MessageSquare, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
+  { href: "https://t.me/amkaweesi", label: "Telegram", icon: Send },
   { href: "https://x.com/amkaweesii", label: "X (Twitter)", icon: Twitter },
   { href: "https://github.com/amkaweesi", label: "GitHub", icon: Github },
   { href: "https://linkedin.com/in/amkaweesi", label: "LinkedIn", icon: Linkedin },
