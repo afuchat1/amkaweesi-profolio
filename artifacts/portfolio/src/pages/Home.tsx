@@ -51,7 +51,7 @@ const clients = [
 ];
 
 const partners = [
-  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ajsdigitalservices.com/favicon.ico" },
+  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ajsdigitalservices.com/favicon.ico", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
 ];
 
 const socialLinks = [
@@ -629,6 +629,18 @@ export default function Home() {
                     <h3 className="text-base font-semibold mb-1" style={{ color: partner.brand.dark ? "#f1f5f9" : "#0f172a" }}>{partner.name}</h3>
                     <p className="text-sm leading-relaxed" style={{ color: partner.brand.dark ? "#94a3b8" : "#64748b" }}>{partner.desc}</p>
                   </div>
+                  {(partner as any).founderImg && (
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-0.5 rounded-full" style={{ background: `linear-gradient(135deg, ${partner.brand.primary}, #fb923c)` }}>
+                        <img
+                          src={(partner as any).founderImg}
+                          alt={(partner as any).founderLabel ?? "Founder"}
+                          className="w-8 h-8 rounded-full object-cover block"
+                        />
+                      </div>
+                      <span className="text-xs text-slate-500">{(partner as any).founderLabel ?? "Founder"}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>Partner</span>
