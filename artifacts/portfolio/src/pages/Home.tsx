@@ -55,7 +55,7 @@ const partners = [
 ];
 
 const socialLinks = [
-  { href: "https://afuchat.com/@amkaweesi", label: "AfuChat", icon: MessageSquare },
+  { href: "https://afuchat.com/@amkaweesi", label: "AfuChat", icon: MessageSquare, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
   { href: "https://x.com/amkaweesii", label: "X (Twitter)", icon: Twitter },
   { href: "https://github.com/amkaweesi", label: "GitHub", icon: Github },
   { href: "https://linkedin.com/in/amkaweesi", label: "LinkedIn", icon: Linkedin },
@@ -625,8 +625,12 @@ export default function Home() {
                         rel="noopener noreferrer"
                         className="flex items-center gap-4 py-4 group hover:bg-slate-50 -mx-3 px-3 rounded-xl transition-colors"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors">
-                          <Icon className="w-4 h-4 text-slate-500 group-hover:text-primary transition-colors" />
+                        <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors overflow-hidden">
+                          {(social as any).logoUrl ? (
+                            <img src={(social as any).logoUrl} alt={social.label} className="w-5 h-5 object-contain" />
+                          ) : (
+                            <Icon className="w-4 h-4 text-slate-500 group-hover:text-primary transition-colors" />
+                          )}
                         </div>
                         <span className="text-sm font-medium text-slate-700 group-hover:text-primary transition-colors flex-1">{social.label}</span>
                         <ExternalLink className="w-3.5 h-3.5 text-slate-300 group-hover:text-primary transition-colors" />
@@ -676,7 +680,11 @@ export default function Home() {
               const Icon = social.icon;
               return (
                 <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-primary transition-colors" aria-label={social.label}>
-                  <Icon className="w-4 h-4" />
+                  {(social as any).logoUrl ? (
+                    <img src={(social as any).logoUrl} alt={social.label} className="w-4 h-4 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+                  ) : (
+                    <Icon className="w-4 h-4" />
+                  )}
                 </a>
               );
             })}
