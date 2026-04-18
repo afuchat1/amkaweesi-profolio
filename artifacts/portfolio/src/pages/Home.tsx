@@ -120,12 +120,15 @@ const navItems: NavItem[] = [
     dropdown: projects.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: p.logoUrl, icon: p.icon })),
   },
   { label: "About", href: "#about" },
-  { label: "Clients", href: "#clients" },
+  {
+    label: "Clients",
+    dropdown: clients.map((c) => ({ name: c.name, desc: c.desc, href: `https://${c.domain}`, domain: c.domain, logoUrl: c.logoUrl, icon: c.icon })),
+  },
   { label: "Partners", href: "#partners" },
   { label: "Vision", href: "#vision" },
 ];
 
-function NavDropdown({ items }: { items: DropdownItem[] }) {
+function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text: string; href: string; linkLabel: string } }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8, scale: 0.97 }}
@@ -163,9 +166,9 @@ function NavDropdown({ items }: { items: DropdownItem[] }) {
         ))}
       </div>
       <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/60 flex items-center justify-between">
-        <span className="text-xs text-slate-500">{projects.length} services in the AfuChat ecosystem</span>
-        <a href="#ecosystem" className="text-xs font-medium text-primary flex items-center gap-1 hover:underline">
-          View all <ArrowRight className="w-3 h-3" />
+        <span className="text-xs text-slate-500">{footer.text}</span>
+        <a href={footer.href} className="text-xs font-medium text-primary flex items-center gap-1 hover:underline">
+          {footer.linkLabel} <ArrowRight className="w-3 h-3" />
         </a>
       </div>
     </motion.div>
@@ -262,7 +265,14 @@ export default function Home() {
                 )}
                 <AnimatePresence>
                   {item.dropdown && activeDropdown === item.label && (
-                    <NavDropdown items={item.dropdown} />
+                    <NavDropdown
+                      items={item.dropdown}
+                      footer={
+                        item.label === "Clients"
+                          ? { text: `${clients.length} active client${clients.length !== 1 ? "s" : ""}`, href: "#clients", linkLabel: "View all" }
+                          : { text: `${projects.length} services in the AfuChat ecosystem`, href: "#ecosystem", linkLabel: "View all" }
+                      }
+                    />
                   )}
                 </AnimatePresence>
               </div>
