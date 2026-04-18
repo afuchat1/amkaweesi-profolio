@@ -46,7 +46,7 @@ const projects = [
 
 const clients = [
   { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers", icon: CreditCard, brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  }, logoUrl: "https://pay.afuchat.com/favicon.ico" },
-  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",   icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "https://honeybeeministriesug.org/favicon.ico" },
+  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",   icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "https://honeybeeministriesug.org/favicon.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
   { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "https://sabulashoespot.com/favicon.ico" },
 ];
 
@@ -477,7 +477,13 @@ export default function Home() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Ecosystem</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">The AfuChat Suite</h2>
-              <p className="text-lg text-slate-500 max-w-xl">A unified collection of {projects.length} interconnected digital services — each purpose-built, all connected.</p>
+              <p className="text-lg text-slate-500 max-w-xl mb-4">A unified collection of {projects.length} interconnected digital services — each purpose-built, all connected.</p>
+              <div className="flex items-center gap-2.5">
+                <div className="p-0.5 rounded-full bg-gradient-to-br from-primary via-blue-400 to-indigo-400">
+                  <img src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg" alt="AM Kaweesi" className="w-7 h-7 rounded-full object-cover block" />
+                </div>
+                <span className="text-sm text-slate-500">Built by <span className="font-semibold text-slate-700">AM Kaweesi</span></span>
+              </div>
             </div>
             {/* carousel controls */}
             <div className="flex items-center gap-2 shrink-0">
@@ -575,6 +581,18 @@ export default function Home() {
                     <h3 className="text-base font-semibold mb-1" style={{ color: client.brand.dark ? "#f1f5f9" : "#0f172a" }}>{client.name}</h3>
                     <p className="text-sm leading-relaxed" style={{ color: client.brand.dark ? "#94a3b8" : "#64748b" }}>{client.desc}</p>
                   </div>
+                  {(client as any).founderImg && (
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-0.5 rounded-full" style={{ background: `linear-gradient(135deg, ${client.brand.primary}, #fbbf24)` }}>
+                        <img
+                          src={(client as any).founderImg}
+                          alt={(client as any).founderLabel ?? "Founder"}
+                          className="w-8 h-8 rounded-full object-cover block"
+                        />
+                      </div>
+                      <span className="text-xs" style={{ color: client.brand.dark ? "#94a3b8" : "#64748b" }}>{(client as any).founderLabel ?? "Founder"}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full border" style={{ background: client.brand.dark ? "#1e1e1e" : "#ffffff", borderColor: client.brand.dark ? "#333" : "#e2e8f0", color: client.brand.dark ? "#94a3b8" : "#64748b" }}>Client</span>
