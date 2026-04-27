@@ -121,7 +121,10 @@ const navItems: NavItem[] = [
     label: "Clients",
     dropdown: clients.map((c) => ({ name: c.name, desc: c.desc, href: `https://${c.domain}`, domain: c.domain, logoUrl: c.logoUrl, icon: c.icon })),
   },
-  { label: "Partners", href: "#partners" },
+  {
+    label: "Partners",
+    dropdown: partners.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: (p as any).logoUrl, icon: p.icon })),
+  },
   { label: "Vision", href: "#vision" },
 ];
 
@@ -453,6 +456,8 @@ export default function Home() {
                       footer={
                         item.label === "Clients"
                           ? { text: `${clients.length} active client${clients.length !== 1 ? "s" : ""}`, href: "#clients", linkLabel: "View all" }
+                          : item.label === "Partners"
+                          ? { text: `${partners.length} ecosystem partner${partners.length !== 1 ? "s" : ""}`, href: "#partners", linkLabel: "View all" }
                           : { text: `${projects.length} services in the AfuChat ecosystem`, href: "#ecosystem", linkLabel: "View all" }
                       }
                     />
@@ -528,15 +533,42 @@ export default function Home() {
                   )}
                 </AnimatePresence>
 
-                {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Vision", href: "#vision" }, { label: "Contact", href: "#contact" }].map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </a>
+                {[
+                  { label: "About", href: "#about" },
+                  { label: "Clients", href: "#clients" },
+                  { label: "Partners", href: "#partners", subItems: partners.map((p) => ({ name: p.name, href: `https://${p.domain}`, icon: p.icon })) },
+                  { label: "Vision", href: "#vision" },
+                  { label: "Contact", href: "#contact" },
+                ].map((item) => (
+                  <div key={item.label}>
+                    <a
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                    {item.subItems && item.subItems.length > 0 && (
+                      <div className="pl-4 pb-1 flex flex-col gap-0.5">
+                        {item.subItems.map((sub) => {
+                          const Icon = sub.icon;
+                          return (
+                            <a
+                              key={sub.name}
+                              href={sub.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
+                            >
+                              <Icon className="w-4 h-4 text-slate-400" />
+                              {sub.name}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 ))}
 
                 <div className="pt-2 pb-1">
