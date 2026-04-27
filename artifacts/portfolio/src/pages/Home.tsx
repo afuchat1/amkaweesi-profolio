@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import useEmblaCarousel from "embla-carousel-react";
 import {
   ExternalLink,
   Mail,
@@ -19,12 +18,12 @@ import {
   Calculator,
   Menu,
   X,
-  ArrowLeft,
   CreditCard,
   Layers,
   Headphones,
   GraduationCap,
   Code2,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,17 +36,17 @@ const projects = [
   { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#1e3a5f", card: "#0a0a0a", cardBorder: "#1e2a3a", dark: true  }, logoUrl: "/favicons/email.afuchat.com.svg" },
   { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/cloud.afuchat.com.ico" },
   { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4", dark: false }, logoUrl: "/favicons/blog.afuchat.com.ico" },
-  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ffffff", cardBorder: "#a5f3fc", dark: false }, logoUrl: "/favicons/build.afuchat.com.ico" },
+  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ffffff", cardBorder: "#a5f3fc", dark: false }, logoUrl: "/favicons/build.afuchat.com.svg" },
   { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ads.afuchat.com.svg" },
   { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "/favicons/math.afuchat.com.png" },
   { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "/favicons/desk.afuchat.com.ico" },
-  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "/favicons/dev.afuchat.com.ico", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
+  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "/favicons/dev.afuchat.com.svg", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
 ];
 
 const clients = [
   { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers", icon: CreditCard, brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  } },
   { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",   icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
-  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "/favicons/sabulashoespot.com.ico" },
+  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "/favicons/sabulashoespot.com.svg" },
 ];
 
 const partners = [
@@ -205,11 +204,6 @@ export default function Home() {
       })
       .catch(() => {});
   };
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start", dragFree: true });
-
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   const handleMouseEnter = (label: string) => {
     if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
@@ -479,79 +473,151 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════ ECOSYSTEM — CAROUSEL ══════════ */}
-      <section id="ecosystem" className="py-28 bg-slate-50 border-t border-slate-100">
+      {/* ══════════ ECOSYSTEM — BENTO GRID ══════════ */}
+      <section id="ecosystem" className="py-28 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-t border-slate-100">
         <div className="max-w-6xl mx-auto px-6">
           <Breadcrumb items={["AMK", "Products", "Ecosystem"]} />
-          <motion.div {...fadeUp} className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Ecosystem</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">The AfuChat Suite</h2>
-              <p className="text-lg text-slate-500 max-w-xl mb-4">A unified collection of {projects.length} interconnected digital services — each purpose-built, all connected.</p>
-              <div className="flex items-center gap-2.5">
-                <div className="p-0.5 rounded-full bg-gradient-to-br from-primary via-blue-400 to-indigo-400">
-                  <img src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg" alt="AM Kaweesi" className="w-7 h-7 rounded-full object-cover block" />
-                </div>
-                <span className="text-sm text-slate-500">Built by <span className="font-semibold text-slate-700">AM Kaweesi</span></span>
-              </div>
+
+          {/* heading */}
+          <motion.div {...fadeUp} className="mb-12 max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-widest mb-5">
+              <Sparkles className="w-3.5 h-3.5" />
+              Ecosystem
             </div>
-            {/* carousel controls */}
-            <div className="flex items-center gap-2 shrink-0">
-              <button onClick={scrollPrev} className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm">
-                <ArrowLeft className="w-4 h-4 text-slate-600" />
-              </button>
-              <button onClick={scrollNext} className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm">
-                <ArrowRight className="w-4 h-4 text-slate-600" />
-              </button>
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4 leading-[1.1]">
+              The AfuChat Suite.
+              <br />
+              <span className="text-slate-400">{projects.length} services. One ecosystem.</span>
+            </h2>
+            <p className="text-lg text-slate-500 mb-6">
+              A unified collection of interconnected digital services — communication, payments, cloud, publishing, education, and tools — each purpose-built, all connected.
+            </p>
+            <div className="flex items-center gap-2.5">
+              <div className="p-0.5 rounded-full bg-gradient-to-br from-primary via-blue-400 to-indigo-400">
+                <img src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg" alt="AM Kaweesi" className="w-7 h-7 rounded-full object-cover block" />
+              </div>
+              <span className="text-sm text-slate-500">Built by <span className="font-semibold text-slate-700">AM Kaweesi</span></span>
             </div>
           </motion.div>
-        </div>
 
-        {/* embla carousel — full width, overflow visible */}
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-4 px-6 md:px-[calc((100vw-72rem)/2+1.5rem)]">
-            {projects.map((project) => (
-                <div
+          {/* bento grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[200px] gap-4">
+            {projects.map((project, idx) => {
+              const isFeatured = idx === 0;
+              const visits = visitCounts[project.domain];
+              const ctaHref = (project as any).ctaHref as string | undefined;
+              const ctaLabel = (project as any).ctaLabel as string | undefined;
+              const txtMain = project.brand.dark ? "#f1f5f9" : "#0f172a";
+              const txtSub = project.brand.dark ? "#94a3b8" : "#64748b";
+              const txtMuted = project.brand.dark ? "#64748b" : "#94a3b8";
+              return (
+                <motion.div
                   key={project.name}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.45, delay: Math.min(idx * 0.05, 0.4) }}
                   onClick={() => { trackVisit(project.domain); window.open(`https://${project.domain}`, "_blank"); }}
-                  className="group flex flex-col flex-[0_0_220px] md:flex-[0_0_240px] p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-250 cursor-pointer"
-                  style={{ background: project.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: project.brand.cardBorder }}
+                  className={`group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                    isFeatured ? "lg:col-span-2 lg:row-span-2" : ""
+                  }`}
+                  style={{
+                    background: project.brand.card,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderColor: project.brand.cardBorder,
+                  }}
                 >
-                  <div className="mb-5 p-2.5 rounded-xl inline-flex w-fit" style={{ background: project.brand.iconBg, color: project.brand.primary }}>
-                    <ServiceLogo
-                      name={project.name}
-                      domain={project.domain}
-                      logoUrl={project.logoUrl}
-                      FallbackIcon={project.icon}
-                      imgClassName="w-7 h-7 object-contain rounded"
-                      iconClassName="w-7 h-7"
-                    />
-                  </div>
-                  <h3 className="text-base font-semibold mb-1.5" style={{ color: project.brand.dark ? "#f1f5f9" : "#0f172a" }}>{project.name}</h3>
-                  <p className="text-sm flex-1 leading-relaxed" style={{ color: project.brand.dark ? "#94a3b8" : "#64748b" }}>{project.desc}</p>
-                  {visitCounts[project.domain] ? (
-                    <p className="mt-2 text-xs" style={{ color: project.brand.dark ? "#64748b" : "#94a3b8" }}>
-                      {visitCounts[project.domain].toLocaleString()} visit{visitCounts[project.domain] !== 1 ? "s" : ""}
-                    </p>
-                  ) : null}
-                  {(project as any).ctaHref ? (
-                    <a
-                      href={(project as any).ctaHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="mt-4 inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-opacity"
-                      style={{ background: project.brand.iconBg, color: project.brand.primary, border: `1px solid ${project.brand.cardBorder}` }}
-                    >
-                      {(project as any).ctaLabel} <ExternalLink className="w-3 h-3" />
-                    </a>
-                  ) : (
-                    <div className="mt-4 flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: project.brand.primary }}>
-                      Visit <ExternalLink className="w-3 h-3" />
+                  {/* brand color top stripe */}
+                  <div className="h-1 w-full shrink-0" style={{ background: project.brand.primary }} />
+
+                  {/* soft brand glow on featured + on hover */}
+                  <div
+                    className={`pointer-events-none absolute -right-16 -top-16 w-56 h-56 rounded-full blur-3xl transition-opacity duration-500 ${
+                      isFeatured ? "opacity-25" : "opacity-0 group-hover:opacity-20"
+                    }`}
+                    style={{ background: project.brand.primary }}
+                  />
+
+                  <div className={`relative flex flex-col flex-1 ${isFeatured ? "p-7" : "p-5"}`}>
+                    {/* logo + featured badge */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div
+                        className={`rounded-xl inline-flex items-center justify-center ${isFeatured ? "p-3" : "p-2.5"}`}
+                        style={{ background: project.brand.iconBg, color: project.brand.primary }}
+                      >
+                        <ServiceLogo
+                          name={project.name}
+                          domain={project.domain}
+                          logoUrl={project.logoUrl}
+                          FallbackIcon={project.icon}
+                          imgClassName={`object-contain rounded ${isFeatured ? "w-9 h-9" : "w-6 h-6"}`}
+                          iconClassName={isFeatured ? "w-9 h-9" : "w-6 h-6"}
+                        />
+                      </div>
+                      {isFeatured && (
+                        <span
+                          className="text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full"
+                          style={{ background: project.brand.iconBg, color: project.brand.primary }}
+                        >
+                          Flagship
+                        </span>
+                      )}
                     </div>
-                  )}
-                </div>
-            ))}
+
+                    {/* title + desc */}
+                    <h3
+                      className={`font-semibold mb-1.5 ${isFeatured ? "text-2xl" : "text-base"}`}
+                      style={{ color: txtMain }}
+                    >
+                      {project.name}
+                    </h3>
+                    <p
+                      className={`leading-relaxed flex-1 ${isFeatured ? "text-base" : "text-sm line-clamp-2"}`}
+                      style={{ color: txtSub }}
+                    >
+                      {project.desc}
+                    </p>
+
+                    {/* footer */}
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-xs truncate" style={{ color: txtMuted }}>
+                          {project.domain}
+                        </span>
+                        {visits ? (
+                          <span
+                            className="hidden sm:inline-flex shrink-0 text-[10px] font-medium px-2 py-0.5 rounded-full"
+                            style={{ background: project.brand.iconBg, color: project.brand.primary }}
+                          >
+                            {visits.toLocaleString()} {visits === 1 ? "visit" : "visits"}
+                          </span>
+                        ) : null}
+                      </div>
+                      {ctaHref ? (
+                        <a
+                          href={ctaHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-transform group-hover:scale-105"
+                          style={{ background: project.brand.primary, color: "#ffffff" }}
+                        >
+                          {ctaLabel} <ArrowRight className="w-3 h-3" />
+                        </a>
+                      ) : (
+                        <div
+                          className="shrink-0 w-8 h-8 rounded-full inline-flex items-center justify-center transition-all group-hover:scale-110"
+                          style={{ background: project.brand.iconBg, color: project.brand.primary }}
+                        >
+                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
