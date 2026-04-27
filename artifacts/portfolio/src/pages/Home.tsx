@@ -180,7 +180,7 @@ const LEVEL_COLORS = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const AVAILABLE_YEARS = [2026, 2025, 2024];
 
-function GitHubActivity() {
+function HeroHeatmap() {
   const [year, setYear] = useState<number>(AVAILABLE_YEARS[0]);
   const [days, setDays] = useState<ContribDay[] | null>(null);
   const [total, setTotal] = useState<number | null>(null);
@@ -235,143 +235,132 @@ function GitHubActivity() {
   });
 
   return (
-    <section id="activity" className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
-      <div className="max-w-6xl mx-auto">
-        <Breadcrumb items={["AMK", "Activity"]} />
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-          <motion.div {...fadeUp}>
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Live from GitHub</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 flex items-center gap-3 flex-wrap">
-              Contributions
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live
-              </span>
-            </h2>
-            <p className="text-lg text-slate-500">
-              {total !== null ? (
-                <><span className="font-semibold text-slate-900">{total.toLocaleString()}</span> contributions in {year} on <span className="font-mono text-slate-700">@afuchat1</span>.</>
-              ) : (
-                <>Loading contributions for {year}…</>
-              )}
-            </p>
-          </motion.div>
+    <div className="bg-white border border-slate-200 rounded-2xl p-5 md:p-6">
+      {/* compact header — title left, year selector right */}
+      <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <Github className="w-4 h-4 text-slate-700 shrink-0" />
+          <span className="text-sm font-semibold text-slate-900">
+            {total !== null ? `${total.toLocaleString()} contributions` : "Loading…"}
+          </span>
+          <span className="text-sm text-slate-400">in {year}</span>
+          <span className="hidden sm:inline-flex items-center gap-1.5 ml-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Live
+          </span>
+        </div>
+        <div className="inline-flex items-center gap-1 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+          {AVAILABLE_YEARS.map((y) => (
+            <button
+              key={y}
+              onClick={() => setYear(y)}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                year === y
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              {y}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {error ? (
+        <div className="py-10 text-center">
+          <p className="text-sm text-slate-500 mb-2">Couldn't load contributions.</p>
           <a
             href="https://github.com/afuchat1"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-primary transition-colors self-start md:self-auto"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
           >
-            <Github className="w-4 h-4" /> View profile <ArrowRight className="w-3.5 h-3.5" />
+            <Github className="w-4 h-4" /> View on GitHub
           </a>
         </div>
-
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
-          {/* year selector */}
-          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-            <div className="inline-flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200">
-              {AVAILABLE_YEARS.map((y) => (
-                <button
-                  key={y}
-                  onClick={() => setYear(y)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
-                    year === y
-                      ? "bg-white text-slate-900 shadow-sm"
-                      : "text-slate-500 hover:text-slate-900"
-                  }`}
-                >
-                  {y}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {error ? (
-            <div className="p-8 text-center">
-              <p className="text-sm text-slate-500 mb-2">Couldn't load the contribution graph.</p>
-              <a
-                href="https://github.com/afuchat1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-              >
-                <Github className="w-4 h-4" /> View on GitHub
-              </a>
-            </div>
-          ) : days === null ? (
-            <div className="h-[180px] flex items-center justify-center">
-              <div className="text-sm text-slate-400">Loading {year} contributions…</div>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <div className="inline-block min-w-full">
-                {/* month labels row */}
-                <div className="flex pl-8 mb-1.5 text-[11px] text-slate-500 select-none" style={{ gap: 3 }}>
-                  {weeks.map((_, i) => {
-                    const label = monthLabels.find((m) => m.idx === i)?.label ?? "";
-                    return (
-                      <div key={i} style={{ width: 13, minWidth: 13 }} className="text-left">
-                        {label}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="flex">
-                  {/* day-of-week labels */}
-                  <div className="flex flex-col mr-2 text-[11px] text-slate-500 select-none" style={{ gap: 3 }}>
-                    {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
-                      <div key={i} style={{ height: 11, lineHeight: "11px" }}>{d}</div>
-                    ))}
+      ) : days === null ? (
+        <div className="h-[140px] flex items-center justify-center">
+          <div className="text-sm text-slate-400">Loading {year}…</div>
+        </div>
+      ) : (
+        <div className="overflow-x-auto -mx-1 px-1">
+          <div className="inline-block min-w-full">
+            {/* month labels row */}
+            <div className="flex pl-7 mb-1.5 text-[10px] text-slate-500 select-none" style={{ gap: 3 }}>
+              {weeks.map((_, i) => {
+                const label = monthLabels.find((m) => m.idx === i)?.label ?? "";
+                return (
+                  <div key={i} style={{ width: 11, minWidth: 11 }} className="text-left">
+                    {label}
                   </div>
+                );
+              })}
+            </div>
 
-                  {/* heatmap grid */}
-                  <div className="flex" style={{ gap: 3 }}>
-                    {weeks.map((week, wi) => (
-                      <div key={wi} className="flex flex-col" style={{ gap: 3 }}>
-                        {week.map((day, di) => (
-                          <div
-                            key={di}
-                            title={day ? `${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}` : ""}
-                            className="rounded-[2px] transition-transform hover:scale-125 hover:ring-1 hover:ring-slate-400"
-                            style={{
-                              width: 11,
-                              height: 11,
-                              background: day ? LEVEL_COLORS[day.level] : "transparent",
-                              border: day && day.level === 0 ? "1px solid #e5e7eb" : "none",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div className="flex">
+              {/* day-of-week labels */}
+              <div className="flex flex-col mr-2 text-[10px] text-slate-500 select-none" style={{ gap: 3 }}>
+                {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
+                  <div key={i} style={{ height: 11, lineHeight: "11px" }}>{d}</div>
+                ))}
+              </div>
 
-                {/* legend */}
-                <div className="flex items-center justify-end gap-2 mt-4 text-[11px] text-slate-500">
-                  <span>Less</span>
-                  <div className="flex" style={{ gap: 3 }}>
-                    {LEVEL_COLORS.map((c, i) => (
+              {/* heatmap grid */}
+              <div className="flex" style={{ gap: 3 }}>
+                {weeks.map((week, wi) => (
+                  <div key={wi} className="flex flex-col" style={{ gap: 3 }}>
+                    {week.map((day, di) => (
                       <div
-                        key={i}
-                        className="rounded-[2px]"
+                        key={di}
+                        title={day ? `${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}` : ""}
+                        className="rounded-[2px] transition-transform hover:scale-125"
                         style={{
                           width: 11,
                           height: 11,
-                          background: c,
-                          border: i === 0 ? "1px solid #e5e7eb" : "none",
+                          background: day ? LEVEL_COLORS[day.level] : "transparent",
+                          border: day && day.level === 0 ? "1px solid #e5e7eb" : "none",
                         }}
                       />
                     ))}
                   </div>
-                  <span>More</span>
-                </div>
+                ))}
               </div>
             </div>
-          )}
+
+            {/* legend + cta row */}
+            <div className="flex items-center justify-between mt-4 gap-3 flex-wrap">
+              <a
+                href="https://github.com/afuchat1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-primary transition-colors"
+              >
+                <Github className="w-3.5 h-3.5" /> @afuchat1 on GitHub
+                <ArrowRight className="w-3 h-3" />
+              </a>
+              <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                <span>Less</span>
+                <div className="flex" style={{ gap: 3 }}>
+                  {LEVEL_COLORS.map((c, i) => (
+                    <div
+                      key={i}
+                      className="rounded-[2px]"
+                      style={{
+                        width: 11,
+                        height: 11,
+                        background: c,
+                        border: i === 0 ? "1px solid #e5e7eb" : "none",
+                      }}
+                    />
+                  ))}
+                </div>
+                <span>More</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      )}
+    </div>
   );
 }
 
@@ -561,70 +550,72 @@ export default function Home() {
         </AnimatePresence>
       </nav>
 
-      {/* ══════════ HERO ══════════ */}
-      <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-[0.07]">
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-city-at-night-12493-large.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-white/70 to-indigo-50/80" />
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
+      {/* ══════════ HERO — flat, heatmap-first ══════════ */}
+      <section className="relative pt-28 pb-16 px-6 bg-gradient-to-b from-blue-50/40 via-white to-white border-b border-slate-100">
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 w-full pt-28 pb-16">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* left — text */}
-            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
-
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-sm font-medium text-blue-700 mb-7">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+          {/* identity row — photo + name + status, all flat */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-5 mt-2 mb-8"
+          >
+            <img
+              src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg"
+              alt="AM Kaweesi"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover ring-1 ring-slate-200 shrink-0"
+            />
+            <div className="min-w-0">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-semibold text-blue-700 mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 Builder of the AfuChat Ecosystem
               </div>
-
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] text-slate-900 mb-5">
-                AM Kaweesi
-                <br />
-                <span className="text-primary">Digital Builder.</span>
+              <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight text-slate-900">
+                AM Kaweesi <span className="text-primary">· Digital Builder</span>
               </h1>
-              <p className="text-xl text-slate-600 leading-relaxed mb-9 max-w-xl">
-                Building connected digital systems across communication, payments, cloud, publishing, and tools.
-              </p>
+            </div>
+          </motion.div>
 
-              <div className="flex flex-wrap items-center gap-4">
-                <Button size="lg" className="px-8 text-base rounded-full shadow-md shadow-blue-100" asChild>
-                  <a href="#ecosystem">Explore Ecosystem <ArrowRight className="ml-2 w-4 h-4" /></a>
-                </Button>
-                <Button size="lg" variant="outline" className="px-8 text-base rounded-full border-slate-300 bg-white hover:bg-slate-50" asChild>
-                  <a href="#contact">Contact Me</a>
-                </Button>
-              </div>
-            </motion.div>
+          {/* tagline */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-lg text-slate-600 leading-relaxed max-w-2xl mb-8"
+          >
+            Building connected digital systems across communication, payments, cloud, publishing, and tools.
+          </motion.p>
 
-            {/* right — photo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.75, delay: 0.15 }}
-              className="flex justify-center md:justify-end"
-            >
-              <div className="relative">
-                {/* outer glow ring */}
-                <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-primary/20 via-blue-200/30 to-indigo-200/20 blur-xl" />
-                {/* colored border frame */}
-                <div className="relative p-1 rounded-[1.75rem] bg-gradient-to-br from-primary via-blue-400 to-indigo-400 shadow-2xl shadow-blue-200/60">
-                  <img
-                    src="https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg"
-                    alt="AM Kaweesi"
-                    className="w-64 h-64 md:w-80 md:h-80 object-cover rounded-[1.6rem] block"
-                  />
-                </div>
-                {/* floating badge */}
-                <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-lg shadow-slate-200/80 border border-slate-100 px-4 py-2.5 flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                  <span className="text-sm font-semibold text-slate-800">Available for projects</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          {/* ★ contribution heatmap — first thing seen, flat */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="mb-8"
+          >
+            <HeroHeatmap />
+          </motion.div>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="flex flex-wrap items-center gap-3"
+          >
+            <Button size="lg" className="px-7 text-base rounded-full" asChild>
+              <a href="#ecosystem">Explore Ecosystem <ArrowRight className="ml-2 w-4 h-4" /></a>
+            </Button>
+            <Button size="lg" variant="outline" className="px-7 text-base rounded-full border-slate-300 bg-white hover:bg-slate-50" asChild>
+              <a href="#contact">Contact Me</a>
+            </Button>
+            <span className="inline-flex items-center gap-2 ml-1 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Available for projects
+            </span>
+          </motion.div>
         </div>
       </section>
 
@@ -800,8 +791,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════ LIVE GITHUB ACTIVITY ══════════ */}
-      <GitHubActivity />
 
 
       {/* ══════════ CLIENTS ══════════ */}
