@@ -179,7 +179,6 @@ export default function Home() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
-  const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -797,9 +796,24 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Contact</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-5">Let's Connect</h2>
-              <p className="text-lg text-slate-600 mb-10 leading-relaxed">
+              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 Interested in the ecosystem? Let's talk about infrastructure, collaboration, or what you're building.
               </p>
+
+              {/* primary email CTA */}
+              <a
+                href="mailto:amkaweesi@afuchat.com"
+                className="group flex items-center gap-4 p-4 mb-3 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-blue-50/40 to-indigo-50/30 hover:border-primary/40 hover:shadow-md transition-all"
+              >
+                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:border-primary transition-colors">
+                  <Mail className="w-5 h-5 text-primary group-hover:text-white transition-colors" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-0.5">Email me directly</p>
+                  <p className="text-base font-semibold text-slate-900 truncate">amkaweesi@afuchat.com</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />
+              </a>
 
               {/* horizontal social link strip */}
               <div className="flex flex-col gap-0">
@@ -831,26 +845,49 @@ export default function Home() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
-              className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8"
+              className="relative bg-white rounded-2xl border border-slate-200 shadow-sm p-8 overflow-hidden"
             >
-              <h3 className="text-lg font-semibold text-slate-900 mb-6">Send a Message</h3>
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              {/* coming-soon ribbon */}
+              <div className="absolute top-5 right-5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-semibold uppercase tracking-wider text-amber-700">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                Coming soon
+              </div>
+
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Send a Message</h3>
+              <p className="text-sm text-slate-500 mb-6 max-w-sm">
+                The in-page contact form is on the way. In the meantime, drop me an email — I read everything.
+              </p>
+
+              <form
+                className="space-y-5 opacity-50 pointer-events-none select-none"
+                aria-disabled="true"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-slate-700">Name</label>
-                  <Input placeholder="Your name" value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className="h-11 border-slate-200 focus-visible:ring-primary" />
+                  <Input placeholder="Your name" disabled className="h-11 border-slate-200" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-slate-700">Email</label>
-                  <Input type="email" placeholder="your@email.com" value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className="h-11 border-slate-200 focus-visible:ring-primary" />
+                  <Input type="email" placeholder="your@email.com" disabled className="h-11 border-slate-200" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-slate-700">Message</label>
-                  <Textarea placeholder="What's on your mind?" value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="min-h-[120px] resize-none border-slate-200 focus-visible:ring-primary" />
+                  <Textarea placeholder="What's on your mind?" disabled className="min-h-[120px] resize-none border-slate-200" />
                 </div>
-                <Button type="submit" className="w-full h-11 text-sm font-medium shadow-sm shadow-blue-100">
-                  Send Message <Send className="ml-2 w-4 h-4" />
+                <Button type="button" disabled className="w-full h-11 text-sm font-medium">
+                  Coming soon
                 </Button>
               </form>
+
+              <a
+                href="mailto:amkaweesi@afuchat.com"
+                className="mt-6 inline-flex items-center justify-center w-full gap-2 h-11 px-5 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm shadow-blue-100"
+              >
+                <Mail className="w-4 h-4" />
+                Email amkaweesi@afuchat.com
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </motion.div>
           </div>
         </div>
