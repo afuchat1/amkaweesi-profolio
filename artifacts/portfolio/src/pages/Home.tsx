@@ -172,6 +172,164 @@ function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text:
   );
 }
 
+/* ─────────────────────────────────── github activity ──── */
+type GitHubCommit = {
+  sha: string;
+  message: string;
+  url: string;
+  repo: string;
+  branch: string;
+  date: string;
+};
+
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const sec = Math.floor(diff / 1000);
+  if (sec < 60) return `${sec}s ago`;
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h ago`;
+  const day = Math.floor(hr / 24);
+  if (day < 30) return `${day}d ago`;
+  const mo = Math.floor(day / 30);
+  if (mo < 12) return `${mo}mo ago`;
+  return `${Math.floor(mo / 12)}y ago`;
+}
+
+function GitHubActivity() {
+  const [commits, setCommits] = useState<GitHubCommit[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("https://api.github.com/users/afuchat1/events/public?per_page=30")
+      .then((r) => {
+        if (!r.ok) throw new Error(`GitHub API ${r.status}`);
+        return r.json();
+      })
+      .then((events: any[]) => {
+        if (cancelled) return;
+        const out: GitHubCommit[] = [];
+        for (const ev of events) {
+          if (ev.type !== "PushEvent") continue;
+          const repo: string = ev.repo?.name ?? "";
+          const ref: string = ev.payload?.ref ?? "";
+          const branch = ref.replace(/^refs\/heads\//, "");
+          const created: string = ev.created_at;
+          const commitsArr: any[] = ev.payload?.commits ?? [];
+          for (let i = commitsArr.length - 1; i >= 0; i--) {
+            const c = commitsArr[i];
+            out.push({
+              sha: c.sha,
+              message: (c.message ?? "").split("\n")[0],
+              url: `https://github.com/${repo}/commit/${c.sha}`,
+              repo,
+              branch,
+              date: created,
+            });
+            if (out.length >= 6) break;
+          }
+          if (out.length >= 6) break;
+        }
+        setCommits(out);
+      })
+      .catch((e) => { if (!cancelled) setError(String(e.message ?? e)); });
+    return () => { cancelled = true; };
+  }, []);
+
+  return (
+    <section id="activity" className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+      <div className="max-w-6xl mx-auto">
+        <Breadcrumb items={["AMK", "Activity"]} />
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <motion.div {...fadeUp}>
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Live from GitHub</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 flex items-center gap-3">
+              Recent Commits
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live
+              </span>
+            </h2>
+            <p className="text-lg text-slate-500">What I've been shipping on @afuchat1.</p>
+          </motion.div>
+          <a
+            href="https://github.com/afuchat1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-primary transition-colors self-start md:self-auto"
+          >
+            <Github className="w-4 h-4" /> View profile <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          {error ? (
+            <div className="p-8 text-center">
+              <p className="text-sm text-slate-500 mb-2">Couldn't load live activity right now.</p>
+              <a
+                href="https://github.com/afuchat1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+              >
+                <Github className="w-4 h-4" /> See activity on GitHub
+              </a>
+            </div>
+          ) : commits === null ? (
+            <div className="divide-y divide-slate-100">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex items-center gap-4 p-5 animate-pulse">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-slate-100 rounded w-2/3" />
+                    <div className="h-3 bg-slate-50 rounded w-1/3" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : commits.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-500">No recent push activity. Check back soon.</div>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {commits.map((c) => (
+                <a
+                  key={c.sha}
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 text-white inline-flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                    <Github className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-primary transition-colors">
+                      {c.message}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 min-w-0">
+                      <span className="font-mono truncate">{c.repo}</span>
+                      <span className="text-slate-300">·</span>
+                      <span className="font-mono shrink-0">{c.branch}</span>
+                      <span className="text-slate-300 shrink-0">·</span>
+                      <span className="shrink-0">{timeAgo(c.date)}</span>
+                    </div>
+                  </div>
+                  <span className="hidden sm:inline-flex font-mono text-[11px] text-slate-400 px-2 py-1 rounded-md bg-slate-50 border border-slate-200 shrink-0">
+                    {c.sha.substring(0, 7)}
+                  </span>
+                  <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors shrink-0" />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─────────────────────────────────── main component ──── */
 export default function Home() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -497,10 +655,9 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* bento grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[200px] gap-4">
+          {/* uniform grid — all cards equal size for clarity */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {projects.map((project, idx) => {
-              const isFeatured = idx === 0;
               const visits = visitCounts[project.domain];
               const ctaHref = (project as any).ctaHref as string | undefined;
               const ctaLabel = (project as any).ctaLabel as string | undefined;
@@ -515,9 +672,7 @@ export default function Home() {
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.45, delay: Math.min(idx * 0.05, 0.4) }}
                   onClick={() => { trackVisit(project.domain); window.open(`https://${project.domain}`, "_blank"); }}
-                  className={`group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                    isFeatured ? "lg:col-span-2 lg:row-span-2" : ""
-                  }`}
+                  className="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl min-h-[260px]"
                   style={{
                     background: project.brand.card,
                     borderWidth: 1,
@@ -528,19 +683,17 @@ export default function Home() {
                   {/* brand color top stripe */}
                   <div className="h-1 w-full shrink-0" style={{ background: project.brand.primary }} />
 
-                  {/* soft brand glow on featured + on hover */}
+                  {/* soft brand glow on hover */}
                   <div
-                    className={`pointer-events-none absolute -right-16 -top-16 w-56 h-56 rounded-full blur-3xl transition-opacity duration-500 ${
-                      isFeatured ? "opacity-25" : "opacity-0 group-hover:opacity-20"
-                    }`}
+                    className="pointer-events-none absolute -right-16 -top-16 w-56 h-56 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"
                     style={{ background: project.brand.primary }}
                   />
 
-                  <div className={`relative flex flex-col flex-1 ${isFeatured ? "p-7" : "p-5"}`}>
-                    {/* logo + featured badge */}
-                    <div className="flex items-start justify-between mb-4">
+                  <div className="relative flex flex-col flex-1 p-5">
+                    {/* logo */}
+                    <div className="mb-4">
                       <div
-                        className={`rounded-xl inline-flex items-center justify-center ${isFeatured ? "p-3" : "p-2.5"}`}
+                        className="rounded-xl inline-flex items-center justify-center p-2.5"
                         style={{ background: project.brand.iconBg, color: project.brand.primary }}
                       >
                         <ServiceLogo
@@ -548,45 +701,28 @@ export default function Home() {
                           domain={project.domain}
                           logoUrl={project.logoUrl}
                           FallbackIcon={project.icon}
-                          imgClassName={`object-contain rounded ${isFeatured ? "w-9 h-9" : "w-6 h-6"}`}
-                          iconClassName={isFeatured ? "w-9 h-9" : "w-6 h-6"}
+                          imgClassName="object-contain rounded w-7 h-7"
+                          iconClassName="w-7 h-7"
                         />
                       </div>
-                      {isFeatured && (
-                        <span
-                          className="text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full"
-                          style={{ background: project.brand.iconBg, color: project.brand.primary }}
-                        >
-                          Flagship
-                        </span>
-                      )}
                     </div>
 
                     {/* title + desc */}
-                    <h3
-                      className={`font-semibold mb-1.5 ${isFeatured ? "text-2xl" : "text-base"}`}
-                      style={{ color: txtMain }}
-                    >
+                    <h3 className="font-semibold mb-1.5 text-base" style={{ color: txtMain }}>
                       {project.name}
                     </h3>
-                    <p
-                      className={`leading-relaxed flex-1 ${isFeatured ? "text-base" : "text-sm line-clamp-2"}`}
-                      style={{ color: txtSub }}
-                    >
+                    <p className="text-sm leading-relaxed flex-1 line-clamp-3" style={{ color: txtSub }}>
                       {project.desc}
                     </p>
 
                     {/* footer */}
-                    <div className="mt-4 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-xs truncate" style={{ color: txtMuted }}>
+                    <div className="mt-4 pt-3 border-t flex items-center justify-between gap-3" style={{ borderColor: project.brand.cardBorder }}>
+                      <div className="flex flex-col gap-0.5 min-w-0">
+                        <span className="text-xs truncate font-medium" style={{ color: txtMuted }}>
                           {project.domain}
                         </span>
                         {visits ? (
-                          <span
-                            className="hidden sm:inline-flex shrink-0 text-[10px] font-medium px-2 py-0.5 rounded-full"
-                            style={{ background: project.brand.iconBg, color: project.brand.primary }}
-                          >
+                          <span className="text-[10px]" style={{ color: txtMuted }}>
                             {visits.toLocaleString()} {visits === 1 ? "visit" : "visits"}
                           </span>
                         ) : null}
@@ -618,6 +754,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ══════════ LIVE GITHUB ACTIVITY ══════════ */}
+      <GitHubActivity />
+
 
       {/* ══════════ CLIENTS ══════════ */}
       <section id="clients" className="py-24 px-6 bg-white border-t border-slate-100">
