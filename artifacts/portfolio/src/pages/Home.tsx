@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type ReactNode } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
@@ -23,15 +23,6 @@ import {
   GraduationCap,
   Code2,
   Sparkles,
-  GitCommitHorizontal,
-  GitPullRequest,
-  GitBranch,
-  GitFork,
-  Tag,
-  CircleDot,
-  Star,
-  Eye,
-  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,231 +172,87 @@ function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text:
   );
 }
 
-/* ─────────────────────────────────── github activity ──── */
-type GitHubActivityItem = {
-  id: string;
-  iconKey: "commit" | "pr" | "branch" | "tag" | "release" | "issue" | "comment" | "fork" | "star" | "public" | "delete" | "repo";
-  iconColor: string;
-  title: ReactNode;
-  subtitle: ReactNode;
-  href: string;
-  date: string;
-  badge?: string;
-};
 
-function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const sec = Math.floor(diff / 1000);
-  if (sec < 60) return `${sec}s ago`;
-  const min = Math.floor(sec / 60);
-  if (min < 60) return `${min}m ago`;
-  const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  const day = Math.floor(hr / 24);
-  if (day < 30) return `${day}d ago`;
-  const mo = Math.floor(day / 30);
-  if (mo < 12) return `${mo}mo ago`;
-  return `${Math.floor(mo / 12)}y ago`;
-}
+/* ─────────────────────────────────── github contribution heatmap ──── */
+type ContribDay = { date: string; count: number; level: number };
 
-function ActivityIcon({ k }: { k: GitHubActivityItem["iconKey"] }) {
-  const cls = "w-5 h-5";
-  switch (k) {
-    case "commit": return <GitCommitHorizontal className={cls} />;
-    case "pr": return <GitPullRequest className={cls} />;
-    case "branch": return <GitBranch className={cls} />;
-    case "tag":
-    case "release": return <Tag className={cls} />;
-    case "issue": return <CircleDot className={cls} />;
-    case "comment": return <MessageSquare className={cls} />;
-    case "fork": return <GitFork className={cls} />;
-    case "star": return <Star className={cls} />;
-    case "public": return <Eye className={cls} />;
-    case "delete": return <Trash2 className={cls} />;
-    default: return <Github className={cls} />;
-  }
-}
-
-function eventToItems(ev: any): GitHubActivityItem[] {
-  const repo: string = ev.repo?.name ?? "";
-  const repoUrl = `https://github.com/${repo}`;
-  const date: string = ev.created_at;
-  const id: string = ev.id;
-  const p = ev.payload ?? {};
-  switch (ev.type) {
-    case "PushEvent": {
-      const branch = (p.ref ?? "").replace(/^refs\/heads\//, "");
-      const commits: any[] = p.commits ?? [];
-      if (commits.length === 0) {
-        return [{
-          id, iconKey: "commit", iconColor: "#6366f1",
-          title: <>Pushed to <span className="font-mono text-slate-700">{branch}</span></>,
-          subtitle: <>{repo}</>,
-          href: `${repoUrl}/commits/${branch}`, date,
-        }];
-      }
-      return commits.slice(-3).reverse().map((c: any, i: number) => ({
-        id: `${id}-${c.sha}`,
-        iconKey: "commit",
-        iconColor: "#6366f1",
-        title: (c.message ?? "").split("\n")[0] || "(no message)",
-        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> <span className="font-mono">{branch}</span></>,
-        href: `${repoUrl}/commit/${c.sha}`,
-        date,
-        badge: c.sha?.substring(0, 7),
-      }));
-    }
-    case "PullRequestEvent": {
-      const pr = p.pull_request ?? {};
-      const action = p.action === "closed" && pr.merged ? "merged" : p.action;
-      const colorMap: Record<string, string> = { opened: "#16a34a", closed: "#dc2626", merged: "#7c3aed", reopened: "#16a34a" };
-      return [{
-        id, iconKey: "pr", iconColor: colorMap[action] ?? "#6366f1",
-        title: <>{pr.title || `Pull request #${p.number}`}</>,
-        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> <span className="capitalize">{action}</span> PR #{p.number}</>,
-        href: pr.html_url || `${repoUrl}/pull/${p.number}`, date,
-      }];
-    }
-    case "CreateEvent": {
-      const refType = p.ref_type;
-      if (refType === "repository") {
-        return [{
-          id, iconKey: "repo", iconColor: "#0ea5e9",
-          title: <>Created repository <span className="font-mono">{repo}</span></>,
-          subtitle: p.description ?? <span className="italic text-slate-400">No description</span>,
-          href: repoUrl, date,
-        }];
-      }
-      return [{
-        id,
-        iconKey: refType === "tag" ? "tag" : "branch",
-        iconColor: refType === "tag" ? "#f59e0b" : "#0ea5e9",
-        title: <>Created {refType} <span className="font-mono text-slate-700">{p.ref}</span></>,
-        subtitle: <span className="font-mono">{repo}</span>,
-        href: `${repoUrl}/tree/${p.ref}`, date,
-      }];
-    }
-    case "DeleteEvent": {
-      return [{
-        id, iconKey: "delete", iconColor: "#dc2626",
-        title: <>Deleted {p.ref_type} <span className="font-mono text-slate-700">{p.ref}</span></>,
-        subtitle: <span className="font-mono">{repo}</span>,
-        href: repoUrl, date,
-      }];
-    }
-    case "PublicEvent": {
-      return [{
-        id, iconKey: "public", iconColor: "#16a34a",
-        title: <>Made <span className="font-mono">{repo}</span> public</>,
-        subtitle: "Open sourced",
-        href: repoUrl, date,
-      }];
-    }
-    case "IssuesEvent": {
-      const issue = p.issue ?? {};
-      return [{
-        id, iconKey: "issue", iconColor: p.action === "closed" ? "#7c3aed" : "#16a34a",
-        title: <>{issue.title || `Issue #${issue.number}`}</>,
-        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> <span className="capitalize">{p.action}</span> #{issue.number}</>,
-        href: issue.html_url || `${repoUrl}/issues/${issue.number}`, date,
-      }];
-    }
-    case "IssueCommentEvent": {
-      const issue = p.issue ?? {};
-      return [{
-        id, iconKey: "comment", iconColor: "#6366f1",
-        title: <>Commented on “{issue.title}”</>,
-        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> #{issue.number}</>,
-        href: p.comment?.html_url || issue.html_url || repoUrl, date,
-      }];
-    }
-    case "ReleaseEvent": {
-      const rel = p.release ?? {};
-      return [{
-        id, iconKey: "release", iconColor: "#f59e0b",
-        title: <>Released <span className="font-mono text-slate-700">{rel.tag_name}</span></>,
-        subtitle: <span className="font-mono">{repo}</span>,
-        href: rel.html_url || repoUrl, date,
-      }];
-    }
-    case "ForkEvent": {
-      return [{
-        id, iconKey: "fork", iconColor: "#0ea5e9",
-        title: <>Forked <span className="font-mono">{repo}</span></>,
-        subtitle: "Fork created",
-        href: p.forkee?.html_url || repoUrl, date,
-      }];
-    }
-    case "WatchEvent": {
-      return [{
-        id, iconKey: "star", iconColor: "#f59e0b",
-        title: <>Starred <span className="font-mono">{repo}</span></>,
-        subtitle: "Added to favorites",
-        href: repoUrl, date,
-      }];
-    }
-    default:
-      return [];
-  }
-}
+const LEVEL_COLORS = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const AVAILABLE_YEARS = [2026, 2025, 2024];
 
 function GitHubActivity() {
-  const [items, setItems] = useState<GitHubActivityItem[] | null>(null);
+  const [year, setYear] = useState<number>(AVAILABLE_YEARS[0]);
+  const [days, setDays] = useState<ContribDay[] | null>(null);
+  const [total, setTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [yearTotal, setYearTotal] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-
-    fetch("https://api.github.com/users/afuchat1/events/public?per_page=30")
+    setDays(null);
+    setError(null);
+    fetch(`https://github-contributions-api.jogruber.de/v4/afuchat1?y=${year}`)
       .then((r) => {
-        if (!r.ok) throw new Error(`GitHub API ${r.status}`);
+        if (!r.ok) throw new Error(`API ${r.status}`);
         return r.json();
       })
-      .then((events: any[]) => {
+      .then((data) => {
         if (cancelled) return;
-        const out: GitHubActivityItem[] = [];
-        for (const ev of events) {
-          for (const item of eventToItems(ev)) {
-            out.push(item);
-            if (out.length >= 8) break;
-          }
-          if (out.length >= 8) break;
-        }
-        setItems(out);
+        const contribs: ContribDay[] = data?.contributions ?? [];
+        setDays(contribs);
+        const yearTotal = data?.total?.[String(year)];
+        setTotal(typeof yearTotal === "number" ? yearTotal : contribs.reduce((s, d) => s + d.count, 0));
       })
       .catch((e) => { if (!cancelled) setError(String(e.message ?? e)); });
-
-    fetch("https://github-contributions-api.jogruber.de/v4/afuchat1?y=last")
-      .then((r) => r.ok ? r.json() : null)
-      .then((data) => {
-        if (cancelled || !data) return;
-        if (typeof data?.total?.lastYear === "number") setYearTotal(data.total.lastYear);
-      })
-      .catch(() => {});
-
     return () => { cancelled = true; };
-  }, []);
+  }, [year]);
+
+  // Build week columns: each column is 7 days (Sun..Sat). Pad start so day-of-week aligns.
+  const weeks: (ContribDay | null)[][] = [];
+  if (days && days.length > 0) {
+    const firstDow = new Date(days[0].date + "T00:00:00").getDay(); // 0=Sun
+    let week: (ContribDay | null)[] = Array(firstDow).fill(null);
+    for (const d of days) {
+      week.push(d);
+      if (week.length === 7) { weeks.push(week); week = []; }
+    }
+    if (week.length > 0) {
+      while (week.length < 7) week.push(null);
+      weeks.push(week);
+    }
+  }
+
+  // Month labels: position above the column where each month starts
+  const monthLabels: { idx: number; label: string }[] = [];
+  let lastMonth = -1;
+  weeks.forEach((w, i) => {
+    const firstDay = w.find((d) => d !== null);
+    if (!firstDay) return;
+    const m = new Date(firstDay.date + "T00:00:00").getMonth();
+    if (m !== lastMonth) {
+      monthLabels.push({ idx: i, label: MONTH_NAMES[m] });
+      lastMonth = m;
+    }
+  });
 
   return (
     <section id="activity" className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
       <div className="max-w-6xl mx-auto">
         <Breadcrumb items={["AMK", "Activity"]} />
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
           <motion.div {...fadeUp}>
             <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Live from GitHub</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 flex items-center gap-3 flex-wrap">
-              Recent Activity
+              Contributions
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Live
               </span>
             </h2>
             <p className="text-lg text-slate-500">
-              {yearTotal !== null ? (
-                <><span className="font-semibold text-slate-900">{yearTotal.toLocaleString()}</span> contributions in the last year on <span className="font-mono text-slate-700">@afuchat1</span>.</>
+              {total !== null ? (
+                <><span className="font-semibold text-slate-900">{total.toLocaleString()}</span> contributions in {year} on <span className="font-mono text-slate-700">@afuchat1</span>.</>
               ) : (
-                <>Public events from <span className="font-mono text-slate-700">@afuchat1</span>.</>
+                <>Loading contributions for {year}…</>
               )}
             </p>
           </motion.div>
@@ -419,77 +266,107 @@ function GitHubActivity() {
           </a>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+          {/* year selector */}
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+            <div className="inline-flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200">
+              {AVAILABLE_YEARS.map((y) => (
+                <button
+                  key={y}
+                  onClick={() => setYear(y)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                    year === y
+                      ? "bg-white text-slate-900 shadow-sm"
+                      : "text-slate-500 hover:text-slate-900"
+                  }`}
+                >
+                  {y}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {error ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-slate-500 mb-2">Couldn't load live activity right now.</p>
+              <p className="text-sm text-slate-500 mb-2">Couldn't load the contribution graph.</p>
               <a
                 href="https://github.com/afuchat1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
               >
-                <Github className="w-4 h-4" /> See activity on GitHub
+                <Github className="w-4 h-4" /> View on GitHub
               </a>
             </div>
-          ) : items === null ? (
-            <div className="divide-y divide-slate-100">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <div key={i} className="flex items-center gap-4 p-5 animate-pulse">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 shrink-0" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-slate-100 rounded w-2/3" />
-                    <div className="h-3 bg-slate-50 rounded w-1/3" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : items.length === 0 ? (
-            <div className="p-8 text-center">
-              <p className="text-sm text-slate-500 mb-3">Most recent work is in private repos.</p>
-              <a
-                href="https://github.com/afuchat1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-              >
-                <Github className="w-4 h-4" /> View full contribution graph
-              </a>
+          ) : days === null ? (
+            <div className="h-[180px] flex items-center justify-center">
+              <div className="text-sm text-slate-400">Loading {year} contributions…</div>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
-              {items.map((it) => (
-                <a
-                  key={it.id}
-                  href={it.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors"
-                >
-                  <div
-                    className="w-10 h-10 rounded-xl inline-flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
-                    style={{ background: `${it.iconColor}15`, color: it.iconColor }}
-                  >
-                    <ActivityIcon k={it.iconKey} />
+            <div className="overflow-x-auto">
+              <div className="inline-block min-w-full">
+                {/* month labels row */}
+                <div className="flex pl-8 mb-1.5 text-[11px] text-slate-500 select-none" style={{ gap: 3 }}>
+                  {weeks.map((_, i) => {
+                    const label = monthLabels.find((m) => m.idx === i)?.label ?? "";
+                    return (
+                      <div key={i} style={{ width: 13, minWidth: 13 }} className="text-left">
+                        {label}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="flex">
+                  {/* day-of-week labels */}
+                  <div className="flex flex-col mr-2 text-[11px] text-slate-500 select-none" style={{ gap: 3 }}>
+                    {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
+                      <div key={i} style={{ height: 11, lineHeight: "11px" }}>{d}</div>
+                    ))}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-primary transition-colors">
-                      {it.title}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 min-w-0">
-                      <span className="truncate">{it.subtitle}</span>
-                      <span className="text-slate-300 shrink-0">·</span>
-                      <span className="shrink-0">{timeAgo(it.date)}</span>
-                    </div>
+
+                  {/* heatmap grid */}
+                  <div className="flex" style={{ gap: 3 }}>
+                    {weeks.map((week, wi) => (
+                      <div key={wi} className="flex flex-col" style={{ gap: 3 }}>
+                        {week.map((day, di) => (
+                          <div
+                            key={di}
+                            title={day ? `${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}` : ""}
+                            className="rounded-[2px] transition-transform hover:scale-125 hover:ring-1 hover:ring-slate-400"
+                            style={{
+                              width: 11,
+                              height: 11,
+                              background: day ? LEVEL_COLORS[day.level] : "transparent",
+                              border: day && day.level === 0 ? "1px solid #e5e7eb" : "none",
+                            }}
+                          />
+                        ))}
+                      </div>
+                    ))}
                   </div>
-                  {it.badge && (
-                    <span className="hidden sm:inline-flex font-mono text-[11px] text-slate-400 px-2 py-1 rounded-md bg-slate-50 border border-slate-200 shrink-0">
-                      {it.badge}
-                    </span>
-                  )}
-                  <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors shrink-0" />
-                </a>
-              ))}
+                </div>
+
+                {/* legend */}
+                <div className="flex items-center justify-end gap-2 mt-4 text-[11px] text-slate-500">
+                  <span>Less</span>
+                  <div className="flex" style={{ gap: 3 }}>
+                    {LEVEL_COLORS.map((c, i) => (
+                      <div
+                        key={i}
+                        className="rounded-[2px]"
+                        style={{
+                          width: 11,
+                          height: 11,
+                          background: c,
+                          border: i === 0 ? "1px solid #e5e7eb" : "none",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span>More</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
