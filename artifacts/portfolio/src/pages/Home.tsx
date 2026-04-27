@@ -48,7 +48,7 @@ const clients = [
 ];
 
 const partners = [
-  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
+  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ajsdigitalservices.com.png", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
 ];
 
 const socialLinks = [
@@ -123,7 +123,7 @@ const navItems: NavItem[] = [
   },
   {
     label: "Partners",
-    dropdown: partners.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: (p as any).logoUrl, icon: p.icon })),
+    dropdown: partners.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: p.logoUrl, icon: p.icon })),
   },
   { label: "Vision", href: "#vision" },
 ];
@@ -583,7 +583,19 @@ export default function Home() {
       </nav>
 
       {/* ══════════ HERO — flat, heatmap-first ══════════ */}
-      <section className="relative pt-28 pb-16 px-6 bg-gradient-to-b from-blue-50/40 via-white to-white border-b border-slate-100">
+      <section className="relative pt-28 pb-16 px-6 bg-gradient-to-b from-blue-50/40 via-white to-white border-b border-slate-100 overflow-hidden">
+        {/* subtle ambient background video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.18] pointer-events-none"
+        >
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/70 to-white pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
 
@@ -958,8 +970,8 @@ export default function Home() {
 
       {/* ══════════ VISION ══════════ */}
       <section id="vision" className="relative py-28 px-6 overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-[0.06]">
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11-large.mp4" type="video/mp4" />
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover opacity-[0.22] pointer-events-none">
+          <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-indigo-50/80 to-violet-50/60" />
         <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-white to-transparent" />
