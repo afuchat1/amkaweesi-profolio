@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
@@ -23,6 +23,15 @@ import {
   GraduationCap,
   Code2,
   Sparkles,
+  GitCommitHorizontal,
+  GitPullRequest,
+  GitBranch,
+  GitFork,
+  Tag,
+  CircleDot,
+  Star,
+  Eye,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -173,13 +182,15 @@ function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text:
 }
 
 /* ─────────────────────────────────── github activity ──── */
-type GitHubCommit = {
-  sha: string;
-  message: string;
-  url: string;
-  repo: string;
-  branch: string;
+type GitHubActivityItem = {
+  id: string;
+  iconKey: "commit" | "pr" | "branch" | "tag" | "release" | "issue" | "comment" | "fork" | "star" | "public" | "delete" | "repo";
+  iconColor: string;
+  title: ReactNode;
+  subtitle: ReactNode;
+  href: string;
   date: string;
+  badge?: string;
 };
 
 function timeAgo(iso: string): string {
@@ -197,12 +208,155 @@ function timeAgo(iso: string): string {
   return `${Math.floor(mo / 12)}y ago`;
 }
 
+function ActivityIcon({ k }: { k: GitHubActivityItem["iconKey"] }) {
+  const cls = "w-5 h-5";
+  switch (k) {
+    case "commit": return <GitCommitHorizontal className={cls} />;
+    case "pr": return <GitPullRequest className={cls} />;
+    case "branch": return <GitBranch className={cls} />;
+    case "tag":
+    case "release": return <Tag className={cls} />;
+    case "issue": return <CircleDot className={cls} />;
+    case "comment": return <MessageSquare className={cls} />;
+    case "fork": return <GitFork className={cls} />;
+    case "star": return <Star className={cls} />;
+    case "public": return <Eye className={cls} />;
+    case "delete": return <Trash2 className={cls} />;
+    default: return <Github className={cls} />;
+  }
+}
+
+function eventToItems(ev: any): GitHubActivityItem[] {
+  const repo: string = ev.repo?.name ?? "";
+  const repoUrl = `https://github.com/${repo}`;
+  const date: string = ev.created_at;
+  const id: string = ev.id;
+  const p = ev.payload ?? {};
+  switch (ev.type) {
+    case "PushEvent": {
+      const branch = (p.ref ?? "").replace(/^refs\/heads\//, "");
+      const commits: any[] = p.commits ?? [];
+      if (commits.length === 0) {
+        return [{
+          id, iconKey: "commit", iconColor: "#6366f1",
+          title: <>Pushed to <span className="font-mono text-slate-700">{branch}</span></>,
+          subtitle: <>{repo}</>,
+          href: `${repoUrl}/commits/${branch}`, date,
+        }];
+      }
+      return commits.slice(-3).reverse().map((c: any, i: number) => ({
+        id: `${id}-${c.sha}`,
+        iconKey: "commit",
+        iconColor: "#6366f1",
+        title: (c.message ?? "").split("\n")[0] || "(no message)",
+        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> <span className="font-mono">{branch}</span></>,
+        href: `${repoUrl}/commit/${c.sha}`,
+        date,
+        badge: c.sha?.substring(0, 7),
+      }));
+    }
+    case "PullRequestEvent": {
+      const pr = p.pull_request ?? {};
+      const action = p.action === "closed" && pr.merged ? "merged" : p.action;
+      const colorMap: Record<string, string> = { opened: "#16a34a", closed: "#dc2626", merged: "#7c3aed", reopened: "#16a34a" };
+      return [{
+        id, iconKey: "pr", iconColor: colorMap[action] ?? "#6366f1",
+        title: <>{pr.title || `Pull request #${p.number}`}</>,
+        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> <span className="capitalize">{action}</span> PR #{p.number}</>,
+        href: pr.html_url || `${repoUrl}/pull/${p.number}`, date,
+      }];
+    }
+    case "CreateEvent": {
+      const refType = p.ref_type;
+      if (refType === "repository") {
+        return [{
+          id, iconKey: "repo", iconColor: "#0ea5e9",
+          title: <>Created repository <span className="font-mono">{repo}</span></>,
+          subtitle: p.description ?? <span className="italic text-slate-400">No description</span>,
+          href: repoUrl, date,
+        }];
+      }
+      return [{
+        id,
+        iconKey: refType === "tag" ? "tag" : "branch",
+        iconColor: refType === "tag" ? "#f59e0b" : "#0ea5e9",
+        title: <>Created {refType} <span className="font-mono text-slate-700">{p.ref}</span></>,
+        subtitle: <span className="font-mono">{repo}</span>,
+        href: `${repoUrl}/tree/${p.ref}`, date,
+      }];
+    }
+    case "DeleteEvent": {
+      return [{
+        id, iconKey: "delete", iconColor: "#dc2626",
+        title: <>Deleted {p.ref_type} <span className="font-mono text-slate-700">{p.ref}</span></>,
+        subtitle: <span className="font-mono">{repo}</span>,
+        href: repoUrl, date,
+      }];
+    }
+    case "PublicEvent": {
+      return [{
+        id, iconKey: "public", iconColor: "#16a34a",
+        title: <>Made <span className="font-mono">{repo}</span> public</>,
+        subtitle: "Open sourced",
+        href: repoUrl, date,
+      }];
+    }
+    case "IssuesEvent": {
+      const issue = p.issue ?? {};
+      return [{
+        id, iconKey: "issue", iconColor: p.action === "closed" ? "#7c3aed" : "#16a34a",
+        title: <>{issue.title || `Issue #${issue.number}`}</>,
+        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> <span className="capitalize">{p.action}</span> #{issue.number}</>,
+        href: issue.html_url || `${repoUrl}/issues/${issue.number}`, date,
+      }];
+    }
+    case "IssueCommentEvent": {
+      const issue = p.issue ?? {};
+      return [{
+        id, iconKey: "comment", iconColor: "#6366f1",
+        title: <>Commented on “{issue.title}”</>,
+        subtitle: <><span className="font-mono">{repo}</span> <span className="text-slate-300">·</span> #{issue.number}</>,
+        href: p.comment?.html_url || issue.html_url || repoUrl, date,
+      }];
+    }
+    case "ReleaseEvent": {
+      const rel = p.release ?? {};
+      return [{
+        id, iconKey: "release", iconColor: "#f59e0b",
+        title: <>Released <span className="font-mono text-slate-700">{rel.tag_name}</span></>,
+        subtitle: <span className="font-mono">{repo}</span>,
+        href: rel.html_url || repoUrl, date,
+      }];
+    }
+    case "ForkEvent": {
+      return [{
+        id, iconKey: "fork", iconColor: "#0ea5e9",
+        title: <>Forked <span className="font-mono">{repo}</span></>,
+        subtitle: "Fork created",
+        href: p.forkee?.html_url || repoUrl, date,
+      }];
+    }
+    case "WatchEvent": {
+      return [{
+        id, iconKey: "star", iconColor: "#f59e0b",
+        title: <>Starred <span className="font-mono">{repo}</span></>,
+        subtitle: "Added to favorites",
+        href: repoUrl, date,
+      }];
+    }
+    default:
+      return [];
+  }
+}
+
 function GitHubActivity() {
-  const [commits, setCommits] = useState<GitHubCommit[] | null>(null);
+  const [items, setItems] = useState<GitHubActivityItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [yearTotal, setYearTotal] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+
     fetch("https://api.github.com/users/afuchat1/events/public?per_page=30")
       .then((r) => {
         if (!r.ok) throw new Error(`GitHub API ${r.status}`);
@@ -210,31 +364,26 @@ function GitHubActivity() {
       })
       .then((events: any[]) => {
         if (cancelled) return;
-        const out: GitHubCommit[] = [];
+        const out: GitHubActivityItem[] = [];
         for (const ev of events) {
-          if (ev.type !== "PushEvent") continue;
-          const repo: string = ev.repo?.name ?? "";
-          const ref: string = ev.payload?.ref ?? "";
-          const branch = ref.replace(/^refs\/heads\//, "");
-          const created: string = ev.created_at;
-          const commitsArr: any[] = ev.payload?.commits ?? [];
-          for (let i = commitsArr.length - 1; i >= 0; i--) {
-            const c = commitsArr[i];
-            out.push({
-              sha: c.sha,
-              message: (c.message ?? "").split("\n")[0],
-              url: `https://github.com/${repo}/commit/${c.sha}`,
-              repo,
-              branch,
-              date: created,
-            });
-            if (out.length >= 6) break;
+          for (const item of eventToItems(ev)) {
+            out.push(item);
+            if (out.length >= 8) break;
           }
-          if (out.length >= 6) break;
+          if (out.length >= 8) break;
         }
-        setCommits(out);
+        setItems(out);
       })
       .catch((e) => { if (!cancelled) setError(String(e.message ?? e)); });
+
+    fetch("https://github-contributions-api.jogruber.de/v4/afuchat1?y=last")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (cancelled || !data) return;
+        if (typeof data?.total?.lastYear === "number") setYearTotal(data.total.lastYear);
+      })
+      .catch(() => {});
+
     return () => { cancelled = true; };
   }, []);
 
@@ -245,14 +394,20 @@ function GitHubActivity() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <motion.div {...fadeUp}>
             <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Live from GitHub</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 flex items-center gap-3">
-              Recent Commits
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 flex items-center gap-3 flex-wrap">
+              Recent Activity
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Live
               </span>
             </h2>
-            <p className="text-lg text-slate-500">What I've been shipping on @afuchat1.</p>
+            <p className="text-lg text-slate-500">
+              {yearTotal !== null ? (
+                <><span className="font-semibold text-slate-900">{yearTotal.toLocaleString()}</span> contributions in the last year on <span className="font-mono text-slate-700">@afuchat1</span>.</>
+              ) : (
+                <>Public events from <span className="font-mono text-slate-700">@afuchat1</span>.</>
+              )}
+            </p>
           </motion.div>
           <a
             href="https://github.com/afuchat1"
@@ -277,7 +432,7 @@ function GitHubActivity() {
                 <Github className="w-4 h-4" /> See activity on GitHub
               </a>
             </div>
-          ) : commits === null ? (
+          ) : items === null ? (
             <div className="divide-y divide-slate-100">
               {[0, 1, 2, 3, 4].map((i) => (
                 <div key={i} className="flex items-center gap-4 p-5 animate-pulse">
@@ -289,36 +444,49 @@ function GitHubActivity() {
                 </div>
               ))}
             </div>
-          ) : commits.length === 0 ? (
-            <div className="p-8 text-center text-sm text-slate-500">No recent push activity. Check back soon.</div>
+          ) : items.length === 0 ? (
+            <div className="p-8 text-center">
+              <p className="text-sm text-slate-500 mb-3">Most recent work is in private repos.</p>
+              <a
+                href="https://github.com/afuchat1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+              >
+                <Github className="w-4 h-4" /> View full contribution graph
+              </a>
+            </div>
           ) : (
             <div className="divide-y divide-slate-100">
-              {commits.map((c) => (
+              {items.map((it) => (
                 <a
-                  key={c.sha}
-                  href={c.url}
+                  key={it.id}
+                  href={it.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-slate-900 text-white inline-flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
-                    <Github className="w-5 h-5" />
+                  <div
+                    className="w-10 h-10 rounded-xl inline-flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                    style={{ background: `${it.iconColor}15`, color: it.iconColor }}
+                  >
+                    <ActivityIcon k={it.iconKey} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-primary transition-colors">
-                      {c.message}
+                      {it.title}
                     </p>
                     <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 min-w-0">
-                      <span className="font-mono truncate">{c.repo}</span>
-                      <span className="text-slate-300">·</span>
-                      <span className="font-mono shrink-0">{c.branch}</span>
+                      <span className="truncate">{it.subtitle}</span>
                       <span className="text-slate-300 shrink-0">·</span>
-                      <span className="shrink-0">{timeAgo(c.date)}</span>
+                      <span className="shrink-0">{timeAgo(it.date)}</span>
                     </div>
                   </div>
-                  <span className="hidden sm:inline-flex font-mono text-[11px] text-slate-400 px-2 py-1 rounded-md bg-slate-50 border border-slate-200 shrink-0">
-                    {c.sha.substring(0, 7)}
-                  </span>
+                  {it.badge && (
+                    <span className="hidden sm:inline-flex font-mono text-[11px] text-slate-400 px-2 py-1 rounded-md bg-slate-50 border border-slate-200 shrink-0">
+                      {it.badge}
+                    </span>
+                  )}
                   <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors shrink-0" />
                 </a>
               ))}
