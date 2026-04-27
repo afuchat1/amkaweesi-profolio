@@ -33,29 +33,29 @@ import { Textarea } from "@/components/ui/textarea";
 /* ─────────────────────────────────────────────── data ──── */
 
 const projects = [
-  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2", dark: false }, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
-  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#1e3a5f", card: "#0a0a0a", cardBorder: "#1e2a3a", dark: true  }, logoUrl: "https://email.afuchat.com/favicon.ico" },
-  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://cloud.afuchat.com/favicon.ico" },
-  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4", dark: false }, logoUrl: "https://blog.afuchat.com/favicon.ico" },
-  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ffffff", cardBorder: "#a5f3fc", dark: false }, logoUrl: "https://build.afuchat.com/favicon.ico" },
-  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ads.afuchat.com/favicon.ico" },
-  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "https://math.afuchat.com/favicon.ico" },
-  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "https://desk.afuchat.com/favicon.ico" },
-  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "https://dev.afuchat.com/favicon.ico", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
+  { domain: "afuchat.com",        name: "AfuChat",  desc: "Unified communication platform for the modern web",   icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2", dark: false }, logoUrl: "/favicons/afuchat.png" },
+  { domain: "email.afuchat.com",  name: "AfuMail",  desc: "Smart, privacy-first email for the ecosystem",        icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#1e3a5f", card: "#0a0a0a", cardBorder: "#1e2a3a", dark: true  }, logoUrl: "/favicons/email.afuchat.com.svg" },
+  { domain: "cloud.afuchat.com",  name: "AfuCloud", desc: "Personal cloud storage and file management",          icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/cloud.afuchat.com.ico" },
+  { domain: "blog.afuchat.com",   name: "AfuBlog",  desc: "Publish ideas, stories, and long-form content",       icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4", dark: false }, logoUrl: "/favicons/blog.afuchat.com.ico" },
+  { domain: "build.afuchat.com",  name: "AfuBuild", desc: "Website and application builder for everyone",        icon: Layers,        brand: { primary: "#06b6d4", iconBg: "#cffafe", card: "#ffffff", cardBorder: "#a5f3fc", dark: false }, logoUrl: "/favicons/build.afuchat.com.ico" },
+  { domain: "ads.afuchat.com",    name: "AfuAds",   desc: "Digital advertising and audience reach tools",        icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ads.afuchat.com.svg" },
+  { domain: "math.afuchat.com",   name: "AfuMath",  desc: "Interactive math education and problem solving",      icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "/favicons/math.afuchat.com.png" },
+  { domain: "desk.afuchat.com",   name: "AfuDesk",  desc: "Customer support and helpdesk for the ecosystem",    icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "/favicons/desk.afuchat.com.ico" },
+  { domain: "dev.afuchat.com",    name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda", icon: Code2, brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "/favicons/dev.afuchat.com.ico", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
 ];
 
 const clients = [
-  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers", icon: CreditCard, brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  }, logoUrl: "https://pay.afuchat.com/favicon.ico" },
-  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",   icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "https://honeybeeministriesug.org/favicon.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
-  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "https://sabulashoespot.com/favicon.ico" },
+  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers", icon: CreditCard, brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  } },
+  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",   icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
+  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "/favicons/sabulashoespot.com.ico" },
 ];
 
 const partners = [
-  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "https://ajsdigitalservices.com/favicon.ico", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
+  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
 ];
 
 const socialLinks = [
-  { href: "https://afuchat.com/@amkaweesi", label: "AfuChat", icon: MessageSquare, logoUrl: "https://www.afuchat.com/assets/assets/images/afu-symbol.b9ba727f19cc6672bb65a748a7279e4b.png" },
+  { href: "https://afuchat.com/@amkaweesi", label: "AfuChat", icon: MessageSquare, logoUrl: "/favicons/afuchat.png" },
   { href: "https://t.me/amkaweesi", label: "Telegram", icon: Send },
   { href: "https://x.com/amkaweesii", label: "X (Twitter)", icon: Twitter },
   { href: "https://github.com/amkaweesi", label: "GitHub", icon: Github },
@@ -647,7 +647,7 @@ export default function Home() {
                     <ServiceLogo
                       name={partner.name}
                       domain={partner.domain}
-                      logoUrl={partner.logoUrl}
+                      logoUrl={(partner as any).logoUrl}
                       FallbackIcon={partner.icon}
                       imgClassName="w-7 h-7 object-contain rounded"
                       iconClassName="w-7 h-7"
