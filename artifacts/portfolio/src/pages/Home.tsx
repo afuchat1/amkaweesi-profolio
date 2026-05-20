@@ -1060,14 +1060,14 @@ export default function Home() {
               </button>
             </div>
 
-            {/* ad iframe */}
+            {/* ad iframe — served via local proxy for correct Content-Type */}
             <iframe
-              src="https://zuekwzcnknkczelivurf.supabase.co/functions/v1/serve-ad?publisher=c94c610f-685e-4834-bb39-be88049814d9&site=d4c5ef0f-ed9c-496f-835d-d420a89091f4&format=banner_300x250"
+              src="/api/ad"
               width="300"
               height="250"
               frameBorder="0"
               scrolling="no"
-              style={{ border: "none", overflow: "hidden", maxWidth: "100%", display: "block", background: "#ffffff" }}
+              style={{ border: "none", overflow: "hidden", width: "300px", height: "250px", display: "block", background: "#ffffff" }}
               loading="eager"
               title="Advertisement"
             />
