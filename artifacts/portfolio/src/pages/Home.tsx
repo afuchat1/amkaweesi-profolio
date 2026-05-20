@@ -439,17 +439,32 @@ export default function Home() {
 
       {/* ══════════ HERO ══════════ */}
       <section className="relative pt-24 pb-0 overflow-hidden bg-slate-950">
-        {/* background video */}
-        <video autoPlay muted loop playsInline aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.65] pointer-events-none">
-          <source src="/videos/hero-bg.mp4" type="video/mp4" />
-        </video>
-
-        {/* gradient mesh blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, #3b82f6 0%, transparent 70%)" }} />
-          <div className="absolute top-20 right-0 w-[500px] h-[500px] rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, #a855f7 0%, transparent 70%)" }} />
-          <div className="absolute bottom-0 left-1/2 w-[400px] h-[400px] rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, #06b6d4 0%, transparent 70%)" }} />
+        {/* animated gradient orbs — replace video */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          <motion.div
+            className="absolute -top-48 -left-48 w-[750px] h-[750px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(59,130,246,0.22) 0%, transparent 68%)" }}
+            animate={{ x: [0, 70, 0], y: [0, 50, 0], scale: [1, 1.12, 1] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" as const }}
+          />
+          <motion.div
+            className="absolute top-10 right-[-80px] w-[580px] h-[580px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(168,85,247,0.18) 0%, transparent 68%)" }}
+            animate={{ x: [0, -55, 0], y: [0, 65, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" as const, delay: 1.2 }}
+          />
+          <motion.div
+            className="absolute bottom-[-60px] left-1/3 w-[550px] h-[550px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(6,182,212,0.14) 0%, transparent 68%)" }}
+            animate={{ x: [0, 45, 0], y: [0, -35, 0], scale: [1, 1.08, 1] }}
+            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" as const, delay: 2.5 }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 w-[320px] h-[320px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 68%)" }}
+            animate={{ x: [0, -30, 0], y: [0, -40, 0], scale: [1, 1.2, 1] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" as const, delay: 0.5 }}
+          />
         </div>
 
         {/* grid overlay */}
@@ -838,16 +853,29 @@ export default function Home() {
 
       {/* ══════════ VISION ══════════ */}
       <section id="vision" className="relative py-32 px-6 overflow-hidden bg-slate-950">
-        <video autoPlay muted loop playsInline aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.15] pointer-events-none">
-          <source src="/videos/vision-bg.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 60% 50%, rgba(99,102,241,0.12) 0%, transparent 70%)" }} />
-          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 20% 80%, rgba(6,182,212,0.08) 0%, transparent 60%)" }} />
+        {/* animated orbs — replace video */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          <motion.div
+            className="absolute top-[-80px] right-[-60px] w-[600px] h-[600px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.20) 0%, transparent 68%)" }}
+            animate={{ x: [0, -60, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" as const }}
+          />
+          <motion.div
+            className="absolute bottom-[-80px] left-[-60px] w-[550px] h-[550px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(6,182,212,0.16) 0%, transparent 68%)" }}
+            animate={{ x: [0, 50, 0], y: [0, -50, 0], scale: [1, 1.12, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" as const, delay: 1.5 }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 68%)" }}
+            animate={{ scale: [1, 1.25, 1], rotate: [0, 15, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" as const, delay: 0.8 }}
+          />
         </div>
-        <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-950 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-950 to-transparent" />
+        <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-950 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-950 to-transparent pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <Breadcrumb items={["AMK", "Vision"]} light />
@@ -1019,11 +1047,10 @@ export default function Home() {
           >
             {/* header bar */}
             <div className="flex items-center justify-between px-3 py-2 bg-slate-900 border-b border-slate-800">
-              <a href="https://ceo.afuchat.com" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 hover:text-white transition-colors">
-                <img src="/favicons/afuchat.png" alt="AfuChat Ads" className="w-3.5 h-3.5 object-contain" />
-                AfuChat Ads
-              </a>
+              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 select-none">
+                <img src="/favicons/afuchat.png" alt="" className="w-3.5 h-3.5 object-contain opacity-60" />
+                Advertisement
+              </span>
               <button
                 onClick={() => setAdDismissed(true)}
                 className="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
