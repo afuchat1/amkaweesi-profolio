@@ -16,19 +16,19 @@ const PROFILE_IMG = "https://pbs.twimg.com/profile_images/2001772163410325504/Hf
 
 const projects = [
   { domain: "afuchat.com",       name: "AfuChat",     desc: "Unified communication platform for the modern web",                      icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2", dark: false }, logoUrl: "/favicons/afuchat.png" },
-  { domain: "email.afuchat.com", name: "AfuMail",     desc: "Smart, privacy-first email for the ecosystem",                           icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#1e3a5f", card: "#0a0a0a", cardBorder: "#1e2a3a", dark: true  }, logoUrl: "/favicons/email.afuchat.com.svg" },
+  { domain: "email.afuchat.com", name: "AfuMail",     desc: "Smart, privacy-first email for the ecosystem",                           icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe", dark: false }, logoUrl: "/favicons/email.afuchat.com.svg" },
   { domain: "cloud.afuchat.com", name: "AfuCloud",    desc: "Personal cloud storage and file management",                             icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/cloud.afuchat.com.ico" },
   { domain: "blog.afuchat.com",  name: "AfuBlog",     desc: "Publish ideas, stories, and long-form content",                          icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4", dark: false }, logoUrl: "/favicons/blog.afuchat.com.ico" },
   { domain: "ads.afuchat.com",   name: "AfuAds",      desc: "Digital advertising and audience reach tools",                           icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ads.afuchat.com.svg" },
-  { domain: "math.afuchat.com",  name: "AfuMath",     desc: "Interactive math education and problem solving",                         icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#1a2050", card: "#0f0f1a", cardBorder: "#1e2040", dark: true  }, logoUrl: "/favicons/math.afuchat.com.png" },
-  { domain: "desk.afuchat.com",  name: "AfuDesk",     desc: "Customer support and helpdesk for the ecosystem",                        icon: Headphones,    brand: { primary: "#f97316", iconBg: "#2a1800", card: "#111111", cardBorder: "#2a2a2a", dark: true  }, logoUrl: "/favicons/desk.afuchat.com.ico" },
+  { domain: "math.afuchat.com",  name: "AfuMath",     desc: "Interactive math education and problem solving",                         icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#ede9fe", card: "#ffffff", cardBorder: "#ddd6fe", dark: false }, logoUrl: "/favicons/math.afuchat.com.png" },
+  { domain: "desk.afuchat.com",  name: "AfuDesk",     desc: "Customer support and helpdesk for the ecosystem",                        icon: Headphones,    brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/desk.afuchat.com.ico" },
   { domain: "dev.afuchat.com",   name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda",           icon: Code2,         brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "/favicons/dev.afuchat.com.svg", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
 ];
 
 const clients = [
-  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers",                     icon: CreditCard, brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  } },
+  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers",                     icon: CreditCard, brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe", dark: false } },
   { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",                       icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
-  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",   desc: "Quality footwear retail brand for everyday style",                                  icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "/favicons/sabulashoespot.com.jpg" },
+  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",   desc: "Quality footwear retail brand for everyday style",                                  icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#fef9c3", card: "#ffffff", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/sabulashoespot.com.jpg" },
   { domain: "mmradioug.org",             name: "MM Radio Uganda",    desc: "Online radio station keeping Uganda connected through music, news and culture",      icon: Globe,      brand: { primary: "#ef4444", iconBg: "#fef2f2", card: "#ffffff", cardBorder: "#fecaca", dark: false }, logoUrl: "/favicons/mmradioug.org.png" },
 ];
 
@@ -172,22 +172,22 @@ function HeroHeatmap() {
   });
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm p-5 md:p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 md:p-6 shadow-sm">
       <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
         <div className="flex items-center gap-2.5 min-w-0">
-          <Github className="w-4 h-4 text-slate-300 shrink-0" />
-          <span className="text-sm font-semibold text-white">
+          <Github className="w-4 h-4 text-slate-600 shrink-0" />
+          <span className="text-sm font-semibold text-slate-900">
             {total !== null ? `${total.toLocaleString()} contributions` : "Loading…"}
           </span>
           <span className="text-sm text-slate-500">in {year}</span>
-          <span className="hidden sm:inline-flex items-center gap-1.5 ml-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <span className="hidden sm:inline-flex items-center gap-1.5 ml-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live
           </span>
         </div>
-        <div className="inline-flex items-center gap-1 p-0.5 rounded-full bg-slate-800 border border-slate-700">
+        <div className="inline-flex items-center gap-1 p-0.5 rounded-full bg-slate-100 border border-slate-200">
           {AVAILABLE_YEARS.map((y) => (
             <button key={y} onClick={() => setYear(y)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${year === y ? "bg-slate-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-300"}`}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${year === y ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
             >{y}</button>
           ))}
         </div>
@@ -196,25 +196,25 @@ function HeroHeatmap() {
       {error ? (
         <div className="py-10 text-center">
           <a href="https://github.com/afuchat1" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 hover:underline">
+            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:underline">
             <Github className="w-4 h-4" /> View on GitHub
           </a>
         </div>
       ) : days === null ? (
         <div className="h-[120px] flex items-center justify-center">
-          <div className="text-sm text-slate-600">Loading {year}…</div>
+          <div className="text-sm text-slate-400">Loading {year}…</div>
         </div>
       ) : (
         <div className="overflow-x-auto -mx-1 px-1">
           <div className="inline-block min-w-full">
-            <div className="flex pl-7 mb-1.5 text-[10px] text-slate-600 select-none" style={{ gap: 3 }}>
+            <div className="flex pl-7 mb-1.5 text-[10px] text-slate-400 select-none" style={{ gap: 3 }}>
               {weeks.map((_, i) => {
                 const label = monthLabels.find((m) => m.idx === i)?.label ?? "";
                 return <div key={i} style={{ width: 11, minWidth: 11 }} className="text-left">{label}</div>;
               })}
             </div>
             <div className="flex">
-              <div className="flex flex-col mr-2 text-[10px] text-slate-600 select-none" style={{ gap: 3 }}>
+              <div className="flex flex-col mr-2 text-[10px] text-slate-400 select-none" style={{ gap: 3 }}>
                 {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
                   <div key={i} style={{ height: 11, lineHeight: "11px" }}>{d}</div>
                 ))}
@@ -226,7 +226,7 @@ function HeroHeatmap() {
                       <div key={di}
                         title={day ? `${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}` : ""}
                         className="rounded-[2px] transition-transform hover:scale-125 cursor-default"
-                        style={{ width: 11, height: 11, background: day ? LEVEL_COLORS[day.level] : "transparent", border: day && day.level === 0 ? "1px solid #333" : "none" }}
+                        style={{ width: 11, height: 11, background: day ? LEVEL_COLORS[day.level] : "transparent", border: day && day.level === 0 ? "1px solid #e2e8f0" : "none" }}
                       />
                     ))}
                   </div>
@@ -235,14 +235,14 @@ function HeroHeatmap() {
             </div>
             <div className="flex items-center justify-between mt-4 gap-3 flex-wrap">
               <a href="https://github.com/afuchat1" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-blue-400 transition-colors">
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors">
                 <Github className="w-3.5 h-3.5" /> @afuchat1 on GitHub <ArrowRight className="w-3 h-3" />
               </a>
-              <div className="flex items-center gap-2 text-[10px] text-slate-600">
+              <div className="flex items-center gap-2 text-[10px] text-slate-400">
                 <span>Less</span>
                 <div className="flex" style={{ gap: 3 }}>
                   {LEVEL_COLORS.map((c, i) => (
-                    <div key={i} className="rounded-[2px]" style={{ width: 11, height: 11, background: c, border: i === 0 ? "1px solid #333" : "none" }} />
+                    <div key={i} className="rounded-[2px]" style={{ width: 11, height: 11, background: c, border: i === 0 ? "1px solid #e2e8f0" : "none" }} />
                   ))}
                 </div>
                 <span>More</span>
@@ -270,7 +270,7 @@ const STATS = [
 function StatsTicker() {
   const items = [...STATS, ...STATS];
   return (
-    <div className="overflow-hidden py-4 border-y border-slate-800 bg-slate-950/80">
+    <div className="overflow-hidden py-4 border-y border-slate-200 bg-slate-50">
       <motion.div
         className="flex gap-10 whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
@@ -329,7 +329,7 @@ export default function Home() {
   useEffect(() => () => { if (dropdownTimer.current) clearTimeout(dropdownTimer.current); }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100" style={{ fontFamily: "'Space Grotesk', 'Inter', sans-serif" }}>
+    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: "'Space Grotesk', 'Inter', sans-serif" }}>
 
       {/* ── scroll progress bar ── */}
       <motion.div
@@ -338,10 +338,10 @@ export default function Home() {
       />
 
       {/* ══════════ NAVBAR ══════════ */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/70">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/70">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
 
-          <a href="#" className="text-lg font-bold tracking-tight text-white shrink-0">
+          <a href="#" className="text-lg font-bold tracking-tight text-slate-900 shrink-0">
             AMK<span className="text-blue-500">.</span>
           </a>
 
@@ -354,13 +354,13 @@ export default function Home() {
               >
                 {item.href ? (
                   <a href={item.href}
-                    className="flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors">
+                    className="flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
                     {item.label}
                   </a>
                 ) : (
-                  <button className={`flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${activeDropdown === item.label ? "text-white bg-slate-800/60" : "text-slate-400 hover:text-white hover:bg-slate-800/60"}`}>
+                  <button className={`flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${activeDropdown === item.label ? "text-slate-900 bg-slate-100" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}>
                     {item.label}
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === item.label ? "rotate-180 text-blue-400" : ""}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === item.label ? "rotate-180 text-blue-500" : ""}`} />
                   </button>
                 )}
                 <AnimatePresence>
@@ -384,7 +384,7 @@ export default function Home() {
             </Button>
           </div>
 
-          <button className="md:hidden p-2 text-slate-400 hover:text-white transition-colors" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="md:hidden p-2 text-slate-500 hover:text-slate-900 transition-colors" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -393,13 +393,13 @@ export default function Home() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.22 }} className="md:hidden bg-slate-950 border-t border-slate-800 overflow-hidden"
+              transition={{ duration: 0.22 }} className="md:hidden bg-white border-t border-slate-200 overflow-hidden"
             >
               <div className="px-5 py-3 flex flex-col gap-1">
                 <button onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
-                  className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">
+                  className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors">
                   Products
-                  <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${mobileProductsOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${mobileProductsOpen ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
                   {mobileProductsOpen && (
@@ -411,8 +411,8 @@ export default function Home() {
                           return (
                             <a key={p.name} href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer"
                               onClick={() => setMobileMenuOpen(false)}
-                              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
-                              <Icon className="w-4 h-4 text-slate-600" /> {p.name}
+                              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                              <Icon className="w-4 h-4 text-slate-400" /> {p.name}
                             </a>
                           );
                         })}
@@ -422,7 +422,7 @@ export default function Home() {
                 </AnimatePresence>
                 {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Partners", href: "#partners" }, { label: "Vision", href: "#vision" }, { label: "Contact", href: "#contact" }].map((item) => (
                   <a key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                     {item.label}
                   </a>
                 ))}
@@ -438,7 +438,7 @@ export default function Home() {
       </nav>
 
       {/* ══════════ HERO ══════════ */}
-      <section className="relative pt-24 pb-0 overflow-hidden bg-slate-950">
+      <section className="relative pt-24 pb-0 overflow-hidden bg-white">
         {/* animated gradient orbs — replace video */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
           <motion.div
@@ -468,11 +468,11 @@ export default function Home() {
         </div>
 
         {/* grid overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12">
-          <Breadcrumb items={["AMK", "Portfolio", "Home"]} light />
+          <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
 
           {/* two-column hero layout */}
           <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-start pb-16">
@@ -486,7 +486,7 @@ export default function Home() {
 
               {/* headline */}
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight text-white mb-6">
+                className="text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight text-slate-900 mb-6">
                 AM<br />
                 <span className="text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #06b6d4 100%)" }}>
                   Kaweesi
@@ -494,9 +494,9 @@ export default function Home() {
               </motion.h1>
 
               <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-xl mb-8">
+                className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl mb-8">
                 Building connected digital systems across communication, payments, cloud, publishing, and tools.
-                Founder of the <span className="text-white font-semibold">AfuChat Ecosystem</span>.
+                Founder of the <span className="text-slate-900 font-semibold">AfuChat Ecosystem</span>.
               </motion.p>
 
               {/* stat row */}
@@ -508,7 +508,7 @@ export default function Home() {
                   { value: `${partners.length}`, label: "Partners" },
                 ].map((s) => (
                   <div key={s.label}>
-                    <div className="text-3xl font-bold text-white">{s.value}</div>
+                    <div className="text-3xl font-bold text-slate-900">{s.value}</div>
                     <div className="text-xs text-slate-500 uppercase tracking-widest font-semibold mt-0.5">{s.label}</div>
                   </div>
                 ))}
@@ -521,7 +521,7 @@ export default function Home() {
                   style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)" }}>
                   Explore Ecosystem <ArrowRight className="w-4 h-4" />
                 </a>
-                <a href="#contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white border border-slate-700 hover:border-slate-500 hover:bg-slate-800/50 transition-all">
+                <a href="#contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all">
                   Contact Me
                 </a>
               </motion.div>
@@ -536,11 +536,11 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }}
               className="hidden lg:flex flex-col items-center gap-5 pt-8">
               <div className="relative">
-                <div className="w-[220px] h-[220px] rounded-3xl overflow-hidden ring-1 ring-slate-700 shadow-2xl shadow-blue-900/30">
+                <div className="w-[220px] h-[220px] rounded-3xl overflow-hidden ring-1 ring-slate-200 shadow-2xl shadow-blue-200/40">
                   <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-full h-full object-cover" />
                 </div>
                 {/* floating badge */}
-                <div className="absolute -bottom-4 -right-4 px-3 py-1.5 rounded-full border border-slate-700 bg-slate-900 text-xs font-semibold text-slate-300 shadow-lg flex items-center gap-1.5">
+                <div className="absolute -bottom-4 -right-4 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-lg flex items-center gap-1.5">
                   <Sparkles className="w-3 h-3 text-blue-400" /> Digital Builder
                 </div>
               </div>
@@ -550,7 +550,7 @@ export default function Home() {
                   const Icon = s.icon;
                   return (
                     <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
-                      className="w-9 h-9 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:border-blue-500/50 hover:bg-slate-800 transition-all overflow-hidden">
+                      className="w-9 h-9 rounded-full border border-slate-200 bg-slate-50 flex items-center justify-center hover:border-blue-400 hover:bg-blue-50 transition-all overflow-hidden">
                       {(s as any).logoUrl
                         ? <img src={(s as any).logoUrl} alt={s.label} className="w-4 h-4 object-contain" />
                         : <Icon className="w-4 h-4 text-slate-500" />}
@@ -852,7 +852,7 @@ export default function Home() {
       </section>
 
       {/* ══════════ VISION ══════════ */}
-      <section id="vision" className="relative py-32 px-6 overflow-hidden bg-slate-950">
+      <section id="vision" className="relative py-32 px-6 overflow-hidden bg-slate-50">
         {/* animated orbs — replace video */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
           <motion.div
@@ -874,19 +874,19 @@ export default function Home() {
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" as const, delay: 0.8 }}
           />
         </div>
-        <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-950 to-transparent pointer-events-none" />
-        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-950 to-transparent pointer-events-none" />
+        <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-50 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <Breadcrumb items={["AMK", "Vision"]} light />
+          <Breadcrumb items={["AMK", "Vision"]} />
           <motion.div {...fadeUp}>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-400 text-xs font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-200 bg-violet-50 text-violet-700 text-xs font-semibold mb-6">
               <Sparkles className="w-3.5 h-3.5" /> Vision
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
               Building for<br />the Long Term
             </h2>
-            <p className="text-xl text-slate-400 leading-relaxed mb-14 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 leading-relaxed mb-14 max-w-2xl mx-auto">
               A unified digital ecosystem spanning communication, payments, cloud, publishing, education, and tools — built with scalable infrastructure to drive real-world impact.
             </p>
 
@@ -897,8 +897,8 @@ export default function Home() {
                 { label: "Impact", value: "Real-world", color: "#06b6d4" },
                 { label: "Approach", value: "Long-term", color: "#10b981" },
               ].map((stat) => (
-                <div key={stat.label} className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                <div key={stat.label} className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                  <div className="text-2xl font-bold text-slate-900 mb-1">{stat.value}</div>
                   <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: stat.color }}>{stat.label}</div>
                 </div>
               ))}
@@ -915,28 +915,28 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-5 items-stretch">
             {/* left — dark panel */}
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
-              className="rounded-2xl bg-slate-950 p-10 flex flex-col gap-8">
+              className="rounded-2xl bg-slate-50 border border-slate-200 p-10 flex flex-col gap-8">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-semibold mb-5">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
                   Contact
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">Let's Connect</h2>
-                <p className="text-slate-400 leading-relaxed">
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 leading-tight">Let's Connect</h2>
+                <p className="text-slate-600 leading-relaxed">
                   Interested in the ecosystem? Let's talk about infrastructure, collaboration, or what you're building.
                 </p>
               </div>
 
               {/* email CTA */}
               <a href="mailto:amkaweesi@afuchat.com"
-                className="group flex items-center gap-4 p-4 rounded-2xl border border-slate-800 bg-slate-900 hover:border-blue-500/40 hover:bg-slate-800/80 transition-all">
-                <div className="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors">
-                  <Mail className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors" />
+                className="group flex items-center gap-4 p-4 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50/60 transition-all">
+                <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors">
+                  <Mail className="w-5 h-5 text-blue-600 group-hover:text-white transition-colors" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-blue-400 mb-0.5">Email</p>
-                  <p className="text-sm font-semibold text-white truncate">amkaweesi@afuchat.com</p>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600 mb-0.5">Email</p>
+                  <p className="text-sm font-semibold text-slate-900 truncate">amkaweesi@afuchat.com</p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
               </a>
 
               {/* social links */}
@@ -945,16 +945,16 @@ export default function Home() {
                   const Icon = social.icon;
                   return (
                     <div key={social.label}>
-                      {i > 0 && <div className="h-px bg-slate-800 mx-1" />}
+                      {i > 0 && <div className="h-px bg-slate-200 mx-1" />}
                       <a href={social.href} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-4 py-3.5 px-3 rounded-xl group hover:bg-slate-800/50 transition-colors">
-                        <div className="w-9 h-9 rounded-xl border border-slate-800 bg-slate-900 flex items-center justify-center group-hover:border-slate-700 transition-colors overflow-hidden">
+                        className="flex items-center gap-4 py-3.5 px-3 rounded-xl group hover:bg-slate-100 transition-colors">
+                        <div className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center group-hover:border-slate-300 transition-colors overflow-hidden">
                           {(social as any).logoUrl
                             ? <img src={(social as any).logoUrl} alt={social.label} className="w-4 h-4 object-contain" />
-                            : <Icon className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" />}
+                            : <Icon className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition-colors" />}
                         </div>
-                        <span className="text-sm font-medium text-slate-400 group-hover:text-white transition-colors flex-1">{social.label}</span>
-                        <ExternalLink className="w-3.5 h-3.5 text-slate-700 group-hover:text-slate-500 transition-colors" />
+                        <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors flex-1">{social.label}</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 transition-colors" />
                       </a>
                     </div>
                   );
@@ -1001,12 +1001,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ FOOTER ══════════ */}
-      <footer className="py-10 px-6 border-t border-slate-800 bg-slate-950">
+      <footer className="py-10 px-6 border-t border-slate-200 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-5">
-              <span className="text-xl font-bold text-white">AMK<span className="text-blue-500">.</span></span>
-              <div className="h-4 w-px bg-slate-800" />
+              <span className="text-xl font-bold text-slate-900">AMK<span className="text-blue-500">.</span></span>
+              <div className="h-4 w-px bg-slate-200" />
               <p className="text-sm text-slate-500">© {new Date().getFullYear()} AM Kaweesi. All rights reserved.</p>
             </div>
 
@@ -1015,9 +1015,9 @@ export default function Home() {
                 const Icon = social.icon;
                 return (
                   <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}
-                    className="w-8 h-8 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:border-slate-600 hover:bg-slate-800 transition-all overflow-hidden">
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-slate-50 flex items-center justify-center hover:border-slate-300 hover:bg-slate-100 transition-all overflow-hidden">
                     {(social as any).logoUrl
-                      ? <img src={(social as any).logoUrl} alt={social.label} className="w-3.5 h-3.5 object-contain opacity-60" />
+                      ? <img src={(social as any).logoUrl} alt={social.label} className="w-3.5 h-3.5 object-contain opacity-70" />
                       : <Icon className="w-3.5 h-3.5 text-slate-500" />}
                   </a>
                 );
@@ -1025,10 +1025,10 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-slate-800/50 flex flex-wrap gap-x-8 gap-y-2 justify-center">
+          <div className="mt-8 pt-8 border-t border-slate-200 flex flex-wrap gap-x-8 gap-y-2 justify-center">
             {projects.map((p) => (
               <a key={p.name} href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer"
-                className="text-xs text-slate-700 hover:text-slate-400 transition-colors font-medium">{p.name}</a>
+                className="text-xs text-slate-500 hover:text-slate-700 transition-colors font-medium">{p.name}</a>
             ))}
           </div>
         </div>
@@ -1042,21 +1042,21 @@ export default function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ duration: 0.35, ease: "easeOut" as const }}
-            className="fixed bottom-5 right-5 z-[300] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-700"
+            className="fixed bottom-5 right-5 z-[300] flex flex-col rounded-2xl overflow-hidden shadow-xl shadow-slate-200/80 border border-slate-200"
             style={{ width: 316 }}
           >
             {/* header bar */}
-            <div className="flex items-center justify-between px-3 py-2 bg-slate-900 border-b border-slate-800">
+            <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-200">
               <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 select-none">
                 <img src="/favicons/afuchat.png" alt="" className="w-3.5 h-3.5 object-contain opacity-60" />
                 Advertisement
               </span>
               <button
                 onClick={() => setAdDismissed(true)}
-                className="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
+                className="w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
                 aria-label="Close advertisement"
               >
-                <X className="w-3 h-3 text-slate-400" />
+                <X className="w-3 h-3 text-slate-500" />
               </button>
             </div>
 
