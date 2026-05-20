@@ -556,23 +556,23 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-white/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/75 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "About"]} />
+          <Breadcrumb items={["AMK", "About"]} light />
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* big stats */}
             <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
               {[
-                { value: `${projects.length}`, label: "Products", sub: "Across the AfuChat ecosystem" },
-                { value: `${clients.length}`, label: "Clients", sub: "Organizations powered by this work" },
-                { value: "2022", label: "Founded", sub: "AfuChat Ecosystem launched" },
-                { value: "∞", label: "Vision", sub: "Infrastructure-first, long-term" },
+                { value: `${projects.length}`, label: "Products", sub: "Across the AfuChat ecosystem", accent: true },
+                { value: `${clients.length}`, label: "Clients", sub: "Organizations powered by this work", accent: false },
+                { value: "2022", label: "Founded", sub: "AfuChat Ecosystem launched", accent: false },
+                { value: "∞", label: "Vision", sub: "Infrastructure-first, long-term", accent: false },
               ].map((stat, i) => (
-                <div key={i} className={`p-6 rounded-2xl border ${i === 0 ? "bg-blue-600 border-blue-500 text-white" : "bg-slate-50 border-slate-100"}`}>
-                  <div className={`text-4xl font-bold mb-1 ${i === 0 ? "text-white" : "text-slate-900"}`}>{stat.value}</div>
-                  <div className={`text-xs font-bold uppercase tracking-widest mb-1.5 ${i === 0 ? "text-blue-200" : "text-blue-600"}`}>{stat.label}</div>
-                  <div className={`text-xs leading-snug ${i === 0 ? "text-blue-100" : "text-slate-500"}`}>{stat.sub}</div>
+                <div key={i} className={`p-6 rounded-2xl border ${stat.accent ? "bg-blue-600 border-blue-500" : "bg-slate-800/70 border-slate-700/60 backdrop-blur-sm"}`}>
+                  <div className="text-4xl font-bold mb-1 text-white">{stat.value}</div>
+                  <div className={`text-xs font-bold uppercase tracking-widest mb-1.5 ${stat.accent ? "text-blue-200" : "text-blue-400"}`}>{stat.label}</div>
+                  <div className={`text-xs leading-snug ${stat.accent ? "text-blue-100" : "text-slate-400"}`}>{stat.sub}</div>
                 </div>
               ))}
             </motion.div>
@@ -584,16 +584,16 @@ export default function Home() {
                   <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-16 h-16 object-cover rounded-2xl block" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-0.5">About</p>
-                  <p className="text-base font-semibold text-slate-900">AM Kaweesi</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">About</p>
+                  <p className="text-base font-semibold text-white">AM Kaweesi</p>
                 </div>
               </div>
 
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">The Architect<br />of Connectivity</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">The Architect<br />of Connectivity</h2>
 
-              <div className="space-y-4 text-base text-slate-600 leading-relaxed">
+              <div className="space-y-4 text-base text-slate-300 leading-relaxed">
                 <p>I am a builder focused on creating cohesive digital ecosystems. Digital tools shouldn't exist in isolation — they should connect, communicate, and compound.</p>
-                <p><strong className="text-slate-900 font-semibold">AfuChat</strong> is the core of this expanding platform — a unified communication layer that branches into payments, cloud storage, publishing, education, and beyond.</p>
+                <p><strong className="text-white font-semibold">AfuChat</strong> is the core of this expanding platform — a unified communication layer that branches into payments, cloud storage, publishing, education, and beyond.</p>
                 <p>Every project I build is designed to be an interconnected piece of a larger, seamless online service architecture.</p>
               </div>
 
@@ -601,7 +601,7 @@ export default function Home() {
                 <a href="#ecosystem" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors">
                   View Ecosystem <ArrowRight className="w-4 h-4" />
                 </a>
-                <a href="#contact" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors">
+                <a href="#contact" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-slate-300 border border-slate-600 hover:border-slate-400 hover:bg-slate-800/50 transition-colors">
                   Get in Touch
                 </a>
               </div>
@@ -708,22 +708,22 @@ export default function Home() {
       </section>
 
       {/* ══════════ CLIENTS ══════════ */}
-      <section id="clients" className="relative py-28 px-6 border-t border-slate-100 overflow-hidden">
+      <section id="clients" className="relative py-28 px-6 border-t border-slate-800 overflow-hidden">
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-white/62 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/72 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "Clients"]} />
+          <Breadcrumb items={["AMK", "Clients"]} light />
 
           <motion.div {...fadeUp} className="mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-semibold mb-5">
               <Sparkles className="w-3.5 h-3.5" /> Clients
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-3">
               Built for Real People
             </h2>
-            <p className="text-lg text-slate-500 max-w-xl">Organizations and brands powered by this ecosystem.</p>
+            <p className="text-lg text-slate-400 max-w-xl">Organizations and brands powered by this ecosystem.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -790,20 +790,20 @@ export default function Home() {
       </section>
 
       {/* ══════════ PARTNERS ══════════ */}
-      <section id="partners" className="relative py-28 px-6 border-t border-slate-100 overflow-hidden">
+      <section id="partners" className="relative py-28 px-6 border-t border-slate-800 overflow-hidden">
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-slate-50/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/72 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "Partners"]} />
+          <Breadcrumb items={["AMK", "Partners"]} light />
 
           <motion.div {...fadeUp} className="mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-200 bg-orange-50 text-orange-700 text-xs font-semibold mb-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 text-xs font-semibold mb-5">
               <Sparkles className="w-3.5 h-3.5" /> Partners
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">Trusted Collaborators</h2>
-            <p className="text-lg text-slate-500 max-w-xl">Organizations we work alongside to deliver greater impact across Africa.</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-3">Trusted Collaborators</h2>
+            <p className="text-lg text-slate-400 max-w-xl">Organizations we work alongside to deliver greater impact across Africa.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -896,13 +896,13 @@ export default function Home() {
       </section>
 
       {/* ══════════ CONTACT ══════════ */}
-      <section id="contact" className="relative py-28 px-6 border-t border-slate-100 overflow-hidden">
+      <section id="contact" className="relative py-28 px-6 border-t border-slate-800 overflow-hidden">
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-white/62 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/75 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "Contact"]} />
+          <Breadcrumb items={["AMK", "Contact"]} light />
 
           <div className="grid lg:grid-cols-2 gap-5 items-stretch">
             {/* left — dark panel */}
@@ -956,28 +956,28 @@ export default function Home() {
 
             {/* right — form panel */}
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
-              className="rounded-2xl border border-slate-200 bg-slate-50 p-10 flex flex-col gap-6 relative overflow-hidden">
-              <div className="absolute top-6 right-6 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-bold uppercase tracking-wider text-amber-700">
+              className="rounded-2xl border border-slate-700/60 bg-slate-900/80 backdrop-blur-sm p-10 flex flex-col gap-6 relative overflow-hidden">
+              <div className="absolute top-6 right-6 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" /> Coming soon
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Send a Message</h3>
-                <p className="text-sm text-slate-500 max-w-sm">The in-page form is on the way. Drop me an email — I read everything.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Send a Message</h3>
+                <p className="text-sm text-slate-400 max-w-sm">The in-page form is on the way. Drop me an email — I read everything.</p>
               </div>
 
-              <form className="space-y-4 opacity-50 pointer-events-none select-none" aria-disabled="true" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4 opacity-40 pointer-events-none select-none" aria-disabled="true" onSubmit={(e) => e.preventDefault()}>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Name</label>
-                  <Input placeholder="Your name" disabled className="h-11 border-slate-200 bg-white" />
+                  <label className="text-sm font-semibold text-slate-300">Name</label>
+                  <Input placeholder="Your name" disabled className="h-11 border-slate-700 bg-slate-800 text-slate-300 placeholder:text-slate-600" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Email</label>
-                  <Input type="email" placeholder="your@email.com" disabled className="h-11 border-slate-200 bg-white" />
+                  <label className="text-sm font-semibold text-slate-300">Email</label>
+                  <Input type="email" placeholder="your@email.com" disabled className="h-11 border-slate-700 bg-slate-800 text-slate-300 placeholder:text-slate-600" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Message</label>
-                  <Textarea placeholder="What's on your mind?" disabled className="min-h-[110px] resize-none border-slate-200 bg-white" />
+                  <label className="text-sm font-semibold text-slate-300">Message</label>
+                  <Textarea placeholder="What's on your mind?" disabled className="min-h-[110px] resize-none border-slate-700 bg-slate-800 text-slate-300 placeholder:text-slate-600" />
                 </div>
                 <Button type="button" disabled className="w-full h-11 text-sm font-semibold">Coming soon</Button>
               </form>
@@ -1066,7 +1066,7 @@ export default function Home() {
               scrolling="no"
               style={{ border: "none", overflow: "hidden", maxWidth: "100%", display: "block", background: "#0f172a" }}
               sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-              loading="lazy"
+              loading="eager"
               title="Advertisement"
             />
           </motion.div>
