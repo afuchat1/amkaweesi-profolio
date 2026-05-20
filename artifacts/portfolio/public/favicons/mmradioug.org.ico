@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Mindset Media Radio — Your Voice. Your Station.</title>
+    <meta name="description" content="Stream Mindset Media Radio live — news, music and talk that matters. Entebbe, Uganda." />
+    <meta property="og:title" content="Mindset Media Radio" />
+    <meta property="og:description" content="Your Voice. Your Station. Stream live from Entebbe, Uganda." />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#dc2626" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <script type="module" crossorigin src="/assets/index-CjUDjGhj.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-lORluquP.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
