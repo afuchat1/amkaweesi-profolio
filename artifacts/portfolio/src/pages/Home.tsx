@@ -545,8 +545,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ ABOUT ══════════ */}
-      <section id="about" className="py-28 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
+      <section id="about" className="relative py-28 px-6 overflow-hidden">
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
+          <source src="/videos/vision-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-white/88 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "About"]} />
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -600,8 +604,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ ECOSYSTEM ══════════ */}
-      <section id="ecosystem" className="py-28 bg-slate-950 border-t border-slate-800">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="ecosystem" className="relative py-28 border-t border-slate-800 overflow-hidden">
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-slate-950/82 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto px-6">
           <Breadcrumb items={["AMK", "Products", "Ecosystem"]} light />
 
           <motion.div {...fadeUp} className="mb-14">
@@ -693,8 +701,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ CLIENTS ══════════ */}
-      <section id="clients" className="py-28 px-6 bg-white border-t border-slate-100">
-        <div className="max-w-6xl mx-auto">
+      <section id="clients" className="relative py-28 px-6 border-t border-slate-100 overflow-hidden">
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-white/90 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Clients"]} />
 
           <motion.div {...fadeUp} className="mb-14">
@@ -771,8 +783,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ PARTNERS ══════════ */}
-      <section id="partners" className="py-28 px-6 bg-slate-50 border-t border-slate-100">
-        <div className="max-w-6xl mx-auto">
+      <section id="partners" className="relative py-28 px-6 border-t border-slate-100 overflow-hidden">
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
+          <source src="/videos/vision-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-slate-50/88 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Partners"]} />
 
           <motion.div {...fadeUp} className="mb-14">
@@ -873,8 +889,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ CONTACT ══════════ */}
-      <section id="contact" className="py-28 px-6 bg-white border-t border-slate-100">
-        <div className="max-w-6xl mx-auto">
+      <section id="contact" className="relative py-28 px-6 border-t border-slate-100 overflow-hidden">
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
+          <source src="/videos/vision-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-white/90 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Contact"]} />
 
           <div className="grid lg:grid-cols-2 gap-5 items-stretch">
@@ -966,8 +986,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ FOOTER ══════════ */}
-      <footer className="py-10 px-6 border-t border-slate-800 bg-slate-950">
-        <div className="max-w-6xl mx-auto">
+      <footer className="relative py-10 px-6 border-t border-slate-800 overflow-hidden">
+        <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-slate-950/92 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-5">
               <span className="text-xl font-bold text-white">AMK<span className="text-blue-500">.</span></span>
