@@ -45,6 +45,7 @@ const clients = [
   { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers", icon: CreditCard, brand: { primary: "#60a5fa", iconBg: "#0c2340", card: "#0d1117", cardBorder: "#1e2d3d", dark: true  } },
   { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",   icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
   { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",    desc: "Quality footwear retail brand for everyday style",             icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#1a1500", card: "#0a0a00", cardBorder: "#2a2000", dark: true  }, logoUrl: "/favicons/sabulashoespot.com.svg" },
+  { domain: "mmradioug.org",             name: "MM Radio Uganda",     desc: "Online radio station keeping Uganda connected through music, news and culture", icon: Globe, brand: { primary: "#ef4444", iconBg: "#fef2f2", card: "#ffffff", cardBorder: "#fecaca", dark: false }, logoUrl: "https://mmradioug.org/favicon.ico" },
 ];
 
 const partners = [
@@ -591,11 +592,11 @@ export default function Home() {
           loop
           playsInline
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.18] pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.55] pointer-events-none"
         >
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/70 to-white pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/30 to-white pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
 
