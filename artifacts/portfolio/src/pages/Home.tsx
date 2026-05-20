@@ -50,6 +50,7 @@ const clients = [
 
 const partners = [
   { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ajsdigitalservices.com.png", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
+
 ];
 
 const socialLinks = [
