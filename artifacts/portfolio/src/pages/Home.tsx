@@ -293,7 +293,14 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
+  const [adDismissed, setAdDismissed] = useState(false);
+  const [adVisible, setAdVisible] = useState(false);
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAdVisible(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -1022,6 +1029,49 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* ── AfuChat Ads floating widget ── */}
+      <AnimatePresence>
+        {adVisible && !adDismissed && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 24, scale: 0.95 }}
+            transition={{ duration: 0.35, ease: "easeOut" as const }}
+            className="fixed bottom-5 right-5 z-[300] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-700"
+            style={{ width: 316 }}
+          >
+            {/* header bar */}
+            <div className="flex items-center justify-between px-3 py-2 bg-slate-900 border-b border-slate-800">
+              <a href="https://ceo.afuchat.com" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 hover:text-white transition-colors">
+                <img src="/favicons/afuchat.png" alt="AfuChat Ads" className="w-3.5 h-3.5 object-contain" />
+                AfuChat Ads
+              </a>
+              <button
+                onClick={() => setAdDismissed(true)}
+                className="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
+                aria-label="Close advertisement"
+              >
+                <X className="w-3 h-3 text-slate-400" />
+              </button>
+            </div>
+
+            {/* ad iframe */}
+            <iframe
+              src="https://zuekwzcnknkczelivurf.supabase.co/functions/v1/serve-ad?publisher=c94c610f-685e-4834-bb39-be88049814d9&site=d4c5ef0f-ed9c-496f-835d-d420a89091f4&format=banner_300x250"
+              width="300"
+              height="250"
+              frameBorder="0"
+              scrolling="no"
+              style={{ border: "none", overflow: "hidden", maxWidth: "100%", display: "block", background: "#0f172a" }}
+              sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+              loading="lazy"
+              title="Advertisement"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
