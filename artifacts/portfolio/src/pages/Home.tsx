@@ -86,6 +86,7 @@ const navItems: NavItem[] = [
   { label: "Clients", dropdown: clients.map((c) => ({ name: c.name, desc: c.desc, href: `https://${c.domain}`, domain: c.domain, logoUrl: (c as any).logoUrl, icon: c.icon })) },
   { label: "Partners", dropdown: partners.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: (p as any).logoUrl, icon: p.icon })) },
   { label: "Vision", href: "#vision" },
+  { label: "Ads", href: "#ads" },
 ];
 
 function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text: string; href: string; linkLabel: string } }) {
@@ -295,12 +296,35 @@ export default function Home() {
   const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
   const [adDismissed, setAdDismissed] = useState(false);
   const [adVisible, setAdVisible] = useState(false);
+  const [adRotation, setAdRotation] = useState(0);
+  const [adProgress, setAdProgress] = useState(0);
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const AD_INTERVAL = 9000;
 
   useEffect(() => {
     const timer = setTimeout(() => setAdVisible(true), 2500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (adDismissed) return;
+    const interval = setInterval(() => {
+      setAdRotation((r) => r + 1);
+      setAdProgress(0);
+    }, AD_INTERVAL);
+    return () => clearInterval(interval);
+  }, [adDismissed]);
+
+  useEffect(() => {
+    if (adDismissed) return;
+    setAdProgress(0);
+    const tick = 80;
+    const interval = setInterval(() => {
+      setAdProgress((p) => Math.min(100, p + (tick / AD_INTERVAL) * 100));
+    }, tick);
+    return () => clearInterval(interval);
+  }, [adDismissed, adRotation]);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -420,7 +444,7 @@ export default function Home() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-                {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Partners", href: "#partners" }, { label: "Vision", href: "#vision" }, { label: "Contact", href: "#contact" }].map((item) => (
+                {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Partners", href: "#partners" }, { label: "Vision", href: "#vision" }, { label: "Ads", href: "#ads" }, { label: "Contact", href: "#contact" }].map((item) => (
                   <a key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                     {item.label}
@@ -907,6 +931,91 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══════════ ADS ══════════ */}
+      <section id="ads" className="py-28 px-6 border-t border-slate-100 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <Breadcrumb items={["AMK", "Ads"]} />
+
+          <motion.div {...fadeUp} className="mb-14 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-200 bg-orange-50 text-orange-700 text-xs font-semibold mb-5">
+              <Megaphone className="w-3.5 h-3.5" /> AfuChat Ads
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">
+              Live Ad Preview
+            </h2>
+            <p className="text-lg text-slate-500 max-w-lg mx-auto">
+              Real ads served by the AfuChat Ads network — rotating every 9 seconds.
+            </p>
+          </motion.div>
+
+          <motion.div {...fadeUp} className="flex flex-col items-center gap-8">
+            {/* Ad frame */}
+            <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-lg bg-white" style={{ width: 320 }}>
+              {/* header */}
+              <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
+                <span className="flex items-center gap-2 text-xs font-semibold text-slate-600 select-none">
+                  <img src="/favicons/afuchat.png" alt="" className="w-4 h-4 object-contain opacity-70" />
+                  AfuChat Ads · Live Preview
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-orange-500">
+                  Ad #{adRotation + 1}
+                </span>
+              </div>
+
+              {/* iframe */}
+              <div style={{ width: 320, height: 267, position: "relative", overflow: "hidden" }}>
+                <iframe
+                  key={`section-${adRotation}`}
+                  src={`/api/ad?t=${adRotation}`}
+                  width="320"
+                  height="267"
+                  frameBorder="0"
+                  scrolling="no"
+                  style={{ border: "none", width: "320px", height: "267px", display: "block", background: "#ffffff" }}
+                  title="AfuChat Ad Preview"
+                />
+              </div>
+
+              {/* progress bar */}
+              <div className="h-1 bg-slate-100">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500"
+                  style={{ width: `${adProgress}%` }}
+                  transition={{ ease: "linear" as const }}
+                />
+              </div>
+
+              {/* footer */}
+              <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 select-none">Powered by AfuChat Ads</span>
+                <div className="flex items-center gap-1">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="w-1.5 h-1.5 rounded-full transition-all duration-300"
+                      style={{ background: i === adRotation % 3 ? "#f97316" : "#e2e8f0" }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a href="https://ads.afuchat.com" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-200"
+                style={{ background: "linear-gradient(135deg, #f97316, #fb923c)" }}>
+                <Megaphone className="w-4 h-4" /> Advertise on AfuChat <ArrowRight className="w-4 h-4" />
+              </a>
+              <a href="https://afuchat.com" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
+                Learn More <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ══════════ CONTACT ══════════ */}
       <section id="contact" className="py-28 px-6 border-t border-slate-100 bg-white">
         <div className="max-w-6xl mx-auto">
@@ -1042,35 +1151,74 @@ export default function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ duration: 0.35, ease: "easeOut" as const }}
-            className="fixed bottom-5 right-5 z-[300] flex flex-col rounded-2xl overflow-hidden shadow-xl shadow-slate-200/80 border border-slate-200"
-            style={{ width: 316 }}
+            className="fixed bottom-5 right-5 z-[300] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-slate-300/50 border border-slate-200 bg-white"
+            style={{ width: 320 }}
           >
             {/* header bar */}
-            <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-200">
-              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 select-none">
-                <img src="/favicons/afuchat.png" alt="" className="w-3.5 h-3.5 object-contain opacity-60" />
-                Advertisement
+            <div className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 border-b border-slate-200">
+              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-600 select-none">
+                <img src="/favicons/afuchat.png" alt="" className="w-3.5 h-3.5 object-contain opacity-70" />
+                AfuChat Ads
               </span>
-              <button
-                onClick={() => setAdDismissed(true)}
-                className="w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
-                aria-label="Close advertisement"
-              >
-                <X className="w-3 h-3 text-slate-500" />
-              </button>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-orange-500">#{adRotation + 1}</span>
+                <button
+                  onClick={() => setAdDismissed(true)}
+                  className="w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
+                  aria-label="Close advertisement"
+                >
+                  <X className="w-3 h-3 text-slate-500" />
+                </button>
+              </div>
             </div>
 
-            {/* ad iframe — served via local proxy for correct Content-Type */}
-            <iframe
-              src="/api/ad"
-              width="300"
-              height="250"
-              frameBorder="0"
-              scrolling="no"
-              style={{ border: "none", overflow: "hidden", width: "300px", height: "250px", display: "block", background: "#ffffff" }}
-              loading="eager"
-              title="Advertisement"
-            />
+            {/* rotating ad iframe */}
+            <div style={{ width: 320, height: 267, position: "relative", overflow: "hidden" }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={adRotation}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  style={{ position: "absolute", inset: 0 }}
+                >
+                  <iframe
+                    key={`widget-${adRotation}`}
+                    src={`/api/ad?t=${adRotation}`}
+                    width="320"
+                    height="267"
+                    frameBorder="0"
+                    scrolling="no"
+                    style={{ border: "none", width: "320px", height: "267px", display: "block", background: "#ffffff" }}
+                    title="Advertisement"
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* progress bar + dots */}
+            <div className="px-3.5 py-2 bg-slate-50 border-t border-slate-100 flex items-center gap-3">
+              <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-none"
+                  style={{ width: `${adProgress}%` }}
+                />
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="rounded-full transition-all duration-300"
+                    style={{
+                      width: i === adRotation % 3 ? 16 : 6,
+                      height: 6,
+                      background: i === adRotation % 3 ? "#f97316" : "#e2e8f0",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

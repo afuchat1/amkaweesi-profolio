@@ -10,15 +10,22 @@ const AD_URL =
 
 router.get("/ad", async (_req, res) => {
   try {
-    const upstream = await fetch(AD_URL, {
-      headers: { Accept: "text/html,application/xhtml+xml" },
+    const cacheBust = Date.now();
+    const upstream = await fetch(`${AD_URL}&_cb=${cacheBust}`, {
+      headers: {
+        Accept: "text/html,application/xhtml+xml",
+        "Cache-Control": "no-cache, no-store",
+        Pragma: "no-cache",
+      },
     });
 
     const html = await upstream.text();
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("X-Frame-Options", "SAMEORIGIN");
-    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.status(200).send(html);
   } catch {
     res
