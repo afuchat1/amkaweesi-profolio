@@ -434,7 +434,7 @@ export default function Home() {
       <section className="relative pt-24 pb-0 overflow-hidden bg-slate-950">
         {/* background video */}
         <video autoPlay muted loop playsInline aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.18] pointer-events-none">
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.65] pointer-events-none">
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
 
@@ -549,7 +549,7 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-white/88 pointer-events-none" />
+        <div className="absolute inset-0 bg-white/60 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "About"]} />
 
@@ -608,7 +608,7 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-slate-950/82 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/55 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <Breadcrumb items={["AMK", "Products", "Ecosystem"]} light />
 
@@ -705,7 +705,7 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-white/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-white/62 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Clients"]} />
 
@@ -787,7 +787,7 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-slate-50/88 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-50/60 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Partners"]} />
 
@@ -893,7 +893,7 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/vision-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-white/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-white/62 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Contact"]} />
 
@@ -990,7 +990,7 @@ export default function Home() {
         <video autoPlay muted loop playsInline aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none">
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-slate-950/92 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/60 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-5">
