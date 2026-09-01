@@ -3,8 +3,8 @@ import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import {
   ExternalLink, Mail, ArrowRight, Github, Twitter, Linkedin,
   Globe, Send, MessageSquare, ChevronRight, ChevronDown,
-  Cloud, BookOpen, Megaphone, Calculator, Menu, X,
-  CreditCard, Headphones, GraduationCap, Code2, Sparkles, Zap,
+  Cloud, BookOpen, Menu, X,
+  CreditCard, Headphones, GraduationCap, Code2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,25 +15,24 @@ import { Textarea } from "@/components/ui/textarea";
 const PROFILE_IMG = "https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg";
 
 const projects = [
-  { domain: "afuchat.com",       name: "AfuChat",     desc: "Unified communication platform for the modern web",                      icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2", dark: false }, logoUrl: "/favicons/afuchat.png" },
-  { domain: "email.afuchat.com", name: "AfuMail",     desc: "Smart, privacy-first email for the ecosystem",                           icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe", dark: false }, logoUrl: "/favicons/email.afuchat.com.svg" },
-  { domain: "cloud.afuchat.com", name: "AfuCloud",    desc: "Personal cloud storage and file management",                             icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/cloud.afuchat.com.ico" },
-  { domain: "blog.afuchat.com",  name: "AfuBlog",     desc: "Publish ideas, stories, and long-form content",                          icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4", dark: false }, logoUrl: "/favicons/blog.afuchat.com.ico" },
-  { domain: "ads.afuchat.com",   name: "AfuAds",      desc: "Digital advertising and audience reach tools",                           icon: Megaphone,     brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ads.afuchat.com.svg" },
-  { domain: "math.afuchat.com",  name: "AfuMath",     desc: "Interactive math education and problem solving",                         icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#ede9fe", card: "#ffffff", cardBorder: "#ddd6fe", dark: false }, logoUrl: "/favicons/math.afuchat.com.png" },
-  { domain: "desk.afuchat.com",  name: "AfuDesk",     desc: "Customer support and helpdesk for the ecosystem",                        icon: Headphones,    brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/desk.afuchat.com.ico" },
-  { domain: "dev.afuchat.com",   name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda",           icon: Code2,         brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff", dark: false }, logoUrl: "/favicons/dev.afuchat.com.svg", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
+  { domain: "afuchat.com",       name: "AfuChat",     desc: "Unified communication platform for the modern web",                      icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2" }, logoUrl: "/favicons/afuchat.png" },
+  { domain: "email.afuchat.com", name: "AfuMail",     desc: "Smart, privacy-first email for the ecosystem",                           icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe" }, logoUrl: "/favicons/email.afuchat.com.svg" },
+  { domain: "cloud.afuchat.com", name: "AfuCloud",    desc: "Personal cloud storage and file management",                             icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa" }, logoUrl: "/favicons/cloud.afuchat.com.ico" },
+  { domain: "blog.afuchat.com",  name: "AfuBlog",     desc: "Publish ideas, stories, and long-form content",                          icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4" }, logoUrl: "/favicons/blog.afuchat.com.ico" },
+  { domain: "math.afuchat.com",  name: "AfuMath",     desc: "Interactive math education and problem solving",                         icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#ede9fe", card: "#ffffff", cardBorder: "#ddd6fe" }, logoUrl: "/favicons/math.afuchat.com.png" },
+  { domain: "desk.afuchat.com",  name: "AfuDesk",     desc: "Customer support and helpdesk for the ecosystem",                        icon: Headphones,    brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa" }, logoUrl: "/favicons/desk.afuchat.com.ico" },
+  { domain: "dev.afuchat.com",   name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda",           icon: Code2,         brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff" }, logoUrl: "/favicons/dev.afuchat.com.svg", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
 ];
 
 const clients = [
-  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers",                     icon: CreditCard, brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe", dark: false } },
-  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",                       icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
-  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",   desc: "Quality footwear retail brand for everyday style",                                  icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#fef9c3", card: "#ffffff", cardBorder: "#fde68a", dark: false }, logoUrl: "/favicons/sabulashoespot.com.jpg" },
-  { domain: "mmradioug.org",             name: "MM Radio Uganda",    desc: "Online radio station keeping Uganda connected through music, news and culture",      icon: Globe,      brand: { primary: "#ef4444", iconBg: "#fef2f2", card: "#ffffff", cardBorder: "#fecaca", dark: false }, logoUrl: "/favicons/mmradioug.org.png" },
+  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers",                     icon: CreditCard, brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe" } },
+  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",                       icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a" }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
+  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",   desc: "Quality footwear retail brand for everyday style",                                  icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#fef9c3", card: "#ffffff", cardBorder: "#fde68a" }, logoUrl: "/favicons/sabulashoespot.com.jpg" },
+  { domain: "mmradioug.org",             name: "MM Radio Uganda",    desc: "Online radio station keeping Uganda connected through music, news and culture",      icon: Globe,      brand: { primary: "#ef4444", iconBg: "#fef2f2", card: "#ffffff", cardBorder: "#fecaca" }, logoUrl: "/favicons/mmradioug.org.png" },
 ];
 
 const partners = [
-  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa", dark: false }, logoUrl: "/favicons/ajsdigitalservices.com.png", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
+  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa" }, logoUrl: "/favicons/ajsdigitalservices.com.png", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
 ];
 
 const socialLinks = [
@@ -63,13 +62,13 @@ function ServiceLogo({ name, logoUrl, FallbackIcon, imgClassName = "w-7 h-7 obje
 }
 
 /* ─────────────────────────────────────────── Breadcrumb ──── */
-function Breadcrumb({ items, light = false }: { items: string[]; light?: boolean }) {
+function Breadcrumb({ items }: { items: string[] }) {
   return (
-    <nav className="flex items-center gap-1.5 text-xs mb-6 select-none" style={{ color: light ? "rgba(255,255,255,0.4)" : "#94a3b8" }}>
+    <nav className="flex items-center gap-1.5 text-xs mb-6 select-none text-slate-400">
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-1.5">
           {i > 0 && <ChevronRight className="w-3 h-3" />}
-          <span style={i === items.length - 1 ? { color: light ? "rgba(255,255,255,0.85)" : "#3b82f6", fontWeight: 600 } : {}}>{item}</span>
+          <span className={i === items.length - 1 ? "font-semibold text-blue-600" : undefined}>{item}</span>
         </span>
       ))}
     </nav>
@@ -86,7 +85,6 @@ const navItems: NavItem[] = [
   { label: "Clients", dropdown: clients.map((c) => ({ name: c.name, desc: c.desc, href: `https://${c.domain}`, domain: c.domain, logoUrl: (c as any).logoUrl, icon: c.icon })) },
   { label: "Partners", dropdown: partners.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: (p as any).logoUrl, icon: p.icon })) },
   { label: "Vision", href: "#vision" },
-  { label: "Ads", href: "#ads" },
 ];
 
 function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text: string; href: string; linkLabel: string } }) {
@@ -269,21 +267,18 @@ const STATS = [
 ];
 
 function StatsTicker() {
-  const items = [...STATS, ...STATS];
   return (
-    <div className="overflow-hidden py-4 border-y border-slate-200 bg-slate-50">
-      <motion.div
-        className="flex gap-10 whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+    <div className="py-4 px-6 border-y border-slate-200 bg-slate-50">
+      <div
+        className="flex flex-wrap justify-center gap-x-10 gap-y-3"
       >
-        {items.map((s, i) => (
+        {STATS.map((s, i) => (
           <span key={i} className="flex items-center gap-3 text-sm font-semibold text-slate-500 shrink-0">
-            <Zap className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" aria-hidden="true" />
             {s}
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -294,37 +289,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
-  const [adDismissed, setAdDismissed] = useState(false);
-  const [adVisible, setAdVisible] = useState(false);
-  const [adRotation, setAdRotation] = useState(0);
-  const [adProgress, setAdProgress] = useState(0);
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const AD_INTERVAL = 9000;
-
-  useEffect(() => {
-    const timer = setTimeout(() => setAdVisible(true), 2500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (adDismissed) return;
-    const interval = setInterval(() => {
-      setAdRotation((r) => r + 1);
-      setAdProgress(0);
-    }, AD_INTERVAL);
-    return () => clearInterval(interval);
-  }, [adDismissed]);
-
-  useEffect(() => {
-    if (adDismissed) return;
-    setAdProgress(0);
-    const tick = 80;
-    const interval = setInterval(() => {
-      setAdProgress((p) => Math.min(100, p + (tick / AD_INTERVAL) * 100));
-    }, tick);
-    return () => clearInterval(interval);
-  }, [adDismissed, adRotation]);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -358,7 +323,7 @@ export default function Home() {
       {/* ── scroll progress bar ── */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-[3px] z-[200] origin-left"
-        style={{ scaleX, background: "linear-gradient(90deg, #3b82f6, #a855f7, #06b6d4)" }}
+        style={{ scaleX, background: "#2563eb" }}
       />
 
       {/* ══════════ NAVBAR ══════════ */}
@@ -444,7 +409,7 @@ export default function Home() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-                {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Partners", href: "#partners" }, { label: "Vision", href: "#vision" }, { label: "Ads", href: "#ads" }, { label: "Contact", href: "#contact" }].map((item) => (
+                {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Partners", href: "#partners" }, { label: "Vision", href: "#vision" }, { label: "Contact", href: "#contact" }].map((item) => (
                   <a key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                     {item.label}
@@ -463,56 +428,17 @@ export default function Home() {
 
       {/* ══════════ HERO ══════════ */}
       <section className="relative pt-24 pb-0 overflow-hidden bg-white">
-        {/* animated gradient orbs — replace video */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-          <motion.div
-            className="absolute -top-48 -left-48 w-[750px] h-[750px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(59,130,246,0.22) 0%, transparent 68%)" }}
-            animate={{ x: [0, 70, 0], y: [0, 50, 0], scale: [1, 1.12, 1] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" as const }}
-          />
-          <motion.div
-            className="absolute top-10 right-[-80px] w-[580px] h-[580px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(168,85,247,0.18) 0%, transparent 68%)" }}
-            animate={{ x: [0, -55, 0], y: [0, 65, 0], scale: [1, 1.15, 1] }}
-            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" as const, delay: 1.2 }}
-          />
-          <motion.div
-            className="absolute bottom-[-60px] left-1/3 w-[550px] h-[550px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(6,182,212,0.14) 0%, transparent 68%)" }}
-            animate={{ x: [0, 45, 0], y: [0, -35, 0], scale: [1, 1.08, 1] }}
-            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" as const, delay: 2.5 }}
-          />
-          <motion.div
-            className="absolute top-1/2 left-1/2 w-[320px] h-[320px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 68%)" }}
-            animate={{ x: [0, -30, 0], y: [0, -40, 0], scale: [1, 1.2, 1] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" as const, delay: 0.5 }}
-          />
-        </div>
-
-        {/* grid overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
-
         <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12">
           <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
 
           {/* two-column hero layout */}
           <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-start pb-16">
             <div>
-              {/* status badge */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Available for projects · Based in Uganda
-              </motion.div>
-
               {/* headline */}
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.05 }}
                 className="text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight text-slate-900 mb-6">
                 AM<br />
-                <span className="text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #06b6d4 100%)" }}>
+                <span className="text-blue-600">
                   Kaweesi
                 </span>
               </motion.h1>
@@ -541,8 +467,8 @@ export default function Home() {
               {/* CTAs */}
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
                 className="flex flex-wrap items-center gap-3 mb-12">
-                <a href="#ecosystem" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/20"
-                  style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)" }}>
+                <a href="#ecosystem"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors">
                   Explore Ecosystem <ArrowRight className="w-4 h-4" />
                 </a>
                 <a href="#contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all">
@@ -560,12 +486,12 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }}
               className="hidden lg:flex flex-col items-center gap-5 pt-8">
               <div className="relative">
-                <div className="w-[220px] h-[220px] rounded-3xl overflow-hidden ring-1 ring-slate-200 shadow-2xl shadow-blue-200/40">
+                <div className="w-[220px] h-[220px] rounded-3xl overflow-hidden ring-1 ring-slate-200 shadow-lg">
                   <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-full h-full object-cover" />
                 </div>
                 {/* floating badge */}
                 <div className="absolute -bottom-4 -right-4 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-lg flex items-center gap-1.5">
-                  <Sparkles className="w-3 h-3 text-blue-400" /> Digital Builder
+                  Digital Builder
                 </div>
               </div>
               {/* social links */}
@@ -615,7 +541,7 @@ export default function Home() {
             {/* text */}
             <motion.div {...fadeUp}>
               <div className="flex items-center gap-4 mb-6">
-                <div className="p-0.5 rounded-2xl" style={{ background: "linear-gradient(135deg,#3b82f6,#a855f7,#06b6d4)" }}>
+                <div className="p-0.5 rounded-2xl bg-blue-600">
                   <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-16 h-16 object-cover rounded-2xl block" />
                 </div>
                 <div>
@@ -652,7 +578,7 @@ export default function Home() {
 
           <motion.div {...fadeUp} className="mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
-              <Sparkles className="w-3.5 h-3.5" /> Ecosystem
+              Ecosystem
             </div>
             <h2 className="text-4xl md:text-6xl font-bold text-slate-900 leading-[1.0] tracking-tight mb-4">
               The AfuChat Suite.
@@ -663,7 +589,7 @@ export default function Home() {
               A unified collection of interconnected digital services — communication, payments, cloud, publishing, education, and tools.
             </p>
             <div className="flex items-center gap-2.5">
-              <div className="p-0.5 rounded-full" style={{ background: "linear-gradient(135deg,#3b82f6,#a855f7)" }}>
+              <div className="p-0.5 rounded-full bg-blue-600">
                 <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-7 h-7 rounded-full object-cover block" />
               </div>
               <span className="text-sm text-slate-500">Built by <span className="font-semibold text-slate-700">AM Kaweesi</span></span>
@@ -677,9 +603,9 @@ export default function Home() {
               const ctaHref = (project as any).ctaHref as string | undefined;
               const ctaLabel = (project as any).ctaLabel as string | undefined;
               const isFeature = idx < 2;
-              const txtMain = project.brand.dark ? "#f1f5f9" : "#0f172a";
-              const txtSub  = project.brand.dark ? "#94a3b8" : "#64748b";
-              const txtMuted = project.brand.dark ? "#64748b" : "#94a3b8";
+              const txtMain = "#0f172a";
+              const txtSub = "#64748b";
+              const txtMuted = "#94a3b8";
 
               return (
                 <motion.div
@@ -692,13 +618,6 @@ export default function Home() {
                   className={`group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl ${isFeature ? "lg:col-span-2 min-h-[300px]" : "min-h-[240px]"}`}
                   style={{ background: project.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: project.brand.cardBorder }}
                 >
-                  {/* brand top stripe */}
-                  <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${project.brand.primary}, ${project.brand.primary}aa)` }} />
-
-                  {/* glow */}
-                  <div className="pointer-events-none absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl opacity-0 group-hover:opacity-25 transition-opacity duration-500"
-                    style={{ background: project.brand.primary }} />
-
                   <div className="relative flex flex-col flex-1 p-5">
                     <div className="flex items-start justify-between mb-4">
                       <div className="rounded-xl inline-flex items-center justify-center p-2.5"
@@ -745,7 +664,7 @@ export default function Home() {
 
           <motion.div {...fadeUp} className="mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
-              <Sparkles className="w-3.5 h-3.5" /> Clients
+              Clients
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">
               Built for Real People
@@ -755,8 +674,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {clients.map((client, index) => {
-              const txtMain  = client.brand.dark ? "#f1f5f9" : "#0f172a";
-              const txtSub   = client.brand.dark ? "#94a3b8" : "#64748b";
+              const txtMain = "#0f172a";
+              const txtSub = "#64748b";
               return (
                 <motion.div key={client.name} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}>
@@ -788,7 +707,7 @@ export default function Home() {
                     {/* founder row */}
                     {(client as any).founderImg && (
                       <div className="flex items-center gap-3 pl-3">
-                        <div className="p-0.5 rounded-full" style={{ background: `linear-gradient(135deg, ${client.brand.primary}, #fbbf24)` }}>
+                        <div className="p-0.5 rounded-full" style={{ background: client.brand.primary }}>
                           <img src={(client as any).founderImg} alt={(client as any).founderLabel ?? "Founder"}
                             className="w-8 h-8 rounded-full object-cover block" />
                         </div>
@@ -798,10 +717,10 @@ export default function Home() {
 
                     {/* footer */}
                     <div className="flex items-center justify-between pl-3 pt-2 border-t" style={{ borderColor: client.brand.cardBorder }}>
-                      <span className="text-xs font-medium" style={{ color: client.brand.dark ? "#475569" : "#94a3b8" }}>{client.domain}</span>
+                      <span className="text-xs font-medium text-slate-400">{client.domain}</span>
                       <div className="flex items-center gap-2">
                         {visitCounts[client.domain] ? (
-                          <span className="text-xs" style={{ color: client.brand.dark ? "#475569" : "#94a3b8" }}>
+                          <span className="text-xs text-slate-400">
                             {visitCounts[client.domain].toLocaleString()} visit{visitCounts[client.domain] !== 1 ? "s" : ""}
                           </span>
                         ) : null}
@@ -823,7 +742,7 @@ export default function Home() {
 
           <motion.div {...fadeUp} className="mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-200 bg-orange-50 text-orange-700 text-xs font-semibold mb-5">
-              <Sparkles className="w-3.5 h-3.5" /> Partners
+              Partners
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">Trusted Collaborators</h2>
             <p className="text-lg text-slate-500 max-w-xl">Organizations we work alongside to deliver greater impact across Africa.</p>
@@ -845,13 +764,13 @@ export default function Home() {
                       <ServiceLogo name={partner.name} domain={partner.domain} logoUrl={(partner as any).logoUrl} FallbackIcon={partner.icon}
                         imgClassName="w-8 h-8 object-contain rounded" iconClassName="w-8 h-8" />
                     </div>
-                    <h3 className="text-lg font-bold mb-2" style={{ color: partner.brand.dark ? "#f1f5f9" : "#0f172a" }}>{partner.name}</h3>
-                    <p className="text-sm leading-relaxed flex-1" style={{ color: partner.brand.dark ? "#94a3b8" : "#64748b" }}>{partner.desc}</p>
+                    <h3 className="text-lg font-bold mb-2 text-slate-900">{partner.name}</h3>
+                    <p className="text-sm leading-relaxed flex-1 text-slate-600">{partner.desc}</p>
                   </div>
 
                   {(partner as any).founderImg && (
                     <div className="flex items-center gap-3 pl-3">
-                      <div className="p-0.5 rounded-full" style={{ background: `linear-gradient(135deg, ${partner.brand.primary}, #fb923c)` }}>
+                      <div className="p-0.5 rounded-full" style={{ background: partner.brand.primary }}>
                         <img src={(partner as any).founderImg} alt={(partner as any).founderLabel ?? "Founder"}
                           className="w-8 h-8 rounded-full object-cover block" />
                       </div>
@@ -876,36 +795,12 @@ export default function Home() {
       </section>
 
       {/* ══════════ VISION ══════════ */}
-      <section id="vision" className="relative py-32 px-6 overflow-hidden bg-slate-50">
-        {/* animated orbs — replace video */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-          <motion.div
-            className="absolute top-[-80px] right-[-60px] w-[600px] h-[600px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.20) 0%, transparent 68%)" }}
-            animate={{ x: [0, -60, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" as const }}
-          />
-          <motion.div
-            className="absolute bottom-[-80px] left-[-60px] w-[550px] h-[550px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(6,182,212,0.16) 0%, transparent 68%)" }}
-            animate={{ x: [0, 50, 0], y: [0, -50, 0], scale: [1, 1.12, 1] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" as const, delay: 1.5 }}
-          />
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 68%)" }}
-            animate={{ scale: [1, 1.25, 1], rotate: [0, 15, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" as const, delay: 0.8 }}
-          />
-        </div>
-        <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-50 to-transparent pointer-events-none" />
-        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
-
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+      <section id="vision" className="py-32 px-6 bg-slate-50">
+        <div className="max-w-4xl mx-auto text-center">
           <Breadcrumb items={["AMK", "Vision"]} />
           <motion.div {...fadeUp}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-200 bg-violet-50 text-violet-700 text-xs font-semibold mb-6">
-              <Sparkles className="w-3.5 h-3.5" /> Vision
+              Vision
             </div>
             <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
               Building for<br />the Long Term
@@ -931,98 +826,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════ ADS ══════════ */}
-      <section id="ads" className="py-28 px-6 border-t border-slate-100 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <Breadcrumb items={["AMK", "Ads"]} />
-
-          <motion.div {...fadeUp} className="mb-14 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-200 bg-orange-50 text-orange-700 text-xs font-semibold mb-5">
-              <Megaphone className="w-3.5 h-3.5" /> AfuChat Ads
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">
-              Live Ad Preview
-            </h2>
-            <p className="text-lg text-slate-500 max-w-lg mx-auto">
-              Real ads served by the AfuChat Ads network — rotating every 9 seconds.
-            </p>
-          </motion.div>
-
-          <motion.div {...fadeUp} className="flex flex-col items-center gap-8">
-            {/* Ad frame */}
-            <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-lg bg-white" style={{ width: 320 }}>
-              {/* header */}
-              <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
-                <span className="flex items-center gap-2 text-xs font-semibold text-slate-600 select-none">
-                  <img src="/favicons/afuchat.png" alt="" className="w-4 h-4 object-contain opacity-70" />
-                  AfuChat Ads · Live Preview
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-orange-500">
-                  Ad #{adRotation + 1}
-                </span>
-              </div>
-
-              {/* iframe */}
-              <div style={{ width: 320, height: 267, position: "relative", overflow: "hidden" }}>
-                <iframe
-                  key={`section-${adRotation}`}
-                  src={`/api/ad?t=${adRotation}`}
-                  width="320"
-                  height="267"
-                  frameBorder="0"
-                  scrolling="no"
-                  style={{ border: "none", width: "320px", height: "267px", display: "block", background: "#ffffff" }}
-                  title="AfuChat Ad Preview"
-                />
-              </div>
-
-              {/* progress bar */}
-              <div className="h-1 bg-slate-100">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500"
-                  style={{ width: `${adProgress}%` }}
-                  transition={{ ease: "linear" as const }}
-                />
-              </div>
-
-              {/* footer */}
-              <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[10px] text-slate-400 select-none">Powered by AfuChat Ads</span>
-                <div className="flex items-center gap-1">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="w-1.5 h-1.5 rounded-full transition-all duration-300"
-                      style={{ background: i === adRotation % 3 ? "#f97316" : "#e2e8f0" }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <a href="https://ads.afuchat.com" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-200"
-                style={{ background: "linear-gradient(135deg, #f97316, #fb923c)" }}>
-                <Megaphone className="w-4 h-4" /> Advertise on AfuChat <ArrowRight className="w-4 h-4" />
-              </a>
-              <a href="https://afuchat.com" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
-                Learn More <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* ══════════ CONTACT ══════════ */}
       <section id="contact" className="py-28 px-6 border-t border-slate-100 bg-white">
         <div className="max-w-6xl mx-auto">
           <Breadcrumb items={["AMK", "Contact"]} />
 
           <div className="grid lg:grid-cols-2 gap-5 items-stretch">
-            {/* left — dark panel */}
+            {/* contact panel */}
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
               className="rounded-2xl bg-slate-50 border border-slate-200 p-10 flex flex-col gap-8">
               <div>
@@ -1100,8 +910,7 @@ export default function Home() {
               </form>
 
               <a href="mailto:amkaweesi@afuchat.com"
-                className="inline-flex items-center justify-center w-full gap-2 h-11 px-5 rounded-xl text-white text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/20"
-                style={{ background: "linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                className="inline-flex items-center justify-center w-full gap-2 h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors">
                 <Mail className="w-4 h-4" /> Email amkaweesi@afuchat.com <ArrowRight className="w-4 h-4" />
               </a>
             </motion.div>
@@ -1143,85 +952,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* ── AfuChat Ads floating widget ── */}
-      <AnimatePresence>
-        {adVisible && !adDismissed && (
-          <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.95 }}
-            transition={{ duration: 0.35, ease: "easeOut" as const }}
-            className="fixed bottom-5 right-5 z-[300] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-slate-300/50 border border-slate-200 bg-white"
-            style={{ width: 320 }}
-          >
-            {/* header bar */}
-            <div className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 border-b border-slate-200">
-              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-600 select-none">
-                <img src="/favicons/afuchat.png" alt="" className="w-3.5 h-3.5 object-contain opacity-70" />
-                AfuChat Ads
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-orange-500">#{adRotation + 1}</span>
-                <button
-                  onClick={() => setAdDismissed(true)}
-                  className="w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
-                  aria-label="Close advertisement"
-                >
-                  <X className="w-3 h-3 text-slate-500" />
-                </button>
-              </div>
-            </div>
-
-            {/* rotating ad iframe */}
-            <div style={{ width: 320, height: 267, position: "relative", overflow: "hidden" }}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={adRotation}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ position: "absolute", inset: 0 }}
-                >
-                  <iframe
-                    key={`widget-${adRotation}`}
-                    src={`/api/ad?t=${adRotation}`}
-                    width="320"
-                    height="267"
-                    frameBorder="0"
-                    scrolling="no"
-                    style={{ border: "none", width: "320px", height: "267px", display: "block", background: "#ffffff" }}
-                    title="Advertisement"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* progress bar + dots */}
-            <div className="px-3.5 py-2 bg-slate-50 border-t border-slate-100 flex items-center gap-3">
-              <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-none"
-                  style={{ width: `${adProgress}%` }}
-                />
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="rounded-full transition-all duration-300"
-                    style={{
-                      width: i === adRotation % 3 ? 16 : 6,
-                      height: 6,
-                      background: i === adRotation % 3 ? "#f97316" : "#e2e8f0",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
