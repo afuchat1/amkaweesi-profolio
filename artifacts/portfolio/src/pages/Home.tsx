@@ -815,11 +815,35 @@ export default function Home() {
                 { label: "Design", value: "Unified", color: "#a855f7" },
                 { label: "Impact", value: "Real-world", color: "#06b6d4" },
                 { label: "Approach", value: "Long-term", color: "#10b981" },
-              ].map((stat) => (
-                <div key={stat.label} className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                  <div className="text-2xl font-bold text-slate-900 mb-1">{stat.value}</div>
-                  <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: stat.color }}>{stat.label}</div>
-                </div>
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.45, delay: index * 0.12, ease: "easeOut" }}
+                  className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.12 + 0.08 }}
+                    className="text-2xl font-bold text-slate-900 mb-1"
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: -8 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.12 + 0.16 }}
+                    className="text-xs uppercase tracking-widest font-semibold"
+                    style={{ color: stat.color }}
+                  >
+                    {stat.label}
+                  </motion.div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
