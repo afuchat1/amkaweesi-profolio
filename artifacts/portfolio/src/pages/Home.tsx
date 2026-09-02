@@ -1,981 +1,437 @@
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import {
-  ExternalLink, Mail, ArrowRight, Github, Twitter, Linkedin,
-  Globe, Send, MessageSquare, ChevronRight, ChevronDown,
-  Cloud, BookOpen, Menu, X,
-  CreditCard, Headphones, GraduationCap, Code2,
+  ArrowDownRight,
+  ArrowRight,
+  Check,
+  ChevronDown,
+  Cloud,
+  Code2,
+  CreditCard,
+  ExternalLink,
+  Github,
+  Globe2,
+  Headphones,
+  Layers3,
+  Linkedin,
+  Mail,
+  Menu,
+  MessageSquare,
+  Play,
+  Radio,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Terminal,
+  Twitter,
+  X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
-/* ─────────────────────────────────────────────── data ──── */
+const profileImage =
+  "https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg";
+const infrastructureImage = "/images/infrastructure-map.png";
 
-const PROFILE_IMG = "https://pbs.twimg.com/profile_images/2001772163410325504/Hf3dXqTN_400x400.jpg";
-
-const projects = [
-  { domain: "afuchat.com",       name: "AfuChat",     desc: "Unified communication platform for the modern web",                      icon: MessageSquare, brand: { primary: "#00BCD4", iconBg: "#e0f7fa", card: "#faf8f3", cardBorder: "#b2ebf2" }, logoUrl: "/favicons/afuchat.png" },
-  { domain: "email.afuchat.com", name: "AfuMail",     desc: "Smart, privacy-first email for the ecosystem",                           icon: Mail,          brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe" }, logoUrl: "/favicons/email.afuchat.com.svg" },
-  { domain: "cloud.afuchat.com", name: "AfuCloud",    desc: "Personal cloud storage and file management",                             icon: Cloud,         brand: { primary: "#f97316", iconBg: "#ffedd5", card: "#ffffff", cardBorder: "#fed7aa" }, logoUrl: "/favicons/cloud.afuchat.com.ico" },
-  { domain: "blog.afuchat.com",  name: "AfuBlog",     desc: "Publish ideas, stories, and long-form content",                          icon: BookOpen,      brand: { primary: "#14b8a6", iconBg: "#ccfbf1", card: "#ffffff", cardBorder: "#99f6e4" }, logoUrl: "/favicons/blog.afuchat.com.ico" },
-  { domain: "math.afuchat.com",  name: "AfuMath",     desc: "Interactive math education and problem solving",                         icon: GraduationCap, brand: { primary: "#3b82f6", iconBg: "#ede9fe", card: "#ffffff", cardBorder: "#ddd6fe" }, logoUrl: "/favicons/math.afuchat.com.png" },
-  { domain: "desk.afuchat.com",  name: "AfuDesk",     desc: "Customer support and helpdesk for the ecosystem",                        icon: Headphones,    brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa" }, logoUrl: "/favicons/desk.afuchat.com.ico" },
-  { domain: "dev.afuchat.com",   name: "AfuChat.dev", desc: "Professional full-stack web and mobile development in Uganda",           icon: Code2,         brand: { primary: "#a855f7", iconBg: "#f3e8ff", card: "#ffffff", cardBorder: "#e9d5ff" }, logoUrl: "/favicons/dev.afuchat.com.svg", ctaLabel: "Get a Quote", ctaHref: "https://dev.afuchat.com/estimate" },
+const products = [
+  { name: "AfuChat", domain: "afuchat.com", description: "Unified communication platform for the modern web", icon: MessageSquare, accent: "#28d4c1", tint: "#dff8f1" },
+  { name: "AfuMail", domain: "email.afuchat.com", description: "Smart, privacy-first email for the ecosystem", icon: Mail, accent: "#5b8cff", tint: "#e7edff" },
+  { name: "AfuCloud", domain: "cloud.afuchat.com", description: "Personal cloud storage and file management", icon: Cloud, accent: "#ffb54a", tint: "#fff0d2" },
+  { name: "AfuBlog", domain: "blog.afuchat.com", description: "Publish ideas, stories, and long-form content", icon: Layers3, accent: "#ef7f9d", tint: "#ffe6ec" },
+  { name: "AfuMath", domain: "math.afuchat.com", description: "Interactive math education and problem solving", icon: Sparkles, accent: "#a786ff", tint: "#eee8ff" },
+  { name: "AfuDesk", domain: "desk.afuchat.com", description: "Customer support and helpdesk for the ecosystem", icon: Headphones, accent: "#67b7ff", tint: "#e4f3ff" },
+  { name: "AfuChat.dev", domain: "dev.afuchat.com", description: "Professional full-stack web and mobile development in Uganda", icon: Code2, accent: "#f0834c", tint: "#ffeadc", cta: "Get a quote", href: "https://dev.afuchat.com/estimate" },
 ];
 
 const clients = [
-  { domain: "pay.afuchat.com",          name: "SkyPay",              desc: "Payments API powering seamless UGX collections and transfers",                     icon: CreditCard, brand: { primary: "#3b82f6", iconBg: "#dbeafe", card: "#ffffff", cardBorder: "#bfdbfe" } },
-  { domain: "honeybeeministriesug.org", name: "Honeybee Ministries", desc: "Faith-based organization serving communities across Uganda",                       icon: Globe,      brand: { primary: "#d97706", iconBg: "#fef3c7", card: "#fffbeb", cardBorder: "#fde68a" }, logoUrl: "/favicons/honeybeeministriesug.org.ico", founderImg: "https://github.com/afuchat1/honeybee/blob/main/src/assets/founder-portrait.jpg?raw=true", founderLabel: "Founder" },
-  { domain: "sabulashoespot.com",        name: "Sabula Shoe Spot",   desc: "Quality footwear retail brand for everyday style",                                  icon: Globe,      brand: { primary: "#f59e0b", iconBg: "#fef9c3", card: "#ffffff", cardBorder: "#fde68a" }, logoUrl: "/favicons/sabulashoespot.com.jpg" },
-  { domain: "mmradioug.org",             name: "MM Radio Uganda",    desc: "Online radio station keeping Uganda connected through music, news and culture",      icon: Globe,      brand: { primary: "#ef4444", iconBg: "#fef2f2", card: "#ffffff", cardBorder: "#fecaca" }, logoUrl: "/favicons/mmradioug.org.png" },
+  { name: "SkyPay", domain: "pay.afuchat.com", description: "Payments API powering seamless UGX collections and transfers", icon: CreditCard, accent: "#5b8cff" },
+  { name: "Honeybee Ministries", domain: "honeybeeministriesug.org", description: "Faith-based organization serving communities across Uganda", icon: Globe2, accent: "#f2aa42", logo: "/favicons/honeybeeministriesug.org.ico", founder: "Founder" },
+  { name: "Sabula Shoe Spot", domain: "sabulashoespot.com", description: "Quality footwear retail brand for everyday style", icon: Globe2, accent: "#ff806b", logo: "/favicons/sabulashoespot.com.jpg" },
+  { name: "MM Radio Uganda", domain: "mmradioug.org", description: "Online radio station keeping Uganda connected through music, news and culture", icon: Radio, accent: "#e85b7a", logo: "/favicons/mmradioug.org.png" },
 ];
 
-const partners = [
-  { domain: "ajsdigitalservices.com", name: "AJS Digital Services", desc: "IT training and digital services empowering careers across Africa", icon: Globe, brand: { primary: "#f97316", iconBg: "#fff7ed", card: "#ffffff", cardBorder: "#fed7aa" }, logoUrl: "/favicons/ajsdigitalservices.com.png", founderImg: "https://dev.afuchat.com/assets/cofounder-photo-Bw4GhOPz.jpg", founderLabel: "Founder" },
+const socials = [
+  { label: "AfuChat", href: "https://afuchat.com/@amkaweesi", icon: MessageSquare },
+  { label: "Telegram", href: "https://t.me/amkaweesi", icon: Send },
+  { label: "X", href: "https://x.com/amkaweesii", icon: Twitter },
+  { label: "GitHub", href: "https://github.com/amkaweesi", icon: Github },
+  { label: "LinkedIn", href: "https://linkedin.com/in/amkaweesi", icon: Linkedin },
 ];
 
-const socialLinks = [
-  { href: "https://afuchat.com/@amkaweesi", label: "AfuChat",      icon: MessageSquare, logoUrl: "/favicons/afuchat.png" },
-  { href: "https://t.me/amkaweesi",          label: "Telegram",     icon: Send },
-  { href: "https://x.com/amkaweesii",        label: "X (Twitter)",  icon: Twitter },
-  { href: "https://github.com/amkaweesi",    label: "GitHub",       icon: Github },
-  { href: "https://linkedin.com/in/amkaweesi", label: "LinkedIn",   icon: Linkedin },
-];
-
-const fadeUp = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, ease: "easeOut" as const },
+const reveal = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
 };
 
-/* ─────────────────────────────────────────── ServiceLogo ──── */
-interface ServiceLogoProps {
-  name: string; domain: string; logoUrl?: string;
-  FallbackIcon: React.ElementType; imgClassName?: string; iconClassName?: string;
-}
-function ServiceLogo({ name, logoUrl, FallbackIcon, imgClassName = "w-7 h-7 object-contain", iconClassName = "w-6 h-6" }: ServiceLogoProps) {
-  const [failed, setFailed] = useState(false);
-  if (!logoUrl || failed) return <FallbackIcon className={iconClassName} />;
-  return <img src={logoUrl} alt={name} className={imgClassName} onError={() => setFailed(true)} />;
-}
-
-/* ─────────────────────────────────────────── Breadcrumb ──── */
-function Breadcrumb({ items }: { items: string[] }) {
-  return (
-    <nav className="flex items-center gap-1.5 text-xs mb-6 select-none text-slate-400">
-      {items.map((item, i) => (
-        <span key={i} className="flex items-center gap-1.5">
-          {i > 0 && <ChevronRight className="w-3 h-3" />}
-          <span className={i === items.length - 1 ? "font-semibold text-blue-600" : undefined}>{item}</span>
-        </span>
-      ))}
-    </nav>
-  );
-}
-
-/* ─────────────────────────────────────── nav dropdown type ──── */
-type DropdownItem = { name: string; desc: string; href: string; domain: string; logoUrl?: string; icon: React.ElementType };
-type NavItem = { label: string; href?: string; dropdown?: DropdownItem[] };
-
-const navItems: NavItem[] = [
-  { label: "Products", dropdown: projects.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: p.logoUrl, icon: p.icon })) },
-  { label: "About", href: "#about" },
-  { label: "Clients", dropdown: clients.map((c) => ({ name: c.name, desc: c.desc, href: `https://${c.domain}`, domain: c.domain, logoUrl: (c as any).logoUrl, icon: c.icon })) },
-  { label: "Partners", dropdown: partners.map((p) => ({ name: p.name, desc: p.desc, href: `https://${p.domain}`, domain: p.domain, logoUrl: (p as any).logoUrl, icon: p.icon })) },
-  { label: "Vision", href: "#vision" },
-];
-
-function NavDropdown({ items, footer }: { items: DropdownItem[]; footer: { text: string; href: string; linkLabel: string } }) {
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-      transition={{ duration: 0.16 }}
-      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[500px] bg-white rounded-2xl border border-slate-200 shadow-2xl shadow-slate-200/70 overflow-hidden z-[100]"
+      className={className}
+      variants={reveal}
+      initial={reduceMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: reduceMotion ? 0 : 0.65, delay, ease: [0.2, 0.8, 0.2, 1] }}
     >
-      <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-slate-200 rotate-45" />
-      <div className="grid grid-cols-2 gap-0 p-3">
-        {items.map((item) => (
-          <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer"
-            className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
-          >
-            <span className="shrink-0 mt-0.5 text-slate-400 group-hover:text-blue-600 transition-colors">
-              <ServiceLogo name={item.name} domain={item.domain} logoUrl={item.logoUrl} FallbackIcon={item.icon} imgClassName="w-5 h-5 object-contain" iconClassName="w-4 h-4" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{item.name}</p>
-              <p className="text-xs text-slate-500 mt-0.5 leading-snug line-clamp-2">{item.desc}</p>
-            </div>
-          </a>
-        ))}
-      </div>
-      <div className="border-t border-slate-100 px-5 py-3 bg-slate-50/80 flex items-center justify-between">
-        <span className="text-xs text-slate-500">{footer.text}</span>
-        <a href={footer.href} className="text-xs font-semibold text-blue-600 flex items-center gap-1 hover:underline">
-          {footer.linkLabel} <ArrowRight className="w-3 h-3" />
-        </a>
-      </div>
+      {children}
     </motion.div>
   );
 }
 
-/* ─────────────────────────────── github heatmap ──── */
-type ContribDay = { date: string; count: number; level: number };
-const LEVEL_COLORS = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
-const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const AVAILABLE_YEARS = [2026, 2025, 2024];
+function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
+  return (
+    <div className="mb-7 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[#e4774f]">
+      <span className="text-[#8c938d]">{index}</span>
+      <span className="h-px w-8 bg-[#e4774f]" />
+      <span>{children}</span>
+    </div>
+  );
+}
 
-function HeroHeatmap() {
-  const [year, setYear] = useState<number>(AVAILABLE_YEARS[0]);
-  const [days, setDays] = useState<ContribDay[] | null>(null);
-  const [total, setTotal] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
+function LogoMark() {
+  return (
+    <span className="relative flex h-9 w-9 items-center justify-center rounded-[11px] bg-[#12212b] text-[#f4efe4] shadow-[4px_4px_0_#ef7f59]">
+      <span className="font-mono text-sm font-bold">A/</span>
+    </span>
+  );
+}
+
+function StatusChip() {
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const interval = window.setInterval(() => setTick((value) => value + 1), 2600);
+    return () => window.clearInterval(interval);
+  }, []);
+  const statuses = ["systems online", "shipping in Uganda", "open for a build"];
+  return (
+    <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-[#527066]">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#37bea3] opacity-60 motion-reduce:animate-none" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-[#37bea3]" />
+      </span>
+      <span>{statuses[tick % statuses.length]}</span>
+    </div>
+  );
+}
+
+function SocialRail() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {socials.map(({ label, href, icon: Icon }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#cad1c7] bg-[#f8f5ed] text-[#53615b] transition-colors hover:border-[#ef7f59] hover:bg-[#fff0e9] hover:text-[#c45432]"
+        >
+          <Icon size={15} strokeWidth={1.8} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function ProductCard({
+  product,
+  index,
+  onVisit,
+}: {
+  product: (typeof products)[number];
+  index: number;
+  onVisit: (domain: string) => void;
+}) {
+  const Icon = product.icon;
+  return (
+    <Reveal delay={index * 0.045} className={index === 0 ? "md:col-span-2" : ""}>
+      <a
+        href={product.href ?? `https://${product.domain}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onVisit(product.domain)}
+        className={`group relative flex min-h-[205px] flex-col justify-between overflow-hidden rounded-[22px] border border-[#d2d7cc] bg-[#f8f5ed] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#ef7f59] hover:shadow-[8px_8px_0_#d9ded3] ${index === 0 ? "md:min-h-[272px] md:p-7" : ""}`}
+      >
+        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-60 transition-transform duration-500 group-hover:scale-150" style={{ background: product.tint }} />
+        <div className="relative z-10 flex items-start justify-between">
+          <span className="flex h-11 w-11 items-center justify-center rounded-[14px]" style={{ background: product.tint, color: product.accent }}>
+            <Icon size={21} strokeWidth={1.7} />
+          </span>
+          <span className="font-mono text-[10px] text-[#87918a]">0{index + 1} / 07</span>
+        </div>
+        <div className="relative z-10 mt-8">
+          <div className="mb-1 flex items-center gap-2">
+            <h3 className="font-sans text-xl font-bold tracking-[-0.04em] text-[#15232a]">{product.name}</h3>
+            {product.cta && <span className="rounded-full bg-[#15232a] px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-[#f4efe4]">{product.cta}</span>}
+          </div>
+          <p className="max-w-[34rem] text-sm leading-6 text-[#64716b]">{product.description}</p>
+          <div className="mt-4 flex items-center justify-between border-t border-[#dce0d7] pt-3">
+            <span className="font-mono text-[10px] text-[#8b958e]">{product.domain}</span>
+            <ArrowUpRight className="h-4 w-4 text-[#ef7f59] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </div>
+        </div>
+      </a>
+    </Reveal>
+  );
+}
+
+function ArrowUpRight({ className }: { className?: string }) {
+  return <ArrowDownRight className={`${className ?? ""} rotate-[-90deg]`} />;
+}
+
+export default function Home() {
+  const reduceMotion = useReducedMotion();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeTrace, setActiveTrace] = useState("AfuChat");
+  const [visits, setVisits] = useState<Record<string, number>>({});
+  const [sent, setSent] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  const traces = useMemo(
+    () => ({
+      AfuChat: ["POST /messages", "AUTH /session", "WS /presence", "SYNC /threads"],
+      AfuCloud: ["PUT /objects", "GET /vault", "HASH /sha256", "SYNC /devices"],
+      SkyPay: ["POST /collections", "VERIFY /otp", "LEDGER /ugx", "WEBHOOK /settled"],
+    }),
+    [],
+  );
 
   useEffect(() => {
     let cancelled = false;
-    setDays(null); setError(null);
-    fetch(`https://github-contributions-api.jogruber.de/v4/afuchat1?y=${year}`)
-      .then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then((data) => {
-        if (cancelled) return;
-        const contribs: ContribDay[] = data?.contributions ?? [];
-        setDays(contribs);
-        const yr = data?.total?.[String(year)];
-        setTotal(typeof yr === "number" ? yr : contribs.reduce((s, d) => s + d.count, 0));
-      })
-      .catch((e) => { if (!cancelled) setError(String(e.message ?? e)); });
-    return () => { cancelled = true; };
-  }, [year]);
-
-  const weeks: (ContribDay | null)[][] = [];
-  if (days && days.length > 0) {
-    const firstDow = new Date(days[0].date + "T00:00:00").getDay();
-    let week: (ContribDay | null)[] = Array(firstDow).fill(null);
-    for (const d of days) {
-      week.push(d);
-      if (week.length === 7) { weeks.push(week); week = []; }
-    }
-    if (week.length > 0) { while (week.length < 7) week.push(null); weeks.push(week); }
-  }
-
-  const monthLabels: { idx: number; label: string }[] = [];
-  let lastMonth = -1;
-  weeks.forEach((w, i) => {
-    const firstDay = w.find((d) => d !== null);
-    if (!firstDay) return;
-    const m = new Date(firstDay.date + "T00:00:00").getMonth();
-    if (m !== lastMonth) { monthLabels.push({ idx: i, label: MONTH_NAMES[m] }); lastMonth = m; }
-  });
-
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 md:p-6 shadow-sm">
-      <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <Github className="w-4 h-4 text-slate-600 shrink-0" />
-          <span className="text-sm font-semibold text-slate-900">
-            {total !== null ? `${total.toLocaleString()} contributions` : "Loading…"}
-          </span>
-          <span className="text-sm text-slate-500">in {year}</span>
-          <span className="hidden sm:inline-flex items-center gap-1.5 ml-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live
-          </span>
-        </div>
-        <div className="inline-flex items-center gap-1 p-0.5 rounded-full bg-slate-100 border border-slate-200">
-          {AVAILABLE_YEARS.map((y) => (
-            <button key={y} onClick={() => setYear(y)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${year === y ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-            >{y}</button>
-          ))}
-        </div>
-      </div>
-
-      {error ? (
-        <div className="py-10 text-center">
-          <a href="https://github.com/afuchat1" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:underline">
-            <Github className="w-4 h-4" /> View on GitHub
-          </a>
-        </div>
-      ) : days === null ? (
-        <div className="h-[120px] flex items-center justify-center">
-          <div className="text-sm text-slate-400">Loading {year}…</div>
-        </div>
-      ) : (
-        <div className="overflow-x-auto -mx-1 px-1">
-          <div className="inline-block min-w-full">
-            <div className="flex pl-7 mb-1.5 text-[10px] text-slate-400 select-none" style={{ gap: 3 }}>
-              {weeks.map((_, i) => {
-                const label = monthLabels.find((m) => m.idx === i)?.label ?? "";
-                return <div key={i} style={{ width: 11, minWidth: 11 }} className="text-left">{label}</div>;
-              })}
-            </div>
-            <div className="flex">
-              <div className="flex flex-col mr-2 text-[10px] text-slate-400 select-none" style={{ gap: 3 }}>
-                {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
-                  <div key={i} style={{ height: 11, lineHeight: "11px" }}>{d}</div>
-                ))}
-              </div>
-              <div className="flex" style={{ gap: 3 }}>
-                {weeks.map((week, wi) => (
-                  <div key={wi} className="flex flex-col" style={{ gap: 3 }}>
-                    {week.map((day, di) => (
-                      <div key={di}
-                        title={day ? `${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}` : ""}
-                        className="rounded-[2px] transition-transform hover:scale-125 cursor-default"
-                        style={{ width: 11, height: 11, background: day ? LEVEL_COLORS[day.level] : "transparent", border: day && day.level === 0 ? "1px solid #e2e8f0" : "none" }}
-                      />
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center justify-between mt-4 gap-3 flex-wrap">
-              <a href="https://github.com/afuchat1" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors">
-                <Github className="w-3.5 h-3.5" /> @afuchat1 on GitHub <ArrowRight className="w-3 h-3" />
-              </a>
-              <div className="flex items-center gap-2 text-[10px] text-slate-400">
-                <span>Less</span>
-                <div className="flex" style={{ gap: 3 }}>
-                  {LEVEL_COLORS.map((c, i) => (
-                    <div key={i} className="rounded-[2px]" style={{ width: 11, height: 11, background: c, border: i === 0 ? "1px solid #e2e8f0" : "none" }} />
-                  ))}
-                </div>
-                <span>More</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────── Marquee stats ──── */
-const STATS = [
-  `${projects.length} Products Built`,
-  "AfuChat Ecosystem",
-  "Uganda × Global",
-  "Full-Stack Builder",
-  `${clients.length} Active Clients`,
-  "Payments · Cloud · Comms",
-  "Open for Projects",
-  "Infrastructure-First",
-];
-
-function StatsTicker() {
-  return (
-    <div className="py-4 px-6 border-y border-slate-200 bg-slate-50">
-      <div
-        className="flex flex-wrap justify-center gap-x-10 gap-y-3"
-      >
-        {STATS.map((s, i) => (
-          <span key={i} className="flex items-center gap-3 text-sm font-semibold text-slate-500 shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" aria-hidden="true" />
-            {s}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────── main component ──── */
-export default function Home() {
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
-  const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
-  const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-
-  useEffect(() => {
     fetch("/api/visits")
-      .then((r) => r.json())
-      .then((data) => { if (data?.counts) setVisitCounts(data.counts); })
-      .catch(() => {});
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to load visit counts");
+        return response.json() as Promise<{ counts?: Record<string, number> }>;
+      })
+      .then((data) => {
+        if (!cancelled && data.counts) setVisits(data.counts);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const trackVisit = (domain: string) => {
-    fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ domain }) })
-      .then((r) => r.json())
-      .then((data) => { if (data?.count !== undefined) setVisitCounts((prev) => ({ ...prev, [domain]: data.count })); })
-      .catch(() => {});
+    setVisits((current) => ({ ...current, [domain]: (current[domain] ?? 0) + 1 }));
+    void fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ domain }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to track visit");
+        return response.json() as Promise<{ domain: string; count: number }>;
+      })
+      .then(({ domain: trackedDomain, count }) => {
+        setVisits((current) => ({ ...current, [trackedDomain]: count }));
+      })
+      .catch(() => undefined);
   };
 
-  const handleMouseEnter = (label: string) => {
-    if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
-    setActiveDropdown(label);
+  const jumpTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    setMenuOpen(false);
   };
-  const handleMouseLeave = () => {
-    dropdownTimer.current = setTimeout(() => setActiveDropdown(null), 130);
-  };
-  useEffect(() => () => { if (dropdownTimer.current) clearTimeout(dropdownTimer.current); }, []);
 
   return (
-    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: "'Space Grotesk', 'Inter', sans-serif" }}>
+    <main className="min-h-[100dvh] overflow-hidden bg-[#f4efe4] font-sans text-[#15232a] selection:bg-[#ef7f59] selection:text-[#15232a]">
+      <style>{`
+        @keyframes trace { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .trace-line { stroke-dasharray: 6 8; animation: trace 4s linear infinite; }
+        .float-node { animation: float 4s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .trace-line, .float-node { animation: none; }
+        }
+      `}</style>
+      <motion.div className="fixed left-0 right-0 top-0 z-[60] h-[3px] origin-left bg-[#ef7f59]" style={{ scaleX: progress }} />
 
-      {/* ── scroll progress bar ── */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] z-[200] origin-left"
-        style={{ scaleX, background: "#2563eb" }}
-      />
-
-      {/* ══════════ NAVBAR ══════════ */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/70">
-        <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
-
-          <a href="#" className="text-lg font-bold tracking-tight text-slate-900 shrink-0">
-            AMK<span className="text-blue-500">.</span>
-          </a>
-
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
-            {navItems.map((item) => (
-              <div key={item.label} className="relative"
-                onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
-                onMouseLeave={handleMouseLeave}
-              >
-                {item.href ? (
-                  <a href={item.href}
-                    className="flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
-                    {item.label}
-                  </a>
-                ) : (
-                  <button className={`flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${activeDropdown === item.label ? "text-slate-900 bg-slate-100" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`}>
-                    {item.label}
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === item.label ? "rotate-180 text-blue-500" : ""}`} />
-                  </button>
-                )}
-                <AnimatePresence>
-                  {item.dropdown && activeDropdown === item.label && (
-                    <NavDropdown items={item.dropdown} footer={
-                      item.label === "Clients"
-                        ? { text: `${clients.length} active clients`, href: "#clients", linkLabel: "View all" }
-                        : item.label === "Partners"
-                        ? { text: `${partners.length} ecosystem partner${partners.length !== 1 ? "s" : ""}`, href: "#partners", linkLabel: "View all" }
-                        : { text: `${projects.length} services in the AfuChat ecosystem`, href: "#ecosystem", linkLabel: "View all" }
-                    } />
-                  )}
-                </AnimatePresence>
-              </div>
+      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#d7dbd1]/80 bg-[#f4efe4]/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-[74px] max-w-[1240px] items-center justify-between px-5 md:px-8">
+          <button onClick={() => jumpTo("top")} className="flex items-center gap-3 text-left" aria-label="Back to top">
+            <LogoMark />
+            <span className="hidden font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[#33423d] sm:block">AM Kaweesi / lab</span>
+          </button>
+          <div className="hidden items-center gap-8 md:flex">
+            {[
+              ["01", "systems", "ecosystem"],
+              ["02", "field notes", "about"],
+              ["03", "contact", "contact"],
+            ].map(([index, label, id]) => (
+              <button key={id} onClick={() => jumpTo(id)} className="group flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[#6c7871] transition-colors hover:text-[#c45432]">
+                <span className="text-[#b0b7ae] group-hover:text-[#ef7f59]">{index}</span>
+                {label}
+              </button>
             ))}
+            <a href="https://dev.afuchat.com/estimate" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#15232a] px-4 py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.13em] text-[#f4efe4] transition-transform hover:-translate-y-0.5">
+              Start a build
+            </a>
           </div>
-
-          <div className="hidden md:flex items-center gap-3 shrink-0">
-            <Button size="sm" className="rounded-full px-5 text-sm bg-blue-600 hover:bg-blue-500 border-0 text-white" asChild>
-              <a href="#contact">Get in Touch</a>
-            </Button>
-          </div>
-
-          <button className="md:hidden p-2 text-slate-500 hover:text-slate-900 transition-colors" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[#cad1c7] md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
-
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.22 }} className="md:hidden bg-white border-t border-slate-200 overflow-hidden"
-            >
-              <div className="px-5 py-3 flex flex-col gap-1">
-                <button onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
-                  className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors">
-                  Products
-                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${mobileProductsOpen ? "rotate-180" : ""}`} />
-                </button>
-                <AnimatePresence>
-                  {mobileProductsOpen && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.18 }} className="overflow-hidden">
-                      <div className="pl-4 pb-1 flex flex-col gap-0.5">
-                        {projects.map((p) => {
-                          const Icon = p.icon;
-                          return (
-                            <a key={p.name} href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer"
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
-                              <Icon className="w-4 h-4 text-slate-400" /> {p.name}
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                {[{ label: "About", href: "#about" }, { label: "Clients", href: "#clients" }, { label: "Partners", href: "#partners" }, { label: "Vision", href: "#vision" }, { label: "Contact", href: "#contact" }].map((item) => (
-                  <a key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                    {item.label}
-                  </a>
-                ))}
-                <div className="pt-2 pb-1">
-                  <Button className="w-full rounded-full bg-blue-600 hover:bg-blue-500 text-white border-0" asChild>
-                    <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Get in Touch</a>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {menuOpen && (
+          <div className="border-t border-[#d7dbd1] bg-[#f4efe4] px-5 pb-5 pt-3 md:hidden">
+            {[
+              ["Systems", "ecosystem"],
+              ["Field notes", "about"],
+              ["Clients", "clients"],
+              ["Contact", "contact"],
+            ].map(([label, id]) => (
+              <button key={id} onClick={() => jumpTo(id)} className="block w-full border-b border-[#dce0d7] py-4 text-left font-mono text-xs uppercase tracking-[0.14em] text-[#33423d]">{label}</button>
+            ))}
+            <a href="https://dev.afuchat.com/estimate" target="_blank" rel="noopener noreferrer" className="mt-4 flex items-center justify-center rounded-full bg-[#15232a] px-4 py-3 font-mono text-xs font-bold uppercase tracking-[0.13em] text-[#f4efe4]">Start a build</a>
+          </div>
+        )}
       </nav>
 
-      {/* ══════════ HERO ══════════ */}
-      <section className="relative pt-24 pb-0 overflow-hidden bg-white">
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12">
-          <Breadcrumb items={["AMK", "Portfolio", "Home"]} />
-
-          {/* two-column hero layout */}
-          <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-start pb-16">
+      <section id="top" className="relative border-b border-[#d7dbd1] px-5 pb-16 pt-[122px] md:px-8 md:pb-24">
+        <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(#d7dbd1_1px,transparent_1px),linear-gradient(90deg,#d7dbd1_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent_78%)]" />
+        <div className="relative mx-auto max-w-[1240px]">
+          <div className="mb-14 flex flex-wrap items-center justify-between gap-5">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8a938c]"><span className="text-[#ef7f59]">AMK_001</span> / portfolio / 2026</div>
+            <StatusChip />
+          </div>
+          <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr]">
             <div>
-              {/* headline */}
-              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight text-slate-900 mb-6">
-                AM<br />
-                <span className="text-blue-600">
-                  Kaweesi
-                </span>
-              </motion.h1>
+              <Reveal>
+                <p className="mb-6 max-w-xl font-mono text-xs uppercase tracking-[0.16em] text-[#c45432]">Full-stack builder · founder · Kampala, Uganda</p>
+                <h1 className="max-w-[900px] font-sans text-[clamp(4.2rem,11vw,9.8rem)] font-extrabold leading-[0.82] tracking-[-0.1em] text-[#15232a]">
+                  Living
+                  <br />
+                  <span className="ml-[9vw] text-[#ef7f59]">systems.</span>
+                </h1>
+                <p className="mt-9 max-w-[550px] text-lg leading-8 text-[#58655f] md:text-xl">I build the connective tissue between people, products, and infrastructure. Founder of the <strong className="font-semibold text-[#15232a]">AfuChat ecosystem</strong>.</p>
+                <div className="mt-9 flex flex-wrap items-center gap-3">
+                  <button onClick={() => jumpTo("ecosystem")} className="group flex items-center gap-3 rounded-full bg-[#ef7f59] px-5 py-3.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[#15232a] transition-all hover:-translate-y-1 hover:shadow-[5px_5px_0_#15232a]">Inspect the system <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></button>
+                  <a href="mailto:amkaweesi@afuchat.com" className="flex items-center gap-2 rounded-full border border-[#bfc8be] px-5 py-3.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[#52605a] transition-colors hover:border-[#ef7f59] hover:bg-[#fff0e9]">Email me <Mail size={15} /></a>
+                </div>
+              </Reveal>
+            </div>
+            <Reveal delay={0.18}>
+              <div className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[#263e4a] bg-[#101d28] shadow-[12px_12px_0_#d9ded3]">
+                <img src={infrastructureImage} alt="Abstract digital infrastructure map showing connected cloud, data, payments and communication systems" className="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-screen" />
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(16,29,40,0.98)_0%,rgba(16,29,40,0.42)_54%,rgba(16,29,40,0.1)_100%)]" />
+                <div className="relative z-10 flex h-full min-h-[360px] flex-col justify-between p-5 md:p-7">
+                  <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.15em] text-[#9faaa8]"><span>infra.map / live</span><span className="flex items-center gap-2 text-[#68d8bd]"><span className="h-1.5 w-1.5 rounded-full bg-[#68d8bd]" /> encrypted</span></div>
+                  <div>
+                    <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#ef7f59]">One builder, many surfaces</div>
+                    <p className="max-w-xs font-sans text-2xl font-bold leading-tight tracking-[-0.05em] text-[#f4efe4]">Communication is the root. Everything else branches.</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 font-mono text-[9px] uppercase tracking-[0.12em] text-[#a5b8b4]">
+                    <div className="border-l border-[#ef7f59] pl-2"><span className="block text-[#f4efe4]">{String(products.length).padStart(2, "0")}</span> product surfaces</div>
+                    <div className="border-l border-[#68d8bd] pl-2"><span className="block text-[#f4efe4]">{String(clients.length).padStart(2, "0")}</span> client systems</div>
+                    <div className="border-l border-[#8297f1] pl-2"><span className="block text-[#f4efe4]">01</span> AfuChat root</div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+          <div className="mt-16 flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.16em] text-[#89948c]"><span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#c5ccc1]"><ArrowDownRight size={14} /></span> scroll to trace the network</div>
+        </div>
+      </section>
 
-              <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl mb-8">
-                Building connected digital systems across communication, payments, cloud, publishing, and tools.
-                Founder of the <span className="text-slate-900 font-semibold">AfuChat Ecosystem</span>.
-              </motion.p>
+      <section className="border-b border-[#d7dbd1] bg-[#15232a] px-5 py-5 text-[#f4efe4] md:px-8">
+        <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4">
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8eaaa2]">runtime / uganda × global</span>
+          <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[10px] uppercase tracking-[0.15em] text-[#f4efe4]">
+            <span><b className="mr-2 text-[#ef7f59]">{String(products.length).padStart(2, "0")}</b> product surfaces</span><span><b className="mr-2 text-[#68d8bd]">{String(clients.length).padStart(2, "0")}</b> client systems</span><span><b className="mr-2 text-[#8297f1]">2022</b> AfuChat founded</span>
+          </div>
+        </div>
+      </section>
 
-              {/* stat row */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.15 }}
-                className="flex flex-wrap gap-6 mb-10">
+      <section id="about" className="border-b border-[#d7dbd1] px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto grid max-w-[1240px] gap-16 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal>
+            <SectionLabel index="02">field notes</SectionLabel>
+            <div className="relative max-w-[320px]">
+              <div className="absolute -bottom-4 -right-4 h-full w-full rounded-[24px] border border-[#ef7f59]" />
+              <img src={profileImage} alt="AM Kaweesi" className="relative aspect-square w-full rounded-[24px] object-cover grayscale-[25%]" />
+              <div className="absolute -bottom-7 -left-5 rounded-xl border border-[#d1d8ce] bg-[#f4efe4] px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[#64716b] shadow-[4px_4px_0_#d9ded3]">AMK / builder<br /><span className="text-[#c45432]">Kampala, UG</span></div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="mb-8 max-w-2xl font-sans text-3xl font-bold leading-[1.08] tracking-[-0.06em] text-[#15232a] md:text-5xl">The web is more interesting when its parts know how to talk to one another.</p>
+            <div className="grid gap-8 border-t border-[#cfd5cb] pt-8 md:grid-cols-2">
+              <div className="text-[15px] leading-7 text-[#64716b]"><p>I am AM Kaweesi, a Ugandan full-stack builder focused on creating cohesive digital ecosystems. Tools should not exist in isolation; they should connect, communicate, and compound.</p></div>
+              <div className="text-[15px] leading-7 text-[#64716b]"><p><strong className="text-[#15232a]">AfuChat</strong> is the core of this expanding platform — a unified communication layer that branches into payments, cloud storage, publishing, education, and beyond.</p></div>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-2">
+              {["React", "TypeScript", "Node.js", "Postgres", "Cloud infra", "Product thinking"].map((skill) => <span key={skill} className="rounded-full border border-[#cbd3c8] bg-[#f9f6ee] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-[#596860]">{skill}</span>)}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section id="ecosystem" className="border-b border-[#d7dbd1] bg-[#e9eee6] px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-[1240px]">
+          <Reveal><SectionLabel index="03">the ecosystem</SectionLabel>
+            <div className="mb-12 flex flex-col justify-between gap-7 md:flex-row md:items-end"><div><h2 className="max-w-3xl font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] text-[#15232a] md:text-7xl">Seven surfaces.<br /><span className="text-[#c45432]">One connective layer.</span></h2></div><p className="max-w-xs text-sm leading-6 text-[#64716b]">AfuChat is a growing suite of digital services — designed as a system, built one useful surface at a time.</p></div>
+          </Reveal>
+          <div className="grid gap-3 md:grid-cols-3">
+            {products.map((product, index) => <ProductCard key={product.name} product={product} index={index} onVisit={trackVisit} />)}
+          </div>
+           <div className="mt-7 flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#859088]"><span>hover a node to inspect</span><span>{products.length} products · {clients.length} client systems indexed</span></div>
+        </div>
+      </section>
+
+      <section className="border-b border-[#d7dbd1] bg-[#15232a] px-5 py-24 text-[#f4efe4] md:px-8 md:py-32">
+        <div className="mx-auto max-w-[1240px]">
+          <Reveal><SectionLabel index="04">system diagram</SectionLabel>
+            <div className="grid gap-14 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
+              <div><h2 className="font-sans text-5xl font-extrabold leading-[0.9] tracking-[-0.08em] md:text-7xl">Design the<br /><span className="text-[#68d8bd]">connections.</span></h2><p className="mt-7 max-w-sm text-sm leading-7 text-[#9faaa8]">The best work is not a collection of screens. It is the quiet infrastructure that makes a meaningful action feel obvious.</p></div>
+              <div className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[#3a5156] bg-[#10202a] p-5 md:p-8">
+                <svg className="absolute inset-0 h-full w-full opacity-60" viewBox="0 0 700 360" fill="none" aria-hidden="true"><path className="trace-line" d="M102 177 C195 177 183 78 282 78 S367 178 464 178 S550 90 620 90" stroke="#68d8bd" strokeWidth="1" /><path className="trace-line" d="M102 177 C192 177 211 282 300 282 S397 181 464 178 S522 270 620 270" stroke="#ef7f59" strokeWidth="1" /><path className="trace-line" d="M282 78 C370 78 378 178 464 178" stroke="#8297f1" strokeWidth="1" /></svg>
                 {[
-                  { value: `${projects.length}`, label: "Products" },
-                  { value: `${clients.length}`, label: "Clients" },
-                  { value: `${partners.length}`, label: "Partners" },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <div className="text-3xl font-bold text-slate-900">{s.value}</div>
-                    <div className="text-xs text-slate-500 uppercase tracking-widest font-semibold mt-0.5">{s.label}</div>
-                  </div>
+                  { label: "AfuChat", sub: "communication", x: "9%", y: "43%", icon: MessageSquare, color: "#68d8bd" },
+                  { label: "AfuCloud", sub: "storage", x: "34%", y: "12%", icon: Cloud, color: "#8297f1" },
+                  { label: "SkyPay", sub: "payments", x: "67%", y: "43%", icon: CreditCard, color: "#ef7f59" },
+                  { label: "AfuDesk", sub: "support", x: "34%", y: "72%", icon: Headphones, color: "#f3bc60" },
+                  { label: "People", sub: "the point", x: "89%", y: "72%", icon: Globe2, color: "#ef7f9d" },
+                ].map(({ label, sub, x, y, icon: Icon, color }, index) => (
+                  <button key={label} onClick={() => setActiveTrace(label === "AfuCloud" ? "AfuCloud" : label === "SkyPay" ? "SkyPay" : "AfuChat")} className={`float-node absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border px-3 py-2 text-left transition-transform hover:scale-105 ${activeTrace === label || (label === "People" && activeTrace === "AfuChat") ? "border-[#f4efe4] bg-[#1c323b]" : "border-[#3b5359] bg-[#132832]"}`} style={{ left: x, top: y, animationDelay: `${index * 0.3}s` }}><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-wider" style={{ color }}><Icon size={14} /> {label}</span><span className="ml-5 block font-mono text-[9px] text-[#80928e]">{sub}</span></button>
                 ))}
-              </motion.div>
-
-              {/* CTAs */}
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-                className="flex flex-wrap items-center gap-3 mb-12">
-                <a href="#ecosystem"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors">
-                  Explore Ecosystem <ArrowRight className="w-4 h-4" />
-                </a>
-                <a href="#contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all">
-                  Contact Me
-                </a>
-              </motion.div>
-
-              {/* github heatmap */}
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.25 }}>
-                <HeroHeatmap />
-              </motion.div>
+                 <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between border-t border-[#30474e] pt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[#71847f]"><span>click a node</span><span>AfuChat root / network stable</span></div>
+              </div>
             </div>
-
-            {/* profile photo column */}
-            <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }}
-              className="hidden lg:flex flex-col items-center gap-5 pt-8">
-              <div className="relative">
-                <div className="w-[220px] h-[220px] rounded-3xl overflow-hidden ring-1 ring-slate-200 shadow-lg">
-                  <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-full h-full object-cover" />
-                </div>
-                {/* floating badge */}
-                <div className="absolute -bottom-4 -right-4 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-lg flex items-center gap-1.5">
-                  Digital Builder
-                </div>
-              </div>
-              {/* social links */}
-              <div className="flex items-center gap-2 mt-6">
-                {socialLinks.map((s) => {
-                  const Icon = s.icon;
-                  return (
-                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
-                      className="w-9 h-9 rounded-full border border-slate-200 bg-slate-50 flex items-center justify-center hover:border-blue-400 hover:bg-blue-50 transition-all overflow-hidden">
-                      {(s as any).logoUrl
-                        ? <img src={(s as any).logoUrl} alt={s.label} className="w-4 h-4 object-contain" />
-                        : <Icon className="w-4 h-4 text-slate-500" />}
-                    </a>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* stats ticker */}
-        <StatsTicker />
-      </section>
-
-      {/* ══════════ ABOUT ══════════ */}
-      <section id="about" className="py-28 px-6 bg-white border-t border-slate-100">
-        <div className="max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "About"]} />
-
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* big stats */}
-            <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
-              {[
-                { value: `${projects.length}`, label: "Products", sub: "Across the AfuChat ecosystem", accent: true },
-                { value: `${clients.length}`, label: "Clients", sub: "Organizations powered by this work", accent: false },
-                { value: "2022", label: "Founded", sub: "AfuChat Ecosystem launched", accent: false },
-                { value: "∞", label: "Vision", sub: "Infrastructure-first, long-term", accent: false },
-              ].map((stat, i) => (
-                <div key={i} className={`p-6 rounded-2xl border ${stat.accent ? "bg-blue-600 border-blue-500" : "bg-slate-50 border-slate-100"}`}>
-                  <div className={`text-4xl font-bold mb-1 ${stat.accent ? "text-white" : "text-slate-900"}`}>{stat.value}</div>
-                  <div className={`text-xs font-bold uppercase tracking-widest mb-1.5 ${stat.accent ? "text-blue-200" : "text-blue-600"}`}>{stat.label}</div>
-                  <div className={`text-xs leading-snug ${stat.accent ? "text-blue-100" : "text-slate-500"}`}>{stat.sub}</div>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* text */}
-            <motion.div {...fadeUp}>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-0.5 rounded-2xl bg-blue-600">
-                  <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-16 h-16 object-cover rounded-2xl block" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-0.5">About</p>
-                  <p className="text-base font-semibold text-slate-900">AM Kaweesi</p>
-                </div>
-              </div>
-
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">The Architect<br />of Connectivity</h2>
-
-              <div className="space-y-4 text-base text-slate-600 leading-relaxed">
-                <p>I am a builder focused on creating cohesive digital ecosystems. Digital tools shouldn't exist in isolation — they should connect, communicate, and compound.</p>
-                <p><strong className="text-slate-900 font-semibold">AfuChat</strong> is the core of this expanding platform — a unified communication layer that branches into payments, cloud storage, publishing, education, and beyond.</p>
-                <p>Every project I build is designed to be an interconnected piece of a larger, seamless online service architecture.</p>
-              </div>
-
-              <div className="mt-8 flex gap-3">
-                <a href="#ecosystem" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors">
-                  View Ecosystem <ArrowRight className="w-4 h-4" />
-                </a>
-                <a href="#contact" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors">
-                  Get in Touch
-                </a>
-              </div>
-            </motion.div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ══════════ ECOSYSTEM ══════════ */}
-      <section id="ecosystem" className="py-28 border-t border-slate-100 bg-slate-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <Breadcrumb items={["AMK", "Products", "Ecosystem"]} />
-
-          <motion.div {...fadeUp} className="mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
-              Ecosystem
-            </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 leading-[1.0] tracking-tight mb-4">
-              The AfuChat Suite.
-              <br />
-              <span className="text-slate-500">{projects.length} services. One vision.</span>
-            </h2>
-            <p className="text-lg text-slate-500 max-w-2xl mb-5">
-              A unified collection of interconnected digital services — communication, payments, cloud, publishing, education, and tools.
-            </p>
-            <div className="flex items-center gap-2.5">
-              <div className="p-0.5 rounded-full bg-blue-600">
-                <img src={PROFILE_IMG} alt="AM Kaweesi" className="w-7 h-7 rounded-full object-cover block" />
-              </div>
-              <span className="text-sm text-slate-500">Built by <span className="font-semibold text-slate-700">AM Kaweesi</span></span>
-            </div>
-          </motion.div>
-
-          {/* bento grid — first two cards are wide */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {projects.map((project, idx) => {
-              const visits = visitCounts[project.domain];
-              const ctaHref = (project as any).ctaHref as string | undefined;
-              const ctaLabel = (project as any).ctaLabel as string | undefined;
-              const isFeature = idx < 2;
-              const txtMain = "#0f172a";
-              const txtSub = "#64748b";
-              const txtMuted = "#94a3b8";
-
-              return (
-                <motion.div
-                  key={project.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: Math.min(idx * 0.06, 0.4) }}
-                  onClick={() => { trackVisit(project.domain); window.open(`https://${project.domain}`, "_blank"); }}
-                  className={`group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl ${isFeature ? "lg:col-span-2 min-h-[300px]" : "min-h-[240px]"}`}
-                  style={{ background: project.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: project.brand.cardBorder }}
-                >
-                  <div className="relative flex flex-col flex-1 p-5">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="rounded-xl inline-flex items-center justify-center p-2.5"
-                        style={{ background: project.brand.iconBg, color: project.brand.primary }}>
-                        <ServiceLogo name={project.name} domain={project.domain} logoUrl={project.logoUrl} FallbackIcon={project.icon}
-                          imgClassName="object-contain rounded w-7 h-7" iconClassName="w-7 h-7" />
-                      </div>
-                      <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-40 transition-opacity" style={{ color: txtMuted }} />
-                    </div>
-
-                    <h3 className="font-bold mb-1.5 text-base" style={{ color: txtMain }}>{project.name}</h3>
-                    <p className="text-sm leading-relaxed flex-1 line-clamp-3" style={{ color: txtSub }}>{project.desc}</p>
-
-                    <div className="mt-4 pt-3 border-t flex items-center justify-between gap-3" style={{ borderColor: project.brand.cardBorder }}>
-                      <div className="flex flex-col gap-0.5 min-w-0">
-                        <span className="text-xs truncate font-medium" style={{ color: txtMuted }}>{project.domain}</span>
-                        {visits ? <span className="text-[10px]" style={{ color: txtMuted }}>{visits.toLocaleString()} {visits === 1 ? "visit" : "visits"}</span> : null}
-                      </div>
-                      {ctaHref ? (
-                        <a href={ctaHref} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-                          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all group-hover:scale-105"
-                          style={{ background: project.brand.primary, color: "#ffffff" }}>
-                          {ctaLabel} <ArrowRight className="w-3 h-3" />
-                        </a>
-                      ) : (
-                        <div className="shrink-0 w-8 h-8 rounded-full inline-flex items-center justify-center transition-all group-hover:scale-110"
-                          style={{ background: project.brand.iconBg, color: project.brand.primary }}>
-                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+      <section className="border-b border-[#d7dbd1] px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal><SectionLabel index="05">live trace</SectionLabel><h2 className="max-w-md font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] md:text-7xl">Under the<br /><span className="text-[#c45432]">interface.</span></h2><p className="mt-7 max-w-sm text-sm leading-7 text-[#64716b]">A glimpse at how I think: start from the user signal, route it through sturdy primitives, and leave room for the system to grow.</p><div className="mt-8 flex flex-wrap gap-2">{["AfuChat", "AfuCloud", "SkyPay"].map((name) => <button key={name} onClick={() => setActiveTrace(name)} className={`rounded-full px-4 py-2 font-mono text-[10px] uppercase tracking-wider transition-colors ${activeTrace === name ? "bg-[#15232a] text-[#f4efe4]" : "border border-[#cbd3c8] text-[#66736d] hover:border-[#ef7f59]"}`}>{name}</button>)}</div></Reveal>
+          <Reveal delay={0.12}><div className="overflow-hidden rounded-[24px] border border-[#2a3d46] bg-[#15232a] shadow-[10px_10px_0_#d9ded3]"><div className="flex items-center justify-between border-b border-[#344b52] px-5 py-4 font-mono text-[10px] text-[#899b96]"><span className="flex items-center gap-2"><Terminal size={14} className="text-[#ef7f59]" /> trace/{activeTrace.toLowerCase()}</span><span className="text-[#68d8bd]">running</span></div><div className="grid gap-8 p-5 md:grid-cols-[1fr_0.7fr] md:p-7"><div className="font-mono text-xs leading-8 text-[#afc0ba]">{(traces[activeTrace as keyof typeof traces] ?? traces.AfuChat).map((line, index) => <motion.div key={`${activeTrace}-${line}`} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.09 }}><span className="mr-4 text-[#637873]">0{index + 1}</span><span className={index === 0 ? "text-[#ef7f59]" : index === 3 ? "text-[#68d8bd]" : "text-[#d9e0d8]"}>{line}</span></motion.div>)}</div><div className="border-l border-[#344b52] pl-5 font-mono text-[10px] leading-6 text-[#82918c]"><p className="mb-4 uppercase tracking-[0.16em] text-[#efefe6]">request anatomy</p><p><span className="text-[#ef7f59]">input</span> → human intent</p><p><span className="text-[#8297f1]">route</span> → shared primitives</p><p><span className="text-[#68d8bd]">output</span> → useful action</p><div className="mt-7 flex items-center gap-2 text-[#68d8bd]"><Check size={14} /> all checks passing</div></div></div></div></Reveal>
         </div>
       </section>
 
-      {/* ══════════ CLIENTS ══════════ */}
-      <section id="clients" className="py-28 px-6 border-t border-slate-100 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "Clients"]} />
-
-          <motion.div {...fadeUp} className="mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
-              Clients
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">
-              Built for Real People
-            </h2>
-            <p className="text-lg text-slate-500 max-w-xl">Organizations and brands powered by this ecosystem.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {clients.map((client, index) => {
-              const txtMain = "#0f172a";
-              const txtSub = "#64748b";
-              return (
-                <motion.div key={client.name} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}>
-                  <a href={`https://${client.domain}`} target="_blank" rel="noopener noreferrer"
-                    onClick={() => trackVisit(client.domain)}
-                    className="group flex flex-col gap-5 p-7 rounded-2xl hover:shadow-xl transition-all h-full overflow-hidden relative"
-                    style={{ background: client.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: client.brand.cardBorder }}>
-
-                    {/* left accent bar */}
-                    <div className="absolute left-0 top-6 bottom-6 w-1 rounded-full" style={{ background: client.brand.primary }} />
-
-                    {/* top row */}
-                    <div className="flex items-start justify-between gap-4 pl-3">
-                      <div className="p-2.5 rounded-xl inline-flex w-fit" style={{ background: client.brand.iconBg, color: client.brand.primary }}>
-                        <ServiceLogo name={client.name} domain={client.domain} logoUrl={(client as any).logoUrl} FallbackIcon={client.icon}
-                          imgClassName="w-8 h-8 object-contain rounded" iconClassName="w-8 h-8" />
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full" style={{ background: client.brand.iconBg, color: client.brand.primary }}>Active</span>
-                      </div>
-                    </div>
-
-                    {/* content */}
-                    <div className="flex-1 pl-3">
-                      <h3 className="text-lg font-bold mb-2" style={{ color: txtMain }}>{client.name}</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: txtSub }}>{client.desc}</p>
-                    </div>
-
-                    {/* founder row */}
-                    {(client as any).founderImg && (
-                      <div className="flex items-center gap-3 pl-3">
-                        <div className="p-0.5 rounded-full" style={{ background: client.brand.primary }}>
-                          <img src={(client as any).founderImg} alt={(client as any).founderLabel ?? "Founder"}
-                            className="w-8 h-8 rounded-full object-cover block" />
-                        </div>
-                        <span className="text-xs font-medium" style={{ color: txtSub }}>{(client as any).founderLabel ?? "Founder"}</span>
-                      </div>
-                    )}
-
-                    {/* footer */}
-                    <div className="flex items-center justify-between pl-3 pt-2 border-t" style={{ borderColor: client.brand.cardBorder }}>
-                      <span className="text-xs font-medium text-slate-400">{client.domain}</span>
-                      <div className="flex items-center gap-2">
-                        {visitCounts[client.domain] ? (
-                          <span className="text-xs text-slate-400">
-                            {visitCounts[client.domain].toLocaleString()} visit{visitCounts[client.domain] !== 1 ? "s" : ""}
-                          </span>
-                        ) : null}
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" style={{ color: client.brand.primary }} />
-                      </div>
-                    </div>
-                  </a>
-                </motion.div>
-              );
-            })}
-          </div>
+      <section id="clients" className="border-b border-[#d7dbd1] bg-[#e9eee6] px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-[1240px]"><Reveal><SectionLabel index="06">field deployments</SectionLabel><div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end"><h2 className="font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] md:text-7xl">Real work.<br /><span className="text-[#c45432]">Real context.</span></h2><p className="max-w-xs text-sm leading-6 text-[#64716b]">Systems built with organizations, brands, and people doing important work across Uganda.</p></div></Reveal>
+          <div className="grid gap-3 md:grid-cols-2">{clients.map((client, index) => { const Icon = client.icon; return <Reveal key={client.name} delay={index * 0.08}><a href={`https://${client.domain}`} target="_blank" rel="noopener noreferrer" onClick={() => trackVisit(client.domain)} className="group flex min-h-[210px] flex-col justify-between rounded-[22px] border border-[#d2d7cc] bg-[#f8f5ed] p-6 transition-all hover:-translate-y-1 hover:border-[#ef7f59] hover:shadow-[8px_8px_0_#d9ded3]"><div className="flex items-start justify-between"><span className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#e9eee6]" style={{ color: client.accent }}>{client.logo ? <img src={client.logo} alt="" className="h-7 w-7 rounded object-contain" /> : <Icon size={21} />}</span><ExternalLink size={15} className="text-[#a0a9a1] transition-colors group-hover:text-[#ef7f59]" /></div><div><h3 className="font-sans text-xl font-bold tracking-[-0.04em]">{client.name}</h3><p className="mt-1 max-w-md text-sm leading-6 text-[#64716b]">{client.description}</p><div className="mt-4 flex items-center justify-between border-t border-[#dce0d7] pt-3 font-mono text-[10px] text-[#8b958e]"><span>{client.domain}</span>{client.founder ? <span className="text-[#c45432]">{client.founder}</span> : <span>{visits[client.domain] ?? 0} visits</span>}</div></div></a></Reveal> })}</div>
         </div>
       </section>
 
-      {/* ══════════ PARTNERS ══════════ */}
-      <section id="partners" className="py-28 px-6 border-t border-slate-100 bg-slate-50">
-        <div className="max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "Partners"]} />
+      <section className="border-b border-[#d7dbd1] px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-end"><Reveal><SectionLabel index="07">operating principles</SectionLabel><h2 className="max-w-3xl font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] md:text-7xl">Infrastructure<br /><span className="text-[#c45432]">with intent.</span></h2></Reveal><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1"><Reveal delay={0.08}><div className="border-t border-[#cbd3c8] py-4"><span className="font-mono text-[10px] text-[#ef7f59]">01 / build</span><p className="mt-2 text-sm leading-6 text-[#64716b]">Ship useful primitives, not impressive demos.</p></div></Reveal><Reveal delay={0.14}><div className="border-t border-[#cbd3c8] py-4"><span className="font-mono text-[10px] text-[#68a995]">02 / connect</span><p className="mt-2 text-sm leading-6 text-[#64716b]">Make every new surface strengthen the whole.</p></div></Reveal><Reveal delay={0.2}><div className="border-t border-[#cbd3c8] py-4"><span className="font-mono text-[10px] text-[#8297f1]">03 / endure</span><p className="mt-2 text-sm leading-6 text-[#64716b]">Choose foundations that still make sense later.</p></div></Reveal></div></div>
+      </section>
 
-          <motion.div {...fadeUp} className="mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-200 bg-orange-50 text-orange-700 text-xs font-semibold mb-5">
-              Partners
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-3">Trusted Collaborators</h2>
-            <p className="text-lg text-slate-500 max-w-xl">Organizations we work alongside to deliver greater impact across Africa.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {partners.map((partner, index) => (
-              <motion.div key={partner.name} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}>
-                <a href={`https://${partner.domain}`} target="_blank" rel="noopener noreferrer"
-                  onClick={() => trackVisit(partner.domain)}
-                  className="group flex flex-col gap-5 p-7 rounded-2xl hover:shadow-xl transition-all h-full relative overflow-hidden"
-                  style={{ background: partner.brand.card, borderWidth: 1, borderStyle: "solid", borderColor: partner.brand.cardBorder }}>
-
-                  <div className="absolute left-0 top-6 bottom-6 w-1 rounded-full" style={{ background: partner.brand.primary }} />
-
-                  <div className="pl-3">
-                    <div className="p-2.5 rounded-xl inline-flex w-fit mb-4" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>
-                      <ServiceLogo name={partner.name} domain={partner.domain} logoUrl={(partner as any).logoUrl} FallbackIcon={partner.icon}
-                        imgClassName="w-8 h-8 object-contain rounded" iconClassName="w-8 h-8" />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-slate-900">{partner.name}</h3>
-                    <p className="text-sm leading-relaxed flex-1 text-slate-600">{partner.desc}</p>
-                  </div>
-
-                  {(partner as any).founderImg && (
-                    <div className="flex items-center gap-3 pl-3">
-                      <div className="p-0.5 rounded-full" style={{ background: partner.brand.primary }}>
-                        <img src={(partner as any).founderImg} alt={(partner as any).founderLabel ?? "Founder"}
-                          className="w-8 h-8 rounded-full object-cover block" />
-                      </div>
-                      <span className="text-xs font-medium text-slate-500">{(partner as any).founderLabel ?? "Founder"}</span>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between pl-3 pt-2 border-t" style={{ borderColor: partner.brand.cardBorder }}>
-                    <span className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full" style={{ background: partner.brand.iconBg, color: partner.brand.primary }}>Partner</span>
-                    <div className="flex items-center gap-2">
-                      {visitCounts[partner.domain] ? (
-                        <span className="text-xs text-slate-400">{visitCounts[partner.domain].toLocaleString()} visits</span>
-                      ) : null}
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" style={{ color: partner.brand.primary }} />
-                    </div>
-                  </div>
-                </a>
-              </motion.div>
-            ))}
-          </div>
+      <section id="contact" className="bg-[#ef7f59] px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end"><Reveal><SectionLabel index="08">open channel</SectionLabel><h2 className="max-w-4xl font-sans text-6xl font-extrabold leading-[0.85] tracking-[-0.09em] text-[#15232a] md:text-8xl">Have a system<br />in mind?</h2><p className="mt-8 max-w-md text-lg leading-7 text-[#713c2c]">Tell me what you are trying to connect. I am open to product work, infrastructure conversations, and collaborations with a long runway.</p><a href="mailto:amkaweesi@afuchat.com?subject=Build%20a%20system" className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#15232a] px-5 py-3.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[#f4efe4] transition-transform hover:-translate-y-1"><Mail size={16} /> amkaweesi@afuchat.com <ArrowRight size={16} /></a></Reveal>
+          <Reveal delay={0.12}><form onSubmit={(event) => { event.preventDefault(); setSent(true); }} className="rounded-[24px] border border-[#d65e3d] bg-[#f58b69] p-5 md:p-7"><div className="mb-7 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.14em] text-[#713c2c]"><span>message.packet</span><span className="flex items-center gap-2"><ShieldCheck size={14} /> no tracking</span></div><div className="space-y-4"><label className="block"><span className="mb-2 block font-mono text-[10px] uppercase tracking-[0.13em] text-[#713c2c]">your name</span><input required placeholder="Name" className="w-full border-b border-[#d56647] bg-transparent px-0 py-3 text-base text-[#15232a] outline-none placeholder:text-[#9b4e39] focus:border-[#15232a]" /></label><label className="block"><span className="mb-2 block font-mono text-[10px] uppercase tracking-[0.13em] text-[#713c2c]">your email</span><input required type="email" placeholder="you@company.com" className="w-full border-b border-[#d56647] bg-transparent px-0 py-3 text-base text-[#15232a] outline-none placeholder:text-[#9b4e39] focus:border-[#15232a]" /></label><label className="block"><span className="mb-2 block font-mono text-[10px] uppercase tracking-[0.13em] text-[#713c2c]">the brief</span><textarea required placeholder="What are you building?" rows={3} className="w-full resize-none border-b border-[#d56647] bg-transparent px-0 py-3 text-base text-[#15232a] outline-none placeholder:text-[#9b4e39] focus:border-[#15232a]" /></label></div><button type="submit" className="mt-7 flex w-full items-center justify-between rounded-full bg-[#15232a] px-5 py-3.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[#f4efe4] transition-colors hover:bg-[#263943]">{sent ? <><span className="flex items-center gap-2"><Check size={15} /> packet staged</span><span>thank you</span></> : <><span>Stage the conversation</span><Play size={14} fill="currentColor" /></>}</button>{sent && <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-[#713c2c]">This prototype does not send data. Email is ready when you are.</p>}</form></Reveal>
         </div>
       </section>
 
-      {/* ══════════ VISION ══════════ */}
-      <section id="vision" className="py-32 px-6 bg-slate-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <Breadcrumb items={["AMK", "Vision"]} />
-          <motion.div {...fadeUp}>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-200 bg-violet-50 text-violet-700 text-xs font-semibold mb-6">
-              Vision
-            </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
-              Building for<br />the Long Term
-            </h2>
-            <p className="text-xl text-slate-600 leading-relaxed mb-14 max-w-2xl mx-auto">
-              A unified digital ecosystem spanning communication, payments, cloud, publishing, education, and tools — built with scalable infrastructure to drive real-world impact.
-            </p>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: "Infrastructure", value: "Scalable", color: "#3b82f6" },
-                { label: "Design", value: "Unified", color: "#a855f7" },
-                { label: "Impact", value: "Real-world", color: "#06b6d4" },
-                { label: "Approach", value: "Long-term", color: "#10b981" },
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.45, delay: index * 0.12, ease: "easeOut" }}
-                  className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: index * 0.12 + 0.08 }}
-                    className="text-2xl font-bold text-slate-900 mb-1"
-                  >
-                    {stat.value}
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, x: -8 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: index * 0.12 + 0.16 }}
-                    className="text-xs uppercase tracking-widest font-semibold"
-                    style={{ color: stat.color }}
-                  >
-                    {stat.label}
-                  </motion.div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════════ CONTACT ══════════ */}
-      <section id="contact" className="py-28 px-6 border-t border-slate-100 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <Breadcrumb items={["AMK", "Contact"]} />
-
-          <div className="grid lg:grid-cols-2 gap-5 items-stretch">
-            {/* contact panel */}
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
-              className="rounded-2xl bg-slate-50 border border-slate-200 p-10 flex flex-col gap-8">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold mb-5">
-                  Contact
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 leading-tight">Let's Connect</h2>
-                <p className="text-slate-600 leading-relaxed">
-                  Interested in the ecosystem? Let's talk about infrastructure, collaboration, or what you're building.
-                </p>
-              </div>
-
-              {/* email CTA */}
-              <a href="mailto:amkaweesi@afuchat.com"
-                className="group flex items-center gap-4 p-4 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50/60 transition-all">
-                <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors">
-                  <Mail className="w-5 h-5 text-blue-600 group-hover:text-white transition-colors" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600 mb-0.5">Email</p>
-                  <p className="text-sm font-semibold text-slate-900 truncate">amkaweesi@afuchat.com</p>
-                </div>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
-              </a>
-
-              {/* social links */}
-              <div className="flex flex-col gap-0 -mx-1">
-                {socialLinks.map((social, i) => {
-                  const Icon = social.icon;
-                  return (
-                    <div key={social.label}>
-                      {i > 0 && <div className="h-px bg-slate-200 mx-1" />}
-                      <a href={social.href} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-4 py-3.5 px-3 rounded-xl group hover:bg-slate-100 transition-colors">
-                        <div className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center group-hover:border-slate-300 transition-colors overflow-hidden">
-                          {(social as any).logoUrl
-                            ? <img src={(social as any).logoUrl} alt={social.label} className="w-4 h-4 object-contain" />
-                            : <Icon className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition-colors" />}
-                        </div>
-                        <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors flex-1">{social.label}</span>
-                        <ExternalLink className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 transition-colors" />
-                      </a>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-
-            {/* right — form panel */}
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
-              className="rounded-2xl border border-slate-200 bg-slate-50 p-10 flex flex-col gap-6 relative overflow-hidden">
-              <div className="absolute top-6 right-6 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-bold uppercase tracking-wider text-amber-700">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" /> Coming soon
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Send a Message</h3>
-                <p className="text-sm text-slate-500 max-w-sm">The in-page form is on the way. Drop me an email — I read everything.</p>
-              </div>
-
-              <form className="space-y-4 opacity-50 pointer-events-none select-none" aria-disabled="true" onSubmit={(e) => e.preventDefault()}>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Name</label>
-                  <Input placeholder="Your name" disabled className="h-11 border-slate-200 bg-white" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Email</label>
-                  <Input type="email" placeholder="your@email.com" disabled className="h-11 border-slate-200 bg-white" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Message</label>
-                  <Textarea placeholder="What's on your mind?" disabled className="min-h-[110px] resize-none border-slate-200 bg-white" />
-                </div>
-                <Button type="button" disabled className="w-full h-11 text-sm font-semibold">Coming soon</Button>
-              </form>
-
-              <a href="mailto:amkaweesi@afuchat.com"
-                className="inline-flex items-center justify-center w-full gap-2 h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors">
-                <Mail className="w-4 h-4" /> Email amkaweesi@afuchat.com <ArrowRight className="w-4 h-4" />
-              </a>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════ FOOTER ══════════ */}
-      <footer className="py-10 px-6 border-t border-slate-200 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-5">
-              <span className="text-xl font-bold text-slate-900">AMK<span className="text-blue-500">.</span></span>
-              <div className="h-4 w-px bg-slate-200" />
-              <p className="text-sm text-slate-500">© {new Date().getFullYear()} AM Kaweesi. All rights reserved.</p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}
-                    className="w-8 h-8 rounded-full border border-slate-200 bg-slate-50 flex items-center justify-center hover:border-slate-300 hover:bg-slate-100 transition-all overflow-hidden">
-                    {(social as any).logoUrl
-                      ? <img src={(social as any).logoUrl} alt={social.label} className="w-3.5 h-3.5 object-contain opacity-70" />
-                      : <Icon className="w-3.5 h-3.5 text-slate-500" />}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="mt-8 pt-8 border-t border-slate-200 flex flex-wrap gap-x-8 gap-y-2 justify-center">
-            {projects.map((p) => (
-              <a key={p.name} href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer"
-                className="text-xs text-slate-500 hover:text-slate-700 transition-colors font-medium">{p.name}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
-
-    </div>
+      <footer className="bg-[#15232a] px-5 py-10 text-[#f4efe4] md:px-8"><div className="mx-auto flex max-w-[1240px] flex-col justify-between gap-8 md:flex-row md:items-end"><div><div className="flex items-center gap-3"><LogoMark /><span className="font-mono text-xs uppercase tracking-[0.16em] text-[#becbc3]">AM Kaweesi / AfuChat ecosystem</span></div><p className="mt-5 font-mono text-[10px] uppercase tracking-[0.14em] text-[#71847f]">© {new Date().getFullYear()} · built from Kampala</p></div><div className="flex flex-col gap-4 md:items-end"><SocialRail /><div className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.13em] text-[#71847f]">{products.map((product) => <a key={product.name} href={product.href ?? `https://${product.domain}`} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#ef7f59]">{product.name}</a>)}</div></div></div></footer>
+    </main>
   );
 }
