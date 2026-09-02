@@ -300,9 +300,9 @@ export function Reimagined() {
                     <p className="max-w-xs font-sans text-2xl font-bold leading-tight tracking-[-0.05em] text-[#f4efe4]">Communication is the root. Everything else branches.</p>
                   </div>
                   <div className="grid grid-cols-3 gap-2 font-mono text-[9px] uppercase tracking-[0.12em] text-[#a5b8b4]">
-                    <div className="border-l border-[#ef7f59] pl-2"><span className="block text-[#f4efe4]">07</span> products</div>
-                    <div className="border-l border-[#68d8bd] pl-2"><span className="block text-[#f4efe4]">04</span> clients</div>
-                    <div className="border-l border-[#8297f1] pl-2"><span className="block text-[#f4efe4]">01</span> vision</div>
+                    <div className="border-l border-[#ef7f59] pl-2"><span className="block text-[#f4efe4]">{String(products.length).padStart(2, "0")}</span> product surfaces</div>
+                    <div className="border-l border-[#68d8bd] pl-2"><span className="block text-[#f4efe4]">{String(clients.length).padStart(2, "0")}</span> client systems</div>
+                    <div className="border-l border-[#8297f1] pl-2"><span className="block text-[#f4efe4]">01</span> AfuChat root</div>
                   </div>
                 </div>
               </div>
@@ -316,7 +316,7 @@ export function Reimagined() {
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4">
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8eaaa2]">runtime / uganda × global</span>
           <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[10px] uppercase tracking-[0.15em] text-[#f4efe4]">
-            <span><b className="mr-2 text-[#ef7f59]">07</b> products shipped</span><span><b className="mr-2 text-[#68d8bd]">04</b> client systems</span><span><b className="mr-2 text-[#8297f1]">2022</b> ecosystem founded</span>
+            <span><b className="mr-2 text-[#ef7f59]">{String(products.length).padStart(2, "0")}</b> product surfaces</span><span><b className="mr-2 text-[#68d8bd]">{String(clients.length).padStart(2, "0")}</b> client systems</span><span><b className="mr-2 text-[#8297f1]">2022</b> AfuChat founded</span>
           </div>
         </div>
       </section>
@@ -352,7 +352,7 @@ export function Reimagined() {
           <div className="grid gap-3 md:grid-cols-3">
             {products.map((product, index) => <ProductCard key={product.name} product={product} index={index} onVisit={trackVisit} />)}
           </div>
-          <div className="mt-7 flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#859088]"><span>hover a node to inspect</span><span>{Object.values(visits).reduce((a, b) => a + b, 0)} external traces recorded in this session</span></div>
+           <div className="mt-7 flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#859088]"><span>hover a node to inspect</span><span>{products.length} products · {clients.length} client systems indexed</span></div>
         </div>
       </section>
 
@@ -372,7 +372,7 @@ export function Reimagined() {
                 ].map(({ label, sub, x, y, icon: Icon, color }, index) => (
                   <button key={label} onClick={() => setActiveTrace(label === "AfuCloud" ? "AfuCloud" : label === "SkyPay" ? "SkyPay" : "AfuChat")} className={`float-node absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border px-3 py-2 text-left transition-transform hover:scale-105 ${activeTrace === label || (label === "People" && activeTrace === "AfuChat") ? "border-[#f4efe4] bg-[#1c323b]" : "border-[#3b5359] bg-[#132832]"}`} style={{ left: x, top: y, animationDelay: `${index * 0.3}s` }}><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-wider" style={{ color }}><Icon size={14} /> {label}</span><span className="ml-5 block font-mono text-[9px] text-[#80928e]">{sub}</span></button>
                 ))}
-                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between border-t border-[#30474e] pt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[#71847f]"><span>click a node</span><span>network stable / 99.4ms</span></div>
+                 <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between border-t border-[#30474e] pt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[#71847f]"><span>click a node</span><span>AfuChat root / network stable</span></div>
               </div>
             </div>
           </Reveal>
