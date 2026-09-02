@@ -6,12 +6,10 @@ import {
   Check,
   ChevronDown,
   Cloud,
-  Code2,
   CreditCard,
   ExternalLink,
   Github,
   Globe2,
-  Headphones,
   Layers3,
   Linkedin,
   Mail,
@@ -32,13 +30,14 @@ const profileImage =
 const infrastructureImage = "/images/infrastructure-map.png";
 
 const products = [
-  { name: "AfuChat", domain: "afuchat.com", description: "Unified communication platform for the modern web", icon: MessageSquare, accent: "#28d4c1", tint: "#dff8f1" },
-  { name: "AfuMail", domain: "email.afuchat.com", description: "Smart, privacy-first email for the ecosystem", icon: Mail, accent: "#5b8cff", tint: "#e7edff" },
-  { name: "AfuCloud", domain: "cloud.afuchat.com", description: "Personal cloud storage and file management", icon: Cloud, accent: "#ffb54a", tint: "#fff0d2" },
-  { name: "AfuBlog", domain: "blog.afuchat.com", description: "Publish ideas, stories, and long-form content", icon: Layers3, accent: "#ef7f9d", tint: "#ffe6ec" },
-  { name: "AfuMath", domain: "math.afuchat.com", description: "Interactive math education and problem solving", icon: Sparkles, accent: "#a786ff", tint: "#eee8ff" },
-  { name: "AfuDesk", domain: "desk.afuchat.com", description: "Customer support and helpdesk for the ecosystem", icon: Headphones, accent: "#67b7ff", tint: "#e4f3ff" },
-  { name: "AfuChat.dev", domain: "dev.afuchat.com", description: "Professional full-stack web and mobile development in Uganda", icon: Code2, accent: "#f0834c", tint: "#ffeadc", cta: "Get a quote", href: "https://dev.afuchat.com/estimate" },
+  { name: "AfuChat", domain: "afuchat.com/products/afuchat", description: "Fast messaging with rich media sharing and private conversations.", features: ["HD video calls", "group channels", "instant translation"], icon: MessageSquare, accent: "#28d4c1", tint: "#dff8f1", href: "https://www.afuchat.com/products/afuchat" },
+  { name: "AfuMail", domain: "afuchat.com/products/afumail", description: "Secure email that can also be your identity across the ecosystem.", features: ["single sign-on", "advanced anti-spam", "custom domains"], icon: Mail, accent: "#5b8cff", tint: "#e7edff", href: "https://www.afuchat.com/products/afumail" },
+  { name: "AfuAI", domain: "afuchat.com/products/afuai", description: "A context-aware personal assistant integrated into the product suite.", features: ["contextual help", "automated workflows", "voice recognition"], icon: Sparkles, accent: "#a786ff", tint: "#eee8ff", href: "https://www.afuchat.com/products/afuai" },
+  { name: "AfuCloud", domain: "afuchat.com/products/afucloud", description: "Secure, reliable cloud storage for every device.", features: ["auto sync", "zero-knowledge encryption", "smart organization"], icon: Cloud, accent: "#ffb54a", tint: "#fff0d2", href: "https://www.afuchat.com/products/afucloud" },
+  { name: "AfuMovies", domain: "afuchat.com/products/afumovies", description: "A discovery and streaming service for movies and series.", features: ["4K HDR streaming", "offline viewing", "personalized recommendations"], icon: Play, accent: "#ef7f9d", tint: "#ffe6ec", href: "https://www.afuchat.com/products/afumovies" },
+  { name: "AfuMall", domain: "afuchat.com/products/afumall", description: "A curated marketplace with simple, secure shopping.", features: ["one-click checkout", "verified sellers", "global shipping"], icon: CreditCard, accent: "#67b7ff", tint: "#e4f3ff", href: "https://www.afuchat.com/products/afumall" },
+  { name: "AfuNews", domain: "afuchat.com/products/afunews", description: "A personalized news feed built for staying informed.", features: ["real-time alerts", "unbiased reporting", "read offline"], icon: Globe2, accent: "#f0834c", tint: "#ffeadc", href: "https://www.afuchat.com/products/afunews" },
+  { name: "AfuBlog", domain: "afuchat.com/products/afublog", description: "A distraction-free publishing platform for creators and thinkers.", features: ["beautiful typography", "audience analytics", "monetization options"], icon: Layers3, accent: "#ef7f9d", tint: "#ffe6ec", href: "https://www.afuchat.com/products/afublog" },
 ];
 
 const clients = [
@@ -164,14 +163,18 @@ function ProductCard({
           <span className="flex h-11 w-11 items-center justify-center rounded-[14px]" style={{ background: product.tint, color: product.accent }}>
             <Icon size={21} strokeWidth={1.7} />
           </span>
-          <span className="font-mono text-[10px] text-[#87918a]">0{index + 1} / 07</span>
+            <span className="font-mono text-[10px] text-[#87918a]">{String(index + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}</span>
         </div>
         <div className="relative z-10 mt-8">
           <div className="mb-1 flex items-center gap-2">
             <h3 className="font-sans text-xl font-bold tracking-[-0.04em] text-[#15232a]">{product.name}</h3>
-            {product.cta && <span className="rounded-full bg-[#15232a] px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-[#f4efe4]">{product.cta}</span>}
           </div>
           <p className="max-w-[34rem] text-sm leading-6 text-[#64716b]">{product.description}</p>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {product.features.map((feature) => (
+              <span key={feature} className="rounded-full border border-[#d5dbd2] bg-[#f0f3ec] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.08em] text-[#718078]">{feature}</span>
+            ))}
+          </div>
           <div className="mt-4 flex items-center justify-between border-t border-[#dce0d7] pt-3">
             <span className="font-mono text-[10px] text-[#8b958e]">{product.domain}</span>
             <ArrowUpRight className="h-4 w-4 text-[#ef7f59] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -199,7 +202,7 @@ export default function Home() {
     () => ({
       AfuChat: ["POST /messages", "AUTH /session", "WS /presence", "SYNC /threads"],
       AfuCloud: ["PUT /objects", "GET /vault", "HASH /sha256", "SYNC /devices"],
-      SkyPay: ["POST /collections", "VERIFY /otp", "LEDGER /ugx", "WEBHOOK /settled"],
+      AfuAI: ["ASSIST /context", "FLOW /automate", "VOICE /recognize", "SYNC /surfaces"],
     }),
     [],
   );
@@ -364,7 +367,7 @@ export default function Home() {
             <p className="mb-8 max-w-2xl font-sans text-3xl font-bold leading-[1.08] tracking-[-0.06em] text-[#15232a] md:text-5xl">The web is more interesting when its parts know how to talk to one another.</p>
             <div className="grid gap-8 border-t border-[#cfd5cb] pt-8 md:grid-cols-2">
               <div className="text-[15px] leading-7 text-[#64716b]"><p>I am AM Kaweesi, a Ugandan full-stack builder focused on creating cohesive digital ecosystems. Tools should not exist in isolation; they should connect, communicate, and compound.</p></div>
-              <div className="text-[15px] leading-7 text-[#64716b]"><p><strong className="text-[#15232a]">AfuChat</strong> is the core of this expanding platform — a unified communication layer that branches into payments, cloud storage, publishing, education, and beyond.</p></div>
+              <div className="text-[15px] leading-7 text-[#64716b]"><p><strong className="text-[#15232a]">AfuChat</strong> is the core of this expanding platform — a unified communication layer that branches into identity, AI, cloud storage, entertainment, shopping, news, and publishing.</p></div>
             </div>
             <div className="mt-10 flex flex-wrap gap-2">
               {["React", "TypeScript", "Node.js", "Postgres", "Cloud infra", "Product thinking"].map((skill) => <span key={skill} className="rounded-full border border-[#cbd3c8] bg-[#f9f6ee] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-[#596860]">{skill}</span>)}
@@ -376,7 +379,7 @@ export default function Home() {
       <section id="ecosystem" className="border-b border-[#d7dbd1] bg-[#e9eee6] px-5 py-24 md:px-8 md:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal><SectionLabel index="03">the ecosystem</SectionLabel>
-            <div className="mb-12 flex flex-col justify-between gap-7 md:flex-row md:items-end"><div><h2 className="max-w-3xl font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] text-[#15232a] md:text-7xl">Seven surfaces.<br /><span className="text-[#c45432]">One connective layer.</span></h2></div><p className="max-w-xs text-sm leading-6 text-[#64716b]">AfuChat is a growing suite of digital services — designed as a system, built one useful surface at a time.</p></div>
+            <div className="mb-12 flex flex-col justify-between gap-7 md:flex-row md:items-end"><div><h2 className="max-w-3xl font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] text-[#15232a] md:text-7xl">{products.length} surfaces.<br /><span className="text-[#c45432]">One connective layer.</span></h2></div><p className="max-w-xs text-sm leading-6 text-[#64716b]">AfuChat is a growing suite of standalone digital services — designed to work apart, and even better together.</p></div>
           </Reveal>
           <div className="grid gap-3 md:grid-cols-3">
             {products.map((product, index) => <ProductCard key={product.name} product={product} index={index} onVisit={trackVisit} />)}
@@ -392,14 +395,14 @@ export default function Home() {
               <div><h2 className="font-sans text-5xl font-extrabold leading-[0.9] tracking-[-0.08em] md:text-7xl">Design the<br /><span className="text-[#68d8bd]">connections.</span></h2><p className="mt-7 max-w-sm text-sm leading-7 text-[#9faaa8]">The best work is not a collection of screens. It is the quiet infrastructure that makes a meaningful action feel obvious.</p></div>
               <div className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[#3a5156] bg-[#10202a] p-5 md:p-8">
                 <svg className="absolute inset-0 h-full w-full opacity-60" viewBox="0 0 700 360" fill="none" aria-hidden="true"><path className="trace-line" d="M102 177 C195 177 183 78 282 78 S367 178 464 178 S550 90 620 90" stroke="#68d8bd" strokeWidth="1" /><path className="trace-line" d="M102 177 C192 177 211 282 300 282 S397 181 464 178 S522 270 620 270" stroke="#ef7f59" strokeWidth="1" /><path className="trace-line" d="M282 78 C370 78 378 178 464 178" stroke="#8297f1" strokeWidth="1" /></svg>
-                {[
+                  {[
                   { label: "AfuChat", sub: "communication", x: "9%", y: "43%", icon: MessageSquare, color: "#68d8bd" },
                   { label: "AfuCloud", sub: "storage", x: "34%", y: "12%", icon: Cloud, color: "#8297f1" },
-                  { label: "SkyPay", sub: "payments", x: "67%", y: "43%", icon: CreditCard, color: "#ef7f59" },
-                  { label: "AfuDesk", sub: "support", x: "34%", y: "72%", icon: Headphones, color: "#f3bc60" },
+                   { label: "AfuAI", sub: "intelligence", x: "67%", y: "43%", icon: Sparkles, color: "#ef7f59" },
+                   { label: "AfuMail", sub: "identity", x: "34%", y: "72%", icon: Mail, color: "#f3bc60" },
                   { label: "People", sub: "the point", x: "89%", y: "72%", icon: Globe2, color: "#ef7f9d" },
                 ].map(({ label, sub, x, y, icon: Icon, color }, index) => (
-                  <button key={label} onClick={() => setActiveTrace(label === "AfuCloud" ? "AfuCloud" : label === "SkyPay" ? "SkyPay" : "AfuChat")} className={`float-node absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border px-3 py-2 text-left transition-transform hover:scale-105 ${activeTrace === label || (label === "People" && activeTrace === "AfuChat") ? "border-[#f4efe4] bg-[#1c323b]" : "border-[#3b5359] bg-[#132832]"}`} style={{ left: x, top: y, animationDelay: `${index * 0.3}s` }}><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-wider" style={{ color }}><Icon size={14} /> {label}</span><span className="ml-5 block font-mono text-[9px] text-[#80928e]">{sub}</span></button>
+                   <button key={label} onClick={() => setActiveTrace(label === "AfuCloud" ? "AfuCloud" : label === "AfuAI" ? "AfuAI" : "AfuChat")} className={`float-node absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border px-3 py-2 text-left transition-transform hover:scale-105 ${activeTrace === label || (label === "People" && activeTrace === "AfuChat") ? "border-[#f4efe4] bg-[#1c323b]" : "border-[#3b5359] bg-[#132832]"}`} style={{ left: x, top: y, animationDelay: `${index * 0.3}s` }}><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-wider" style={{ color }}><Icon size={14} /> {label}</span><span className="ml-5 block font-mono text-[9px] text-[#80928e]">{sub}</span></button>
                 ))}
                  <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between border-t border-[#30474e] pt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[#71847f]"><span>click a node</span><span>AfuChat root / network stable</span></div>
               </div>
@@ -408,9 +411,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-b border-[#d7dbd1] px-5 py-24 md:px-8 md:py-32">
-        <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-[0.8fr_1.2fr]">
-          <Reveal><SectionLabel index="05">live trace</SectionLabel><h2 className="max-w-md font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] md:text-7xl">Under the<br /><span className="text-[#c45432]">interface.</span></h2><p className="mt-7 max-w-sm text-sm leading-7 text-[#64716b]">A glimpse at how I think: start from the user signal, route it through sturdy primitives, and leave room for the system to grow.</p><div className="mt-8 flex flex-wrap gap-2">{["AfuChat", "AfuCloud", "SkyPay"].map((name) => <button key={name} onClick={() => setActiveTrace(name)} className={`rounded-full px-4 py-2 font-mono text-[10px] uppercase tracking-wider transition-colors ${activeTrace === name ? "bg-[#15232a] text-[#f4efe4]" : "border border-[#cbd3c8] text-[#66736d] hover:border-[#ef7f59]"}`}>{name}</button>)}</div></Reveal>
+       <section className="border-b border-[#d7dbd1] px-5 py-24 md:px-8 md:py-32">
+         <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+           <Reveal><SectionLabel index="05">live trace</SectionLabel><h2 className="max-w-md font-sans text-5xl font-extrabold leading-[0.92] tracking-[-0.08em] md:text-7xl">Under the<br /><span className="text-[#c45432]">interface.</span></h2><p className="mt-7 max-w-sm text-sm leading-7 text-[#64716b]">A glimpse at how I think: start from the user signal, route it through sturdy primitives, and leave room for the system to grow.</p><div className="mt-8 flex flex-wrap gap-2">{["AfuChat", "AfuCloud", "AfuAI"].map((name) => <button key={name} onClick={() => setActiveTrace(name)} className={`rounded-full px-4 py-2 font-mono text-[10px] uppercase tracking-wider transition-colors ${activeTrace === name ? "bg-[#15232a] text-[#f4efe4]" : "border border-[#cbd3c8] text-[#66736d] hover:border-[#ef7f59]"}`}>{name}</button>)}</div></Reveal>
           <Reveal delay={0.12}><div className="overflow-hidden rounded-[24px] border border-[#2a3d46] bg-[#15232a] shadow-[10px_10px_0_#d9ded3]"><div className="flex items-center justify-between border-b border-[#344b52] px-5 py-4 font-mono text-[10px] text-[#899b96]"><span className="flex items-center gap-2"><Terminal size={14} className="text-[#ef7f59]" /> trace/{activeTrace.toLowerCase()}</span><span className="text-[#68d8bd]">running</span></div><div className="grid gap-8 p-5 md:grid-cols-[1fr_0.7fr] md:p-7"><div className="font-mono text-xs leading-8 text-[#afc0ba]">{(traces[activeTrace as keyof typeof traces] ?? traces.AfuChat).map((line, index) => <motion.div key={`${activeTrace}-${line}`} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.09 }}><span className="mr-4 text-[#637873]">0{index + 1}</span><span className={index === 0 ? "text-[#ef7f59]" : index === 3 ? "text-[#68d8bd]" : "text-[#d9e0d8]"}>{line}</span></motion.div>)}</div><div className="border-l border-[#344b52] pl-5 font-mono text-[10px] leading-6 text-[#82918c]"><p className="mb-4 uppercase tracking-[0.16em] text-[#efefe6]">request anatomy</p><p><span className="text-[#ef7f59]">input</span> → human intent</p><p><span className="text-[#8297f1]">route</span> → shared primitives</p><p><span className="text-[#68d8bd]">output</span> → useful action</p><div className="mt-7 flex items-center gap-2 text-[#68d8bd]"><Check size={14} /> all checks passing</div></div></div></div></Reveal>
         </div>
       </section>

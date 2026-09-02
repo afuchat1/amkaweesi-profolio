@@ -1,1 +1,2 @@
 - [Portfolio preview workflow](workflow-port-contention.md) — use the dedicated portfolio workflow for preview; the aggregate launcher can collide with its assigned port.
+- [AfuChat content source](afuchat-content-source.md) — verify portfolio product names and capabilities against AfuChat’s public product pages before revising copy.
